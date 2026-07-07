@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="RealEstateApi\RealEstateApi.csproj" />
+  <Project Path="RealEstateApp.Core.Application\RealEstateApp.Core.Application.csproj" />
+  <Project Path="RealEstateApp.Core.Domain\RealEstateApp.Core.Domain.csproj" />
+  <Project Path="RealEstateApp.Infrastructure.Identity\RealEstateApp.Infrastructure.Identity.csproj" />
+  <Project Path="RealEstateApp.Infrastructure.Persistence\RealEstateApp.Infrastructure.Persistence.csproj" />
+  <Project Path="RealEstateApp.Infrastructure.Shared\RealEstateApp.Infrastructure.Shared.csproj" />
+  <Project Path="RealEstateApp\RealEstateApp.csproj" />
+</Solution>
