@@ -4,11 +4,21 @@
     <File Path=".gitignore" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="RealEstateApi\RealEstateApi.csproj" />
-  <Project Path="RealEstateApp.Core.Application\RealEstateApp.Core.Application.csproj" />
-  <Project Path="RealEstateApp.Core.Domain\RealEstateApp.Core.Domain.csproj" />
-  <Project Path="RealEstateApp.Infrastructure.Identity\RealEstateApp.Infrastructure.Identity.csproj" />
-  <Project Path="RealEstateApp.Infrastructure.Persistence\RealEstateApp.Infrastructure.Persistence.csproj" />
-  <Project Path="RealEstateApp.Infrastructure.Shared\RealEstateApp.Infrastructure.Shared.csproj" />
-  <Project Path="RealEstateApp\RealEstateApp.csproj" />
+  <Folder Name="/Source/" />
+  <Folder Name="/Source/Core/">
+    <Project Path="RealEstateApp.Core.Application\RealEstateApp.Core.Application.csproj" />
+    <Project Path="RealEstateApp.Core.Domain\RealEstateApp.Core.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Source/Infrastructure/">
+    <Project Path="RealEstateApp.Infrastructure.Identity\RealEstateApp.Infrastructure.Identity.csproj" />
+    <Project Path="RealEstateApp.Infrastructure.Persistence\RealEstateApp.Infrastructure.Persistence.csproj" />
+    <Project Path="RealEstateApp.Infrastructure.Shared\RealEstateApp.Infrastructure.Shared.csproj" />
+  </Folder>
+  <Folder Name="/Source/Presentation/" />
+  <Folder Name="/Source/Presentation/WebApi/">
+    <Project Path="RealEstateApi\RealEstateApi.csproj" />
+  </Folder>
+  <Folder Name="/Source/Presentation/WebApp/">
+    <Project Path="RealEstateApp\RealEstateApp.csproj" />
+  </Folder>
 </Solution>
