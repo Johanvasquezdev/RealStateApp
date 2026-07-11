@@ -1,0 +1,37 @@
+﻿@model LoginViewModel
+@{ ViewData["Title"] = "Iniciar Sesión"; }
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="card-title text-center">Iniciar Sesión</h3>
+                @if (TempData["Mensaje"] is not null)
+                {
+                    <div class="alert alert-info">@TempData["Mensaje"]</div>
+                }
+                <form method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="UsuarioOCorreo" class="form-label"></label>
+                        <input asp-for="UsuarioOCorreo" class="form-control" />
+                        <span asp-validation-for="UsuarioOCorreo" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" type="password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+                </form>
+                <p class="mt-3 text-center">
+                    ¿No tienes cuenta? <a asp-action="Registro">Regístrate</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

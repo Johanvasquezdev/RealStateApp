@@ -1,0 +1,38 @@
+﻿@model List<OfertaResumenViewModel>
+@{ ViewData["Title"] = "Ofertas por Propiedad"; }
+
+<h2>Ofertas</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Cantidad</th>
+                <th>Última Oferta</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var o in Model)
+            {
+                <tr>
+                    <td>@o.ClienteNombre</td>
+                    <td>@o.CantidadOfertas</td>
+                    <td>RD$ @o.UltimaOferta.ToString("N2")</td>
+                    <td>
+                        <span class="badge @(o.Estado == "Pendiente" ? "bg-warning" : o.Estado == "Aceptada" ? "bg-success" : "bg-danger")">@o.Estado</span>
+                    </td>
+                    <td>
+                        <a asp-action="Detalle" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clienteId="@o.ClienteId" class="btn btn-sm btn-info">Ver Detalle</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@if (!Model.Any())
+{
+    <p>No hay ofertas para esta propiedad.</p>
+}
+<a asp-controller="PropiedadMantenimiento" asp-action="Index" class="btn btn-secondary">Volver</a>

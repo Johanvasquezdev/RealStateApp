@@ -1,0 +1,34 @@
+﻿@model List<OfertaDetalleViewModel>
+@{ ViewData["Title"] = "Detalle de Ofertas"; }
+
+<h2>Detalle de Ofertas</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>RD$ @o.Amount.ToString("N2")</td>
+                <td>
+                    <span class="badge @(o.Status == "Pendiente" ? "bg-warning" : o.Status == "Aceptada" ? "bg-success" : "bg-danger")">@o.Status</span>
+                </td>
+                <td>@o.Created.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    @if (o.Status == "Pendiente")
+                    {
+                        <a asp-action="Aceptar" asp-route-id="@o.Id" asp-route-propertyId="@ViewBag.PropertyId" class="btn btn-sm btn-success">Aceptar</a>
+                        <a asp-action="Rechazar" asp-route-id="@o.Id" asp-route-propertyId="@ViewBag.PropertyId" class="btn btn-sm btn-danger">Rechazar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Index" asp-route-propertyId="@ViewBag.PropertyId" class="btn btn-secondary">Volver</a>

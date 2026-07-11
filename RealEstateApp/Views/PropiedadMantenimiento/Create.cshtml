@@ -1,0 +1,56 @@
+﻿@model PropiedadSaveViewModel
+@{ ViewData["Title"] = "Agregar Propiedad"; }
+
+<h2>Agregar Propiedad</h2>
+<form method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="PropertyTypeId" class="form-label">ID Tipo Propiedad</label>
+            <input asp-for="PropertyTypeId" class="form-control" type="number" />
+            <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="SaleTypeId" class="form-label">ID Tipo Venta</label>
+            <input asp-for="SaleTypeId" class="form-control" type="number" />
+            <span asp-validation-for="SaleTypeId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Precio (RD$)</label>
+        <input asp-for="Price" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="LandSize" class="form-label">Tamaño (m²)</label>
+            <input asp-for="LandSize" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="LandSize" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="Rooms" class="form-label"></label>
+            <input asp-for="Rooms" class="form-control" type="number" />
+            <span asp-validation-for="Rooms" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="Bathrooms" class="form-label"></label>
+            <input asp-for="Bathrooms" class="form-control" type="number" />
+            <span asp-validation-for="Bathrooms" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Images" class="form-label">Imágenes</label>
+        <input asp-for="Images" class="form-control" type="file" multiple accept="image/*" />
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

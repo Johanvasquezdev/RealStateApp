@@ -1,0 +1,25 @@
+﻿@model List<ConversacionResumenViewModel>
+@{ ViewData["Title"] = "Conversaciones"; }
+
+<h2>Conversaciones</h2>
+@if (Model.Any())
+{
+    <div class="list-group">
+        @foreach (var c in Model)
+        {
+            <a asp-action="Conversacion" asp-route-propertyId="@c.PropertyId" asp-route-clienteId="@c.ClienteId" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@c.ClienteNombre</h5>
+                    <small>@c.FechaUltimoMensaje.ToString("dd/MM/yyyy HH:mm")</small>
+                </div>
+                <p class="mb-1">Propiedad: @c.PropertyCode</p>
+                <small>@c.UltimoMensaje</small>
+            </a>
+        }
+    </div>
+}
+else
+{
+    <p>No hay conversaciones para esta propiedad.</p>
+}
+<a asp-controller="PropiedadMantenimiento" asp-action="Index" class="btn btn-secondary mt-3">Volver</a>

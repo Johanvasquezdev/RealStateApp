@@ -1,0 +1,54 @@
+﻿@model PropiedadViewModel
+@{ ViewData["Title"] = "Detalle de Propiedad"; }
+
+<h2>Propiedad @Model.Code</h2>
+<span class="badge @(Model.Status == "Disponible" ? "bg-success" : "bg-secondary") fs-6">@Model.Status</span>
+
+<div class="row mt-3">
+    <div class="col-md-8">
+        <dl class="row">
+            <dt class="col-sm-4">Código</dt>
+            <dd class="col-sm-8">@Model.Code</dd>
+            <dt class="col-sm-4">Precio</dt>
+            <dd class="col-sm-8">RD$ @Model.Price.ToString("N2")</dd>
+            <dt class="col-sm-4">Tamaño</dt>
+            <dd class="col-sm-8">@Model.LandSize m²</dd>
+            <dt class="col-sm-4">Habitaciones</dt>
+            <dd class="col-sm-8">@Model.Rooms</dd>
+            <dt class="col-sm-4">Baños</dt>
+            <dd class="col-sm-8">@Model.Bathrooms</dd>
+            <dt class="col-sm-4">Tipo Propiedad</dt>
+            <dd class="col-sm-8">@Model.PropertyType</dd>
+            <dt class="col-sm-4">Tipo Venta</dt>
+            <dd class="col-sm-8">@Model.SaleType</dd>
+            <dt class="col-sm-4">Descripción</dt>
+            <dd class="col-sm-8">@Model.Description</dd>
+        </dl>
+    </div>
+</div>
+
+@if (Model.Imagenes.Any())
+{
+    <h4>Imágenes</h4>
+    <div class="row">
+        @foreach (var img in Model.Imagenes)
+        {
+            <div class="col-md-3 mb-2">
+                <img src="~/images/properties/@img" class="img-fluid img-thumbnail" />
+            </div>
+        }
+    </div>
+}
+
+@if (Model.Mejoras.Any())
+{
+    <h4>Mejoras</h4>
+    <div>
+        @foreach (var mejora in Model.Mejoras)
+        {
+            <span class="badge bg-info me-1">@mejora</span>
+        }
+    </div>
+}
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Volver</a>
