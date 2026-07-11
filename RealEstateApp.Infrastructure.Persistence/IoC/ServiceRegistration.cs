@@ -12,9 +12,8 @@ public static class ServiceRegistration
     public static void AddPersistenceInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(
-                configuration.GetConnectionString("DefaultConnection"),
-                m => m.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+            m => m.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
         #region Repositories
         services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
