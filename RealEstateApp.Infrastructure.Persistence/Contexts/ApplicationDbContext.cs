@@ -1,13 +1,11 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Entities;
-using RealEstateApp.Infrastructure.Identity.Entities;
 using System.Reflection;
 
 namespace RealEstateApp.Infrastructure.Persistence.Contexts;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
     public DbSet<Property> Properties { get; set; }
     public DbSet<PropertyType> PropertyTypes { get; set; }
@@ -19,7 +17,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Offer> Offers { get; set; }
     public DbSet<Message> Messages { get; set; }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
         {
@@ -27,7 +25,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             {
                 case EntityState.Added:
                     entry.Entity.Created = DateTime.UtcNow;
-                    entry.Entity.CreatedBy = "DefaultAppUser"; // Pendiente integrar con IHttpContextAccessor
+                    entry.Entity.CreatedBy = "DefaultAppUser";
                     break;
                 case EntityState.Modified:
                     entry.Entity.LastModified = DateTime.UtcNow;
@@ -40,7 +38,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

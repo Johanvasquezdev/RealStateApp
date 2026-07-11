@@ -1,17 +1,13 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using RealEstateApp.Core.Domain.Common;
+using RealEstateApp.Infrastructure.Persistence.Contexts;
 
 namespace RealEstateApp.Infrastructure.Persistence.Repositories;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : class
+public class GenericRepository<T>(ApplicationDbContext dbContext) : IGenericRepository<T> where T : class
 {
-    private readonly DbContext _dbContext;
-
-    public GenericRepository(DbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    private readonly ApplicationDbContext _dbContext = dbContext;
 
     public virtual async Task<T> AddAsync(T entity)
     {
