@@ -7,12 +7,8 @@ using System.Reflection;
 
 namespace RealEstateApp.Infrastructure.Persistence.Contexts;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-    }
-
     public DbSet<Property> Properties { get; set; }
     public DbSet<PropertyType> PropertyTypes { get; set; }
     public DbSet<SaleType> SaleTypes { get; set; }
@@ -44,10 +40,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Must call base first for Identity
         base.OnModelCreating(modelBuilder);
-
-        // Aplica todas las configuraciones de IEntityTypeConfiguration de este ensamblado
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

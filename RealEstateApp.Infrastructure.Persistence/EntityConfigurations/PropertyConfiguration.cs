@@ -17,11 +17,11 @@ public class PropertyConfiguration : IEntityTypeConfiguration<Property>
         builder.HasOne(p => p.PropertyType)
             .WithMany(t => t.Properties)
             .HasForeignKey(p => p.PropertyTypeId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(p => p.SaleType)
             .WithMany(t => t.Properties)
             .HasForeignKey(p => p.SaleTypeId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
