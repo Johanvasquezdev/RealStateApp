@@ -2,15 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstateApp.Core.Application.ViewModels.Properties;
 
-public class PropertyDetailViewModel
+public class ClientPropertyViewModel
 {
     public int Id { get; set; }
 
     [Display(Name = "Código")]
     public string Code { get; set; } = null!;
-
-    [Display(Name = "Descripción")]
-    public string Description { get; set; } = null!;
 
     [Display(Name = "Tipo de Propiedad")]
     public string PropertyTypeName { get; set; } = null!;
@@ -31,24 +28,9 @@ public class PropertyDetailViewModel
     [Display(Name = "Tamaño (m²)")]
     public double LandSize { get; set; }
 
-    public List<string> ImageUrls { get; set; } = new();
+    public string MainImageUrl { get; set; } = null!;
     
-    [Display(Name = "Mejoras")]
-    public List<string> Improvements { get; set; } = new();
-    
-    // Agent info
     public string AgentId { get; set; } = null!;
-    
-    [Display(Name = "Agente")]
     public string AgentName { get; set; } = null!;
-    
-    [Display(Name = "Teléfono")]
-    [DataType(DataType.PhoneNumber)]
-    public string AgentPhone { get; set; } = null!;
-    
-    [Display(Name = "Correo")]
-    [DataType(DataType.EmailAddress)]
-    public string AgentEmail { get; set; } = null!;
-    
     public string AgentPhotoUrl { get; set; } = null!;
 }

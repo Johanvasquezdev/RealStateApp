@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealEstateApp.Core.Application.ViewModels.Properties;
 
-public class FilterPropertyViewModel
+public class ClientFilterPropertyViewModel
 {
     [Display(Name = "Tipo de Propiedad")]
     public int? PropertyTypeId { get; set; }
