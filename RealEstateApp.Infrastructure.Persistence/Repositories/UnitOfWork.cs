@@ -1,4 +1,5 @@
 using RealEstateApp.Core.Domain.Common;
+using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Infrastructure.Persistence.Contexts;
 
 namespace RealEstateApp.Infrastructure.Persistence.Repositories;
