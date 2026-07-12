@@ -1,5 +1,5 @@
-using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.Perfil;
+﻿using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.ViewModels.AgentProfile;
 
 namespace RealEstateApp.Core.Application.Services;
 
@@ -12,13 +12,13 @@ public class PerfilService : IPerfilService
         _userService = userService;
     }
 
-    public async Task<PerfilViewModel> GetPerfilAsync(string userId)
+    public async Task<AgentProfileViewModel> GetPerfilAsync(string userId)
     {
         var user = await _userService.FindByIdAsync(userId);
         if (user is null)
             throw new KeyNotFoundException("Usuario no encontrado");
 
-        return new PerfilViewModel
+        return new AgentProfileViewModel
         {
             Id = user.Id,
             FirstName = user.FirstName,
@@ -30,7 +30,7 @@ public class PerfilService : IPerfilService
         };
     }
 
-    public async Task<bool> UpdatePerfilAsync(string userId, PerfilViewModel vm)
+    public async Task<bool> UpdatePerfilAsync(string userId, AgentProfileViewModel vm)
     {
         return await _userService.UpdateUserAsync(userId, vm.FirstName, vm.LastName, vm.Email, vm.PhoneNumber);
     }

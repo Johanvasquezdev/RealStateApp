@@ -1,6 +1,6 @@
-namespace RealEstateApp.Core.Application.ViewModels.Chat;
+﻿namespace RealEstateApp.Core.Application.ViewModels.AgentChats;
 
-public class EnviarMensajeViewModel
+public class AgentSendMessageViewModel
 {
     public int PropertyId { get; set; }
     public string ReceiverId { get; set; } = null!;

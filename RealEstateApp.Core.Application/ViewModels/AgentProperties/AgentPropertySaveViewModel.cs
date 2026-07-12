@@ -1,9 +1,9 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace RealEstateApp.Core.Application.ViewModels.Propiedad;
+namespace RealEstateApp.Core.Application.ViewModels.AgentProperties;
 
-public class PropiedadSaveViewModel
+public class AgentPropertySaveViewModel
 {
     public int Id { get; set; }
 

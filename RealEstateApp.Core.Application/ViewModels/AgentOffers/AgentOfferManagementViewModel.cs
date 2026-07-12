@@ -1,6 +1,6 @@
-namespace RealEstateApp.Core.Application.ViewModels.Oferta;
+﻿namespace RealEstateApp.Core.Application.ViewModels.AgentOffers;
 
-public class OfertaGestionViewModel
+public class AgentOfferManagementViewModel
 {
     public int OfertaId { get; set; }
     public string ClienteId { get; set; } = null!;

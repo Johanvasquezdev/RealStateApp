@@ -1,6 +1,6 @@
-using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.Agente;
-using RealEstateApp.Core.Application.ViewModels.Propiedad;
+﻿using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.ViewModels.Agents;
+using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Entities;
 
@@ -66,10 +66,10 @@ public class AgenteService : IAgenteService
         };
     }
 
-    public async Task<List<PropiedadViewModel>> GetPropiedadesByAgenteAsync(string id)
+    public async Task<List<AgentPropertyViewModel>> GetPropiedadesByAgenteAsync(string id)
     {
         var properties = await _propertyRepository.FindAsync(p => p.AgentId == id);
-        return properties.Select(p => new PropiedadViewModel
+        return properties.Select(p => new AgentPropertyViewModel
         {
             Id = p.Id,
             Code = p.Code,

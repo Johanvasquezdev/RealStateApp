@@ -1,9 +1,9 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace RealEstateApp.Core.Application.ViewModels.Perfil;
+namespace RealEstateApp.Core.Application.ViewModels.AgentProfile;
 
-public class PerfilViewModel
+public class AgentProfileViewModel
 {
     public string Id { get; set; } = null!;
 

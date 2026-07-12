@@ -1,5 +1,5 @@
-using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.Cuenta;
+﻿using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.ViewModels.Accounts;
 
 namespace RealEstateApp.Core.Application.Services;
 

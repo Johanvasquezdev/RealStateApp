@@ -1,7 +1,7 @@
-using AutoMapper;
+﻿using AutoMapper;
 using RealEstateApp.Core.Application.ViewModels.Improvement;
 using RealEstateApp.Core.Application.ViewModels.Property;
-using RealEstateApp.Core.Application.ViewModels.Propiedad;
+using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 using RealEstateApp.Core.Application.ViewModels.SaleType;
 using RealEstateApp.Core.Application.ViewModels.Properties;
 using RealEstateApp.Core.Domain.Entities;
@@ -21,7 +21,7 @@ public class GeneralProfile : Profile
         CreateMap<SaleType, SaleTypeViewModel>().ReverseMap();
         CreateMap<SaleType, SaveSaleTypeViewModel>().ReverseMap();
 
-        CreateMap<Property, PropiedadViewModel>()
+        CreateMap<Property, AgentPropertyViewModel>()
             .ForMember(d => d.PropertyType, o => o.MapFrom(s => s.PropertyType!.Name))
             .ForMember(d => d.SaleType, o => o.MapFrom(s => s.SaleType!.Name))
             .ForMember(d => d.Status, o => o.MapFrom(s => s.Status.ToString()))

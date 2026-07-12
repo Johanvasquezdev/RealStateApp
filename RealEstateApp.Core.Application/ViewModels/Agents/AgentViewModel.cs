@@ -1,4 +1,4 @@
-namespace RealEstateApp.Core.Application.ViewModels.Agente;
+﻿namespace RealEstateApp.Core.Application.ViewModels.Agents;
 
 public class AgenteListViewModel
 {

@@ -1,6 +1,6 @@
-namespace RealEstateApp.Core.Application.ViewModels.Oferta;
+﻿namespace RealEstateApp.Core.Application.ViewModels.AgentOffers;
 
-public class OfertaResumenViewModel
+public class AgentOfferSummaryViewModel
 {
     public string ClienteId { get; set; } = null!;
     public string ClienteNombre { get; set; } = null!;

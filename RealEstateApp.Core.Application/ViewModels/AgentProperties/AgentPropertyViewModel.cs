@@ -1,6 +1,6 @@
-namespace RealEstateApp.Core.Application.ViewModels.Propiedad;
+﻿namespace RealEstateApp.Core.Application.ViewModels.AgentProperties;
 
-public class PropiedadViewModel
+public class AgentPropertyViewModel
 {
     public int Id { get; set; }
     public string Code { get; set; } = null!;

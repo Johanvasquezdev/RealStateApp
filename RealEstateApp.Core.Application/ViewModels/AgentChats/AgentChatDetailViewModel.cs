@@ -1,6 +1,6 @@
-namespace RealEstateApp.Core.Application.ViewModels.Chat;
+﻿namespace RealEstateApp.Core.Application.ViewModels.AgentChats;
 
-public class ConversacionDetalleViewModel
+public class AgentChatDetailViewModel
 {
     public string ClienteId { get; set; } = null!;
     public string ClienteNombre { get; set; } = null!;

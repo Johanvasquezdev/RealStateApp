@@ -1,10 +1,10 @@
-using RealEstateApp.Core.Application.ViewModels.Chat;
+﻿using RealEstateApp.Core.Application.ViewModels.AgentChats;
 
 namespace RealEstateApp.Core.Application.Interfaces.Services;
 
 public interface IChatService
 {
-    Task<List<ConversacionResumenViewModel>> GetConversacionesByPropertyAsync(int propertyId, string agenteId);
-    Task<ConversacionDetalleViewModel> GetConversacionDetalleAsync(int propertyId, string clienteId, string agenteId);
-    Task EnviarMensajeAsync(EnviarMensajeViewModel vm, string senderId);
+    Task<List<AgentChatSummaryViewModel>> GetConversacionesByPropertyAsync(int propertyId, string agenteId);
+    Task<AgentChatDetailViewModel> GetConversacionDetalleAsync(int propertyId, string clienteId, string agenteId);
+    Task EnviarMensajeAsync(AgentSendMessageViewModel vm, string senderId);
 }

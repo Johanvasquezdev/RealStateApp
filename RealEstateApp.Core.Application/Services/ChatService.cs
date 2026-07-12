@@ -1,5 +1,5 @@
-using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.Chat;
+﻿using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.ViewModels.AgentChats;
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Entities;
 
@@ -16,7 +16,7 @@ public class ChatService : IChatService
         _userService = userService;
     }
 
-    public async Task<List<ConversacionResumenViewModel>> GetConversacionesByPropertyAsync(int propertyId, string agenteId)
+    public async Task<List<AgentChatSummaryViewModel>> GetConversacionesByPropertyAsync(int propertyId, string agenteId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var property = await propertyRepo.GetByIdAsync(propertyId);
@@ -27,7 +27,7 @@ public class ChatService : IChatService
         var allMessages = await messageRepo.FindAsync(m => m.PropertyId == propertyId && m.ReceiverId == agenteId);
         var clientesIds = allMessages.Select(m => m.SenderId).Distinct().ToList();
 
-        var result = new List<ConversacionResumenViewModel>();
+        var result = new List<AgentChatSummaryViewModel>();
         foreach (var clienteId in clientesIds)
         {
             var client = await _userService.FindByIdAsync(clienteId);
@@ -35,7 +35,7 @@ public class ChatService : IChatService
                 .OrderByDescending(m => m.Created);
             var ultimo = clientMessages.First();
 
-            result.Add(new ConversacionResumenViewModel
+            result.Add(new AgentChatSummaryViewModel
             {
                 ClienteId = clienteId,
                 ClienteNombre = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
@@ -48,7 +48,7 @@ public class ChatService : IChatService
         return result;
     }
 
-    public async Task<ConversacionDetalleViewModel> GetConversacionDetalleAsync(int propertyId, string clienteId, string agenteId)
+    public async Task<AgentChatDetailViewModel> GetConversacionDetalleAsync(int propertyId, string clienteId, string agenteId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var property = await propertyRepo.GetByIdAsync(propertyId);
@@ -61,7 +61,7 @@ public class ChatService : IChatService
              (m.SenderId == agenteId && m.ReceiverId == clienteId)));
         mensajes = mensajes.OrderBy(m => m.Created).ToList();
 
-        return new ConversacionDetalleViewModel
+        return new AgentChatDetailViewModel
         {
             ClienteId = clienteId,
             ClienteNombre = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
@@ -77,7 +77,7 @@ public class ChatService : IChatService
         };
     }
 
-    public async Task EnviarMensajeAsync(EnviarMensajeViewModel vm, string senderId)
+    public async Task EnviarMensajeAsync(AgentSendMessageViewModel vm, string senderId)
     {
         var messageRepo = _unitOfWork.Repository<Message>();
         var msg = new Message

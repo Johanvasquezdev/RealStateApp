@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace RealEstateApp.Core.Application.ViewModels.Cuenta;
+namespace RealEstateApp.Core.Application.ViewModels.Accounts;
 
 public class LoginViewModel
 {

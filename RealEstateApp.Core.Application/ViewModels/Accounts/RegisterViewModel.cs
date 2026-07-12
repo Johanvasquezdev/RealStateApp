@@ -1,7 +1,7 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace RealEstateApp.Core.Application.ViewModels.Cuenta;
+namespace RealEstateApp.Core.Application.ViewModels.Accounts;
 
 public class RegisterViewModel
 {
