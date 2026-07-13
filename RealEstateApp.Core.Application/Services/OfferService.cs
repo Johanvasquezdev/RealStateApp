@@ -6,12 +6,12 @@ using RealEstateApp.Core.Domain.Enums;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class OfertaService : IOfertaService
+public class OfferService : IOfertaService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _userService;
 
-    public OfertaService(IUnitOfWork unitOfWork, IUserService userService)
+    public OfferService(IUnitOfWork unitOfWork, IUserService userService)
     {
         _unitOfWork = unitOfWork;
         _userService = userService;
@@ -67,6 +67,7 @@ public class OfertaService : IOfertaService
         }).ToList();
     }
 
+    #region AceptarOfertaAsync(
     public async Task AceptarOfertaAsync(int ofertaId, string agenteId)
     {
         using var tx = await _unitOfWork.BeginTransactionAsync();
@@ -103,7 +104,9 @@ public class OfertaService : IOfertaService
             throw;
         }
     }
+    #endregion
 
+    #region RechazarOfertaAsync
     public async Task RechazarOfertaAsync(int ofertaId, string agenteId)
     {
         var offerRepo = _unitOfWork.Repository<Offer>();
@@ -115,5 +118,6 @@ public class OfertaService : IOfertaService
         oferta.Status = OfferStatus.Rechazada;
         await offerRepo.UpdateAsync(oferta);
         await _unitOfWork.SaveChangesAsync();
-    }
+    } 
+    #endregion
 }

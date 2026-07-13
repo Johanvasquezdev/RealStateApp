@@ -6,12 +6,12 @@ using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class AgenteService : IAgenteService
+public class AgentService : IAgenteService
 {
     private readonly IUserService _userService;
     private readonly IGenericRepository<Property> _propertyRepository;
 
-    public AgenteService(IUserService userService, IGenericRepository<Property> propertyRepository)
+    public AgentService(IUserService userService, IGenericRepository<Property> propertyRepository)
     {
         _userService = userService;
         _propertyRepository = propertyRepository;

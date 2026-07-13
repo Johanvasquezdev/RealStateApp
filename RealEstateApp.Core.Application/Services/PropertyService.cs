@@ -8,12 +8,12 @@ using RealEstateApp.Core.Domain.Enums;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class PropiedadService : IPropiedadService
+public class PropertyService : IPropiedadService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public PropiedadService(IUnitOfWork unitOfWork, IMapper mapper)
+    public PropertyService(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;

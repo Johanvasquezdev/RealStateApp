@@ -12,6 +12,7 @@ public class AuthService : IAuthService
         _userService = userService;
     }
 
+    #region RegisterResult
     public async Task<RegisterResult> RegisterAsync(RegisterViewModel vm)
     {
         var existingUser = await _userService.FindByNameAsync(vm.Username);
@@ -40,7 +41,9 @@ public class AuthService : IAuthService
 
         return new RegisterResult { Exito = true, Mensaje = mensaje, TipoUsuario = vm.TipoUsuario };
     }
+    #endregion
 
+    #region LoginResult
     public async Task<LoginResult> LoginAsync(LoginViewModel vm)
     {
         var user = await _userService.FindByEmailAsync(vm.UsuarioOCorreo)
@@ -64,7 +67,8 @@ public class AuthService : IAuthService
             return new LoginResult { Exito = false, Mensaje = "Los datos de acceso son inválidos." };
 
         return new LoginResult { Exito = true, Mensaje = "", Rol = roles.First(), UserId = user.Id };
-    }
+    } 
+    #endregion
 
     public async Task LogoutAsync()
     {

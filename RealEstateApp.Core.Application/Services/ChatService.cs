@@ -77,6 +77,7 @@ public class ChatService : IChatService
         };
     }
 
+    #region  EnviarMensajeAsync
     public async Task EnviarMensajeAsync(EnviarMensajeViewModel vm, string senderId)
     {
         var messageRepo = _unitOfWork.Repository<Message>();
@@ -89,5 +90,6 @@ public class ChatService : IChatService
         };
         await messageRepo.AddAsync(msg);
         await _unitOfWork.SaveChangesAsync();
-    }
+    } 
+    #endregion
 }
