@@ -8,7 +8,7 @@ using RealEstateApp.Infrastructure.Identity.Entities;
 using RealEstateApp.Infrastructure.Identity.Services;
 using System.Text;
 
-namespace RealEstateApp.Infrastructure.Identity;
+namespace RealEstateApp.Infrastructure.Identity.IoC;
 
 public static class ServiceRegistration
 {

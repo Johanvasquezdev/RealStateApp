@@ -6,7 +6,7 @@ using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Infrastructure.Persistence.Contexts;
 using RealEstateApp.Infrastructure.Persistence.Repositories;
 
-namespace RealEstateApp.Infrastructure.Persistence;
+namespace RealEstateApp.Infrastructure.Persistence.IoC;
 
 public static class ServiceRegistration
 {
