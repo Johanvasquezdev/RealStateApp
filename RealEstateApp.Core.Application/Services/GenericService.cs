@@ -1,5 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 using RealEstateApp.Core.Application.Interfaces;
+using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
 using System.Linq.Expressions;
 

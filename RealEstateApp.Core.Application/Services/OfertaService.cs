@@ -1,6 +1,7 @@
-﻿using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.AgentOffers;
 using RealEstateApp.Core.Domain.Common;
+using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
 

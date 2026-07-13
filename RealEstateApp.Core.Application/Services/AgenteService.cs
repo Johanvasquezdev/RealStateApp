@@ -1,7 +1,8 @@
-﻿using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.Agents;
 using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 using RealEstateApp.Core.Domain.Common;
+using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Services;
