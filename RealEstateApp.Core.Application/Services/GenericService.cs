@@ -11,8 +11,8 @@ namespace RealEstateApp.Core.Application.Services
         where TViewModel : class
         where TEntity : class
     {
-        private readonly IGenericRepository<TEntity> _repository = repository;
-        private readonly IMapper _mapper = mapper;
+        protected readonly IGenericRepository<TEntity> _repository = repository;
+        protected readonly IMapper _mapper = mapper;
 
         public virtual async Task<TSaveViewModel> Add(TSaveViewModel vm)
         {
@@ -46,7 +46,7 @@ namespace RealEstateApp.Core.Application.Services
             TEntity entity = _mapper.Map<TEntity>(vm);
             await _repository.UpdateAsync(entity);
         }
-        public virtual async Task<List<TViewModel>> Find(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<List<TViewModel>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
             var entityList = await _repository.FindAsync(predicate);
             return _mapper.Map<List<TViewModel>>(entityList);
