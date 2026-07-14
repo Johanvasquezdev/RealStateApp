@@ -1,6 +1,7 @@
 using RealEstateApp.Core.Application.IoC;
 using RealEstateApp.Infrastructure.Identity;
 using RealEstateApp.Infrastructure.Persistence;
+using RealEstateApp.Infrastructure.Shared.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
+builder.Services.AddSharedInfrastructure(builder.Configuration);
 builder.Services.AddApplicationLayer();
 
 var app = builder.Build();
