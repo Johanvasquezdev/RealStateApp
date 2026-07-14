@@ -16,11 +16,11 @@ public static class ServiceRegistration
         services.AddTransient<IPropertyTypeService, PropertyTypeService>();
         services.AddTransient<ISaleTypeService, SaleTypeService>();
 
-        services.AddTransient<IAgenteService, AgenteService>();
+        services.AddTransient<IAgenteService, AgentService>();
         services.AddTransient<IAuthService, AuthService>();
-        services.AddTransient<IPropiedadService, PropiedadService>();
+        services.AddTransient<IPropiedadService, PropertyService>();
         services.AddTransient<IPerfilService, PerfilService>();
-        services.AddTransient<IOfertaService, OfertaService>();
+        services.AddTransient<IOfertaService, OfferService>();
         services.AddTransient<IChatService, ChatService>();
 
         // Persona 2: Cliente Services
