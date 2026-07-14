@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.Cuenta;
+using RealEstateApp.Core.Application.ViewModels.Accounts;
 
 namespace RealEstateApp.Controllers;
 

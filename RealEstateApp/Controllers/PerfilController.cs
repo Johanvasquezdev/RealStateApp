@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.Perfil;
+using RealEstateApp.Core.Application.ViewModels.AgentProfile;
 
 namespace RealEstateApp.Controllers;
 
@@ -23,7 +23,7 @@ public class PerfilController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Index(PerfilViewModel vm)
+    public async Task<IActionResult> Index(AgentProfileViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;

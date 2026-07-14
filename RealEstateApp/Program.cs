@@ -1,4 +1,4 @@
-using RealEstateApp.Core.Application;
+using RealEstateApp.Core.Application.IoC;
 using RealEstateApp.Infrastructure.Identity;
 using RealEstateApp.Infrastructure.Persistence;
 

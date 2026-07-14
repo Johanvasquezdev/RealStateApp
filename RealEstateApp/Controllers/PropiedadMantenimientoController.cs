@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.Propiedad;
+using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 
 namespace RealEstateApp.Controllers;
 
@@ -24,11 +24,11 @@ public class PropiedadMantenimientoController : Controller
 
     public IActionResult Create()
     {
-        return View(new PropiedadSaveViewModel());
+        return View(new AgentPropertySaveViewModel());
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(PropiedadSaveViewModel vm)
+    public async Task<IActionResult> Create(AgentPropertySaveViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
@@ -45,7 +45,7 @@ public class PropiedadMantenimientoController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(PropiedadSaveViewModel vm)
+    public async Task<IActionResult> Edit(AgentPropertySaveViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;

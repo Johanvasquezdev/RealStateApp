@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using RealEstateApp.Core.Application.DTOs;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Users;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
+using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Infrastructure.Identity.Entities;
 

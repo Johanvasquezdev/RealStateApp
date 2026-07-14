@@ -1,6 +1,7 @@
 using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.Oferta;
+using RealEstateApp.Core.Application.ViewModels.AgentOffers;
 using RealEstateApp.Core.Domain.Common;
+using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
 
@@ -17,7 +18,7 @@ public class OfferService : IOfertaService
         _userService = userService;
     }
 
-    public async Task<List<OfertaResumenViewModel>> GetOfertasResumenByPropertyAsync(int propertyId, string agenteId)
+    public async Task<List<AgentOfferSummaryViewModel>> GetOfertasResumenByPropertyAsync(int propertyId, string agenteId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var property = await propertyRepo.GetByIdAsync(propertyId);
@@ -28,12 +29,12 @@ public class OfferService : IOfertaService
         var ofertas = await offerRepo.FindAsync(o => o.PropertyId == propertyId);
         var grouped = ofertas.GroupBy(o => o.ClientId);
 
-        var result = new List<OfertaResumenViewModel>();
+        var result = new List<AgentOfferSummaryViewModel>();
         foreach (var group in grouped)
         {
             var client = await _userService.FindByIdAsync(group.Key);
             var ultima = group.OrderByDescending(o => o.Created).First();
-            result.Add(new OfertaResumenViewModel
+            result.Add(new AgentOfferSummaryViewModel
             {
                 ClienteId = group.Key,
                 ClienteNombre = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
@@ -45,7 +46,7 @@ public class OfferService : IOfertaService
         return result;
     }
 
-    public async Task<List<OfertaDetalleViewModel>> GetOfertasByClientePropertyAsync(int propertyId, string clienteId, string agenteId)
+    public async Task<List<AgentOfferDetailViewModel>> GetOfertasByClientePropertyAsync(int propertyId, string clienteId, string agenteId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var property = await propertyRepo.GetByIdAsync(propertyId);
@@ -57,7 +58,7 @@ public class OfferService : IOfertaService
         var ofertas = await offerRepo.FindAsync(o => o.PropertyId == propertyId && o.ClientId == clienteId);
         ofertas = ofertas.OrderByDescending(o => o.Created).ToList();
 
-        return ofertas.Select(o => new OfertaDetalleViewModel
+        return ofertas.Select(o => new AgentOfferDetailViewModel
         {
             Id = o.Id,
             ClienteNombre = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",

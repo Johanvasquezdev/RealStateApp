@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
-using RealEstateApp.Core.Application.ViewModels.Chat;
+using RealEstateApp.Core.Application.ViewModels.AgentChats;
 
 namespace RealEstateApp.Controllers;
 
@@ -31,7 +31,7 @@ public class ChatController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> EnviarMensaje(EnviarMensajeViewModel vm)
+    public async Task<IActionResult> EnviarMensaje(AgentSendMessageViewModel vm)
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
         await _chatService.EnviarMensajeAsync(vm, userId);
