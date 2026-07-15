@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstateApp.Core.Domain.Common;
-using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Core.Domain.Entities;
 using System.Reflection;
 
@@ -17,6 +16,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<FavoriteProperty> FavoriteProperties { get; set; }
     public DbSet<Offer> Offers { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<SesionPunchCard> SesionesPunchCard { get; set; }
+    public DbSet<RegistroPunchCard> RegistrosPunchCard { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -40,5 +41,31 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        modelBuilder.Entity<SesionPunchCard>(entity =>
+        {
+            entity.Property(e => e.NombreArchivo).HasMaxLength(250).IsRequired();
+            entity.Property(e => e.UsuarioId).HasMaxLength(450);
+            entity.Property(e => e.UsuarioNombre).HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<RegistroPunchCard>(entity =>
+        {
+            entity.HasIndex(e => e.SesionPunchCardId);
+            entity.HasIndex(e => new { e.SesionPunchCardId, e.NombreEmpleado, e.Fecha });
+
+            entity.Property(e => e.NombreEmpleado).HasMaxLength(200).IsRequired();
+            entity.Property(e => e.Departamento).HasMaxLength(100);
+            entity.Property(e => e.HoraEntrada).HasMaxLength(10);
+            entity.Property(e => e.HoraSalida).HasMaxLength(10);
+            entity.Property(e => e.Observacion).HasMaxLength(500);
+            entity.Property(e => e.NombreOriginal).HasMaxLength(200);
+            entity.Property(e => e.HorasTrabajadas).HasColumnType("decimal(18,2)");
+
+            entity.HasOne(e => e.SesionPunchCard)
+                .WithMany(s => s.Registros)
+                .HasForeignKey(e => e.SesionPunchCardId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }

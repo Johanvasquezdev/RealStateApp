@@ -1,9 +1,10 @@
-﻿using AutoMapper;
+using AutoMapper;
 using RealEstateApp.Core.Application.ViewModels.Improvement;
 using RealEstateApp.Core.Application.ViewModels.Property;
 using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 using RealEstateApp.Core.Application.ViewModels.SaleType;
 using RealEstateApp.Core.Application.ViewModels.Properties;
+using RealEstateApp.Core.Application.DTOs.PunchCard;
 using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Mapping;
@@ -12,6 +13,9 @@ public class GeneralProfile : Profile
 {
     public GeneralProfile()
     {
+        CreateMap<RegistroPunchCard, RegistrationPunchCardDto>().ReverseMap();
+        CreateMap<SesionPunchCard, SessionPunchCardDto>();
+        CreateMap<RowPunchCardImportada, RegistroPunchCard>();
         CreateMap<Improvement, ImprovementViewModel>().ReverseMap();
         CreateMap<Improvement, SaveImprovementViewModel>().ReverseMap();
 

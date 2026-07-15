@@ -4,7 +4,7 @@ using RealEstateApp.Core.Application.ViewModels.Agents;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ClientAgentService : IClientAgentService
+public class ClientAgentService : Interfaces.Services.ClientAgentService
 {
     private readonly IUserService _userService;
     private readonly IMapper _mapper;

@@ -6,7 +6,7 @@ using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ChatService : IChatService
+public class ChatService : Interfaces.Services.ChatService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _userService;

@@ -8,7 +8,7 @@ using RealEstateApp.Core.Domain.Enums;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ClientFavoriteService : IClientFavoriteService
+public class ClientFavoriteService : Interfaces.Services.ClientFavoriteService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;

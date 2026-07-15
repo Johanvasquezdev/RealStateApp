@@ -8,9 +8,9 @@ namespace RealEstateApp.Controllers;
 [Authorize(Roles = "Agente")]
 public class ChatController : Controller
 {
-    private readonly IChatService _chatService;
+    private readonly ChatService _chatService;
 
-    public ChatController(IChatService chatService)
+    public ChatController(ChatService chatService)
     {
         _chatService = chatService;
     }

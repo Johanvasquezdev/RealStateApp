@@ -7,8 +7,8 @@ using RealEstateApp.Core.Domain.Interfaces;
 
 namespace RealEstateApp.Core.Application.Services
 {
-    public class ImprovementService(IGenericRepository<Improvement> repository, IGenericRepository<PropertyImprovement> linkRepository, IMapper mapper)
-    : GenericService<SaveImprovementViewModel, ImprovementViewModel, Improvement>(repository, mapper), IImprovementService
+    public class ImprovementService(IGenericRepository<Improvement> repository, IMapper mapper)
+    : GenericService<SaveImprovementViewModel, ImprovementViewModel, Improvement>(repository, mapper), Interfaces.ImprovementService
     {
         private readonly IGenericRepository<PropertyImprovement> _linkRepository = linkRepository;
         public override async Task Delete(int id)

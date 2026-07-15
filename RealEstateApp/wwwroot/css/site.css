@@ -8,8 +8,16 @@ html {
   }
 }
 
+:root {
+  --color-primary: #8B0000;
+  --color-primary-dark: #5C0000;
+  --color-gold: #DAA520;
+  --color-gold-light: #FFD700;
+  --color-gold-dark: #B8860B;
+}
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--color-gold);
 }
 
 html {

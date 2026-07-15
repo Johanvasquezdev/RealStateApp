@@ -11,24 +11,28 @@ public static class ServiceRegistration
     {
         services.AddAutoMapper(typeof(ServiceRegistration).Assembly);
 
-        services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
-        services.AddTransient<IImprovementService, ImprovementService>();
-        services.AddTransient<IPropertyTypeService, PropertyTypeService>();
-        services.AddTransient<ISaleTypeService, SaleTypeService>();
+        services.AddTransient(typeof(Interfaces.GenericService<,,>), typeof(Services.GenericService<,,>));
+        services.AddTransient<ImprovementService, ImprovementService>();
+        services.AddTransient<PropertyTypeService, PropertyTypeService>();
+        services.AddTransient<SaleTypeService, SaleTypeService>();
 
-        services.AddTransient<IAgenteService, AgentService>();
-        services.AddTransient<IAuthService, AuthService>();
-        services.AddTransient<IPropiedadService, PropertyService>();
-        services.AddTransient<IPerfilService, PerfilService>();
-        services.AddTransient<IOfertaService, OfferService>();
-        services.AddTransient<IChatService, ChatService>();
+        services.AddTransient<AgentService, AgentService>();
+        services.AddTransient<AuthService, AuthService>();
+        services.AddTransient<IPropertyService, PropertyService>();
+        services.AddTransient<ProfileService, PerfilService>();
+        services.AddTransient<OfferService, OfferService>();
+        services.AddTransient<ChatService, ChatService>();
 
         // Persona 2: Cliente Services
-        services.AddTransient<IClientAgentService, ClientAgentService>();
-        services.AddTransient<IClientFavoriteService, ClientFavoriteService>();
-        services.AddTransient<IClientOfferService, ClientOfferService>();
-        services.AddTransient<IClientChatService, ClientChatService>();
-        services.AddTransient<IClientPropertyService, ClientPropertyService>();
+        services.AddTransient<ClientAgentService, ClientAgentService>();
+        services.AddTransient<ClientFavoriteService, ClientFavoriteService>();
+        services.AddTransient<ClientOfferService, ClientOfferService>();
+        services.AddTransient<ClientChatService, ClientChatService>();
+        services.AddTransient<ClientPropertyService, ClientPropertyService>();
+
+        // Punch Card Services
+        services.AddTransient<SummaryPunchCardService, SummaryPunchCardService>();
+
         return services;
     }
 }
