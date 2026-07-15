@@ -72,7 +72,7 @@ public class ChatService : IChatService
             {
                 Content = m.Content,
                 SenderId = m.SenderId,
-                SenderNombre = m.SenderId == agenteId ? "Tú" : (client is not null ? $"{client.FirstName} {client.LastName}" : "Cliente"),
+                SenderNombre = m.SenderId == agenteId ? "TÃº" : (client is not null ? $"{client.FirstName} {client.LastName}" : "Cliente"),
                 Created = m.Created
             }).ToList()
         };
