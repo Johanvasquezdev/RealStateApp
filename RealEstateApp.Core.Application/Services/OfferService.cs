@@ -7,7 +7,7 @@ using RealEstateApp.Core.Domain.Enums;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class OfferService : IOfertaService
+public class OfferService : Interfaces.Services.OfferService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _userService;

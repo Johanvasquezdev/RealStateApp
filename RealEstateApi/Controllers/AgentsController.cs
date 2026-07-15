@@ -7,9 +7,9 @@ namespace RealEstateApi.Controllers;
 [Route("api/[controller]")]
 public class AgentsController : ControllerBase
 {
-    private readonly IAgenteService _agenteService;
+    private readonly AgentService _agenteService;
 
-    public AgentsController(IAgenteService agenteService)
+    public AgentsController(AgentService agenteService)
     {
         _agenteService = agenteService;
     }

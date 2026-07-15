@@ -1,0 +1,21 @@
+@{ ViewData["Title"] = "Subir Archivo Punch Card"; }
+
+<h2 class="text-gold">Subir Archivo Punch Card</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label class="form-label">Seleccionar archivo (CSV, XLS o XLSX)</label>
+        <input type="file" name="archivo" class="form-control" accept=".csv,.xls,.xlsx" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Subir y Procesar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

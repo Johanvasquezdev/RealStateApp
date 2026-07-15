@@ -7,7 +7,7 @@ using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class AgentService : IAgenteService
+public class AgentService : Interfaces.Services.AgentService
 {
     private readonly IUserService _userService;
     private readonly IGenericRepository<Property> _propertyRepository;

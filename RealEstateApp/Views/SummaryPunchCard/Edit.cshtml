@@ -1,0 +1,42 @@
+@model EditPunchCardDto
+@{ ViewData["Title"] = "Editar Registro Punch Card"; }
+
+<h2 class="text-gold">Editar Registro</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<form method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="NombreEmpleado" class="form-label"></label>
+        <input asp-for="NombreEmpleado" class="form-control" />
+        <span asp-validation-for="NombreEmpleado" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="TieneLicencia" class="form-check-input" />
+        <label asp-for="TieneLicencia" class="form-check-label"></label>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Observacion" class="form-label"></label>
+        <textarea asp-for="Observacion" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Observacion" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    <a asp-action="Registros" asp-route-sesionId="@ViewBag.SesionId" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

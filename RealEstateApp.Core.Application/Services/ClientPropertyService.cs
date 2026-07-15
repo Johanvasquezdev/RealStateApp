@@ -4,17 +4,17 @@ using RealEstateApp.Core.Application.ViewModels.Properties;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ClientPropertyService : IClientPropertyService
+public class ClientPropertyService : Interfaces.Services.ClientPropertyService
 {
     // Usaremos IPropiedadService de Gregori (que ya interactúa con la BD y el UnitOfWork)
     // para re-aprovechar la lógica de obtención de propiedades, 
     // pero mapearemos a nuestros Client ViewModels y buscaremos datos del agente.
-    private readonly IPropiedadService _propiedadService;
+    private readonly IPropertyService _propiedadService;
     private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
     public ClientPropertyService(
-        IPropiedadService propiedadService,
+        IPropertyService propiedadService,
         IMapper mapper,
         IUserService userService)
     {

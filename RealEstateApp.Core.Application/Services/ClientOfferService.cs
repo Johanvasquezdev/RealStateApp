@@ -8,7 +8,7 @@ using RealEstateApp.Core.Domain.Enums;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ClientOfferService : IClientOfferService
+public class ClientOfferService : Interfaces.Services.ClientOfferService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;

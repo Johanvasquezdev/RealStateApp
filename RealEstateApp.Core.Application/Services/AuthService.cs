@@ -3,7 +3,7 @@ using RealEstateApp.Core.Application.ViewModels.Accounts;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class AuthService : IAuthService
+public class AuthService : Interfaces.Services.AuthService
 {
     private readonly IUserService _userService;
 

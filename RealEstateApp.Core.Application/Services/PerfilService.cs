@@ -3,7 +3,7 @@ using RealEstateApp.Core.Application.ViewModels.AgentProfile;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class PerfilService : IPerfilService
+public class PerfilService : ProfileService
 {
     private readonly IUserService _userService;
 
