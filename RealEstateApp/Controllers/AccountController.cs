@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.Accounts;
 
@@ -30,6 +30,9 @@ public class AccountController : Controller
         }
         if (result.Rol == "Agente")
             return RedirectToAction("Index", "AgenteHome");
+        if (result.Rol == "Cliente")
+            return RedirectToAction("Index", "ClientProperty");
+            
         return RedirectToAction("Index", "Home");
     }
 

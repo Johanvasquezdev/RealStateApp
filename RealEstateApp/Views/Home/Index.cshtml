@@ -1,8 +1,49 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <div class="position-relative overflow-hidden text-center rounded-4 shadow-lg mb-5" style="background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover; min-height: 500px; display: flex; align-items: center; justify-content: center;">
+        <div class="p-5 fade-in-up">
+            <h1 class="display-3 fw-bolder text-white mb-4" style="letter-spacing: -1px;">Encuentra el Hogar de tus Sueños</h1>
+            <p class="lead text-white-50 mb-5 fw-light mx-auto" style="max-width: 600px;">Descubre las mejores propiedades con la tecnología más avanzada del mercado. Tu futuro comienza aquí.</p>
+            <a asp-controller="ClientProperty" asp-action="Index" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fs-5 shadow-lg hover-lift">
+                Explorar Propiedades <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container py-5 mt-4">
+        <div class="row g-5 text-center fade-in-up delay-1">
+            <div class="col-md-4">
+                <div class="card-premium p-4 h-100">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                        <i class="bi bi-house-door fs-1"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Propiedades Exclusivas</h3>
+                    <p class="text-muted">Accede a un catálogo de viviendas seleccionadas rigurosamente para garantizar tu confort.</p>
+                </div>
+            </div>
+            <div class="col-md-4 fade-in-up delay-2">
+                <div class="card-premium p-4 h-100">
+                    <div class="bg-secondary bg-opacity-10 text-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                        <i class="bi bi-shield-check fs-1"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Transacciones Seguras</h3>
+                    <p class="text-muted">Garantizamos la seguridad y transparencia en cada paso del proceso de compra o alquiler.</p>
+                </div>
+            </div>
+            <div class="col-md-4 fade-in-up delay-3">
+                <div class="card-premium p-4 h-100">
+                    <div class="bg-info bg-opacity-10 text-info rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
+                        <i class="bi bi-person-badge fs-1"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Agentes Expertos</h3>
+                    <p class="text-muted">Nuestro equipo de agentes inmobiliarios certificados te guiará en todo momento.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

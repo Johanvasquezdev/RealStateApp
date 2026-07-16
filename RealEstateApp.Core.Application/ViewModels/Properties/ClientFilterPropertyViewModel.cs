@@ -20,4 +20,7 @@ public class ClientFilterPropertyViewModel
 
     [Display(Name = "Cantidad de Baños")]
     public int? Bathrooms { get; set; }
+
+    [Display(Name = "Código")]
+    public string? Code { get; set; }
 }

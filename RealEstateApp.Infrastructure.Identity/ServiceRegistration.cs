@@ -25,7 +25,7 @@ public static class ServiceRegistration
         {
             services.AddDbContext<IdentityContext>(options =>
             {
-                options.UseSqlServer(config.GetConnectionString("IdentityConnection"),
+                options.UseNpgsql(config.GetConnectionString("DefaultConnection"),
                 m => m.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName));
             });
         }

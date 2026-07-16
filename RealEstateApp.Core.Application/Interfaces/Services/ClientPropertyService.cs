@@ -5,5 +5,5 @@ namespace RealEstateApp.Core.Application.Interfaces.Services;
 public interface ClientPropertyService
 {
     Task<List<ClientPropertyViewModel>> GetPropertiesWithFiltersAsync(ClientFilterPropertyViewModel filters);
-    Task<ClientPropertyDetailViewModel?> GetPropertyDetailAsync(int id);
+    Task<ClientPropertyDetailViewModel?> GetPropertyDetailAsync(int id, string? clientId = null);
 }

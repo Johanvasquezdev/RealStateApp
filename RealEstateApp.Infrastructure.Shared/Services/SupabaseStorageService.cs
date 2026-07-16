@@ -15,7 +15,6 @@ public class SupabaseStorageService : IFileStorageService
         _settings = settings.Value;
         var options = new Supabase.SupabaseOptions { AutoConnectRealtime = false };
         _client = new Supabase.Client(_settings.Url, _settings.Key, options);
-        _client.InitializeAsync().Wait();
     }
 
     public string UploadFile(IFormFile file, string directory, bool isEditMode = false, string imagePath = "")
@@ -28,7 +27,6 @@ public class SupabaseStorageService : IFileStorageService
             }
         }
 
-        // Generate unique filename
         Guid guid = Guid.NewGuid();
         FileInfo fileInfo = new FileInfo(file.FileName);
         string fileName = guid + fileInfo.Extension;
@@ -39,8 +37,6 @@ public class SupabaseStorageService : IFileStorageService
         byte[] bytes = memoryStream.ToArray();
 
         var bucket = _client.Storage.From(_settings.BucketName);
-
-        // Upload to Supabase asynchronously but we block since the interface is synchronous
         bucket.Upload(bytes, fullPath).Wait();
 
         if (isEditMode && !string.IsNullOrEmpty(imagePath))
@@ -53,11 +49,9 @@ public class SupabaseStorageService : IFileStorageService
             }
             catch
             {
-                // Ignore if it fails to delete the old image
             }
         }
 
-        // Return public URL
         return bucket.GetPublicUrl(fullPath);
     }
 
@@ -74,7 +68,6 @@ public class SupabaseStorageService : IFileStorageService
         }
         catch
         {
-            // Ignore if file doesn't exist
         }
     }
 }
