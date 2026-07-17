@@ -17,31 +17,31 @@ public class ChatService : Interfaces.Services.ChatService
         _userService = userService;
     }
 
-    public async Task<List<AgentChatSummaryViewModel>> GetConversacionesByPropertyAsync(int propertyId, string agenteId)
+    public async Task<List<AgentChatSummaryViewModel>> GetConversationsByPropertyAsync(int propertyId, string agentId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var property = await propertyRepo.GetByIdAsync(propertyId);
-        if (property is null || property.AgentId != agenteId)
+        if (property is null || property.AgentId != agentId)
             return new();
 
         var messageRepo = _unitOfWork.Repository<Message>();
-        var allMessages = await messageRepo.FindAsync(m => m.PropertyId == propertyId && m.ReceiverId == agenteId);
-        var clientesIds = allMessages.Select(m => m.SenderId).Distinct().ToList();
+        var allMessages = await messageRepo.FindAsync(m => m.PropertyId == propertyId && m.ReceiverId == agentId);
+        var clientIds = allMessages.Select(m => m.SenderId).Distinct().ToList();
 
         var result = new List<AgentChatSummaryViewModel>();
-        foreach (var clienteId in clientesIds)
+        foreach (var clientId in clientIds)
         {
-            var client = await _userService.FindByIdAsync(clienteId);
-            var clientMessages = (await messageRepo.FindAsync(m => m.PropertyId == propertyId && m.SenderId == clienteId))
+            var client = await _userService.FindByIdAsync(clientId);
+            var clientMessages = (await messageRepo.FindAsync(m => m.PropertyId == propertyId && m.SenderId == clientId))
                 .OrderByDescending(m => m.Created);
-            var ultimo = clientMessages.First();
+            var last = clientMessages.First();
 
             result.Add(new AgentChatSummaryViewModel
             {
-                ClienteId = clienteId,
-                ClienteNombre = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
-                UltimoMensaje = ultimo.Content,
-                FechaUltimoMensaje = ultimo.Created,
+                ClientId = clientId,
+                ClientName = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
+                LastMessage = last.Content,
+                LastMessageDate = last.Created,
                 PropertyId = propertyId,
                 PropertyCode = property.Code
             });
@@ -49,36 +49,36 @@ public class ChatService : Interfaces.Services.ChatService
         return result;
     }
 
-    public async Task<AgentChatDetailViewModel> GetConversacionDetalleAsync(int propertyId, string clienteId, string agenteId)
+    public async Task<AgentChatDetailViewModel> GetConversationDetailAsync(int propertyId, string clientId, string agentId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var property = await propertyRepo.GetByIdAsync(propertyId);
-        var client = await _userService.FindByIdAsync(clienteId);
+        var client = await _userService.FindByIdAsync(clientId);
 
         var messageRepo = _unitOfWork.Repository<Message>();
-        var mensajes = await messageRepo.FindAsync(m =>
+        var messages = await messageRepo.FindAsync(m =>
             m.PropertyId == propertyId &&
-            ((m.SenderId == clienteId && m.ReceiverId == agenteId) ||
-             (m.SenderId == agenteId && m.ReceiverId == clienteId)));
-        mensajes = mensajes.OrderBy(m => m.Created).ToList();
+            ((m.SenderId == clientId && m.ReceiverId == agentId) ||
+             (m.SenderId == agentId && m.ReceiverId == clientId)));
+        messages = messages.OrderBy(m => m.Created).ToList();
 
         return new AgentChatDetailViewModel
         {
-            ClienteId = clienteId,
-            ClienteNombre = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
+            ClientId = clientId,
+            ClientName = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
             PropertyId = propertyId,
             PropertyCode = property?.Code ?? "",
-            Mensajes = mensajes.Select(m => new MensajeViewModel
+            Messages = messages.Select(m => new MessageViewModel
             {
                 Content = m.Content,
                 SenderId = m.SenderId,
-                SenderNombre = m.SenderId == agenteId ? "Tú" : (client is not null ? $"{client.FirstName} {client.LastName}" : "Cliente"),
+                SenderName = m.SenderId == agentId ? "Tú" : (client is not null ? $"{client.FirstName} {client.LastName}" : "Cliente"),
                 Created = m.Created
             }).ToList()
         };
     }
 
-    public async Task EnviarMensajeAsync(AgentSendMessageViewModel vm, string senderId)
+    public async Task SendMessageAsync(AgentSendMessageViewModel vm, string senderId)
     {
         var messageRepo = _unitOfWork.Repository<Message>();
         var msg = new Message

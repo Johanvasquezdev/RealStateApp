@@ -26,7 +26,7 @@ public class PropertiesController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var properties = await _propertyRepository.FindWithIncludesAsync(
-            p => p.Status == PropertyStatus.Disponible,
+            p => p.Status == PropertyStatus.Available,
             "PropertyType", "SaleType", "Images");
 
         var result = properties.Select(p => new PropertyListApiResponse
@@ -49,7 +49,7 @@ public class PropertiesController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var property = await _propertyRepository.FirstOrDefaultWithIncludesAsync(
-            p => p.Id == id && p.Status == PropertyStatus.Disponible,
+            p => p.Id == id && p.Status == PropertyStatus.Available,
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
 
         if (property == null)
@@ -82,7 +82,7 @@ public class PropertiesController : ControllerBase
     public async Task<IActionResult> GetByCode(string code)
     {
         var property = await _propertyRepository.FirstOrDefaultWithIncludesAsync(
-            p => p.Code == code && p.Status == PropertyStatus.Disponible,
+            p => p.Code == code && p.Status == PropertyStatus.Available,
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
 
         if (property == null)

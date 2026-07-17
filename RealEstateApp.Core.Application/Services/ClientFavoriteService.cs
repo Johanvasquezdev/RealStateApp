@@ -8,7 +8,7 @@ using RealEstateApp.Core.Domain.Enums;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ClientFavoriteService : Interfaces.Services.ClientFavoriteService
+public class ClientFavoriteService : IClientFavoriteService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -49,7 +49,7 @@ public class ClientFavoriteService : Interfaces.Services.ClientFavoriteService
         // Filtrar solo las disponibles o las que quiera ver
         var availableProperties = favorites
             .Select(f => f.Property)
-            .Where(p => p.Status == PropertyStatus.Disponible)
+            .Where(p => p.Status == PropertyStatus.Available)
             .ToList();
 
         var vms = _mapper.Map<List<ClientPropertyViewModel>>(availableProperties);

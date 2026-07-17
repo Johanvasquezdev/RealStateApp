@@ -20,38 +20,38 @@ public class PropertyService : IPropertyService
         _mapper = mapper;
     }
 
-    public async Task<List<AgentPropertyViewModel>> GetPropiedadesDisponiblesAsync()
+    public async Task<List<AgentPropertyViewModel>> GetAvailablePropertiesAsync()
     {
         var repo = _unitOfWork.Repository<Property>();
-        var propiedades = await repo.FindWithIncludesAsync(
-            p => p.Status == PropertyStatus.Disponible,
+        var properties = await repo.FindWithIncludesAsync(
+            p => p.Status == PropertyStatus.Available,
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
-        return MapWithImages(propiedades);
+        return MapWithImages(properties);
     }
 
-    public async Task<List<AgentPropertyViewModel>> GetPropiedadesByAgenteAsync(string agenteId)
+    public async Task<List<AgentPropertyViewModel>> GetPropertiesByAgentAsync(string agentId)
     {
         var repo = _unitOfWork.Repository<Property>();
-        var propiedades = await repo.FindWithIncludesAsync(
-            p => p.AgentId == agenteId,
+        var properties = await repo.FindWithIncludesAsync(
+            p => p.AgentId == agentId,
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
-        return MapWithImages(propiedades);
+        return MapWithImages(properties);
     }
 
-    public async Task<List<AgentPropertyViewModel>> GetPropiedadesDisponiblesByAgenteAsync(string agenteId)
+    public async Task<List<AgentPropertyViewModel>> GetAvailablePropertiesByAgentAsync(string agentId)
     {
         var repo = _unitOfWork.Repository<Property>();
-        var propiedades = await repo.FindWithIncludesAsync(
-            p => p.AgentId == agenteId && p.Status == PropertyStatus.Disponible,
+        var properties = await repo.FindWithIncludesAsync(
+            p => p.AgentId == agentId && p.Status == PropertyStatus.Available,
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
-        return MapWithImages(propiedades);
+        return MapWithImages(properties);
     }
 
-    public async Task<AgentPropertySaveViewModel> GetPropiedadForEditAsync(int id, string agenteId)
+    public async Task<AgentPropertySaveViewModel> GetPropertyForEditAsync(int id, string agentId)
     {
         var repo = _unitOfWork.Repository<Property>();
         var prop = await repo.FirstOrDefaultWithIncludesAsync(
-            p => p.Id == id && p.AgentId == agenteId && p.Status == PropertyStatus.Disponible,
+            p => p.Id == id && p.AgentId == agentId && p.Status == PropertyStatus.Available,
             "Images", "PropertyImprovements");
         if (prop is null) return null!;
         return new AgentPropertySaveViewModel
@@ -69,7 +69,7 @@ public class PropertyService : IPropertyService
         };
     }
 
-    public async Task<AgentPropertyViewModel?> GetPropiedadDetailAsync(int id)
+    public async Task<AgentPropertyViewModel?> GetPropertyDetailAsync(int id)
     {
         var repo = _unitOfWork.Repository<Property>();
         var prop = await repo.FirstOrDefaultWithIncludesAsync(
@@ -77,11 +77,11 @@ public class PropertyService : IPropertyService
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
         if (prop is null) return null;
         var vm = _mapper.Map<AgentPropertyViewModel>(prop);
-        vm.ImagenPrincipal = prop.Images.FirstOrDefault()?.ImageUrl;
+        vm.MainImage = prop.Images.FirstOrDefault()?.ImageUrl;
         return vm;
     }
 
-    public async Task<int> CreateAsync(AgentPropertySaveViewModel vm, string agenteId)
+    public async Task<int> CreateAsync(AgentPropertySaveViewModel vm, string agentId)
     {
         var code = await GenerateUniqueCodeAsync();
         var propertyRepo = _unitOfWork.Repository<Property>();
@@ -98,8 +98,8 @@ public class PropertyService : IPropertyService
             Bathrooms = vm.Bathrooms,
             PropertyTypeId = vm.PropertyTypeId,
             SaleTypeId = vm.SaleTypeId,
-            AgentId = agenteId,
-            Status = PropertyStatus.Disponible
+            AgentId = agentId,
+            Status = PropertyStatus.Available
         };
 
         await propertyRepo.AddAsync(entity);
@@ -124,14 +124,14 @@ public class PropertyService : IPropertyService
         return entity.Id;
     }
 
-    public async Task UpdateAsync(AgentPropertySaveViewModel vm, string agenteId)
+    public async Task UpdateAsync(AgentPropertySaveViewModel vm, string agentId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var improvementRepo = _unitOfWork.Repository<PropertyImprovement>();
         var imageRepo = _unitOfWork.Repository<PropertyImage>();
 
         var entity = await propertyRepo.FirstOrDefaultWithIncludesAsync(
-            p => p.Id == vm.Id && p.AgentId == agenteId && p.Status == PropertyStatus.Disponible,
+            p => p.Id == vm.Id && p.AgentId == agentId && p.Status == PropertyStatus.Available,
             "Images", "PropertyImprovements");
         if (entity is null) return;
 
@@ -162,11 +162,11 @@ public class PropertyService : IPropertyService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id, string agenteId)
+    public async Task DeleteAsync(int id, string agentId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var entity = await propertyRepo.FirstOrDefaultWithIncludesAsync(
-            p => p.Id == id && p.AgentId == agenteId && p.Status == PropertyStatus.Disponible,
+            p => p.Id == id && p.AgentId == agentId && p.Status == PropertyStatus.Available,
             "Images");
         if (entity is null) return;
 
@@ -210,13 +210,13 @@ public class PropertyService : IPropertyService
         return fileName;
     }
 
-    private List<AgentPropertyViewModel> MapWithImages(List<Property> propiedades)
+    private List<AgentPropertyViewModel> MapWithImages(List<Property> properties)
     {
-        var list = _mapper.Map<List<AgentPropertyViewModel>>(propiedades);
+        var list = _mapper.Map<List<AgentPropertyViewModel>>(properties);
         foreach (var vm in list)
         {
-            var prop = propiedades.First(p => p.Id == vm.Id);
-            vm.ImagenPrincipal = prop.Images.FirstOrDefault()?.ImageUrl;
+            var prop = properties.First(p => p.Id == vm.Id);
+            vm.MainImage = prop.Images.FirstOrDefault()?.ImageUrl;
         }
         return list;
     }

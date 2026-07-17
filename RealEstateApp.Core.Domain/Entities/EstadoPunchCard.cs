@@ -1,8 +1,8 @@
 namespace RealEstateApp.Core.Domain.Enums;
 
-public enum EstadoPunchCard
+public enum PunchCardStatus
 {
     Normal = 1,
-    Licencia = 2,
-    Ausente = 3
+    OnLeave = 2,
+    Absent = 3
 }

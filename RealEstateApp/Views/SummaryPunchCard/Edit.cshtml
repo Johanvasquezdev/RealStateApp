@@ -17,20 +17,22 @@
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="mb-3">
-        <label asp-for="NombreEmpleado" class="form-label"></label>
-        <input asp-for="NombreEmpleado" class="form-control" />
-        <span asp-validation-for="NombreEmpleado" class="text-danger"></span>
+        <label asp-for="EmployeeName" class="form-label"></label>
+        <input asp-for="EmployeeName" class="form-control" />
+        <span asp-validation-for="EmployeeName" class="text-danger"></span>
     </div>
 
-    <div class="mb-3 form-check">
-        <input asp-for="TieneLicencia" class="form-check-input" />
-        <label asp-for="TieneLicencia" class="form-check-label"></label>
+    <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" asp-for="IsOnLeave">
+        <label class="form-check-label" asp-for="IsOnLeave">
+            Empleado está de Licencia
+        </label>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Observacion" class="form-label"></label>
-        <textarea asp-for="Observacion" class="form-control" rows="3"></textarea>
-        <span asp-validation-for="Observacion" class="text-danger"></span>
+        <label asp-for="Notes" class="form-label"></label>
+        <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Notes" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>

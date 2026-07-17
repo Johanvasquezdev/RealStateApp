@@ -1,4 +1,4 @@
-﻿@model List<AgenteListViewModel>
+@model List<AgentListViewModel>
 @{ ViewData["Title"] = "Agentes Inmobiliarios"; }
 
 <h2>Agentes Inmobiliarios</h2>
@@ -15,11 +15,11 @@
     {
         <div class="col">
             <div class="card h-100 shadow-sm">
-                <img src="@(string.IsNullOrEmpty(agente.ProfilePictureUrl) ? "~/images/profiles/default-profile.png" : "~/images/profiles/" + agente.ProfilePictureUrl)" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@agente.NombreCompleto" asp-append-version="true" />
+                <img src="@(string.IsNullOrEmpty(agente.ProfilePictureUrl) ? "~/images/profiles/default-profile.png" : "~/images/profiles/" + agente.ProfilePictureUrl)" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@agente.FullName" asp-append-version="true" />
                 <div class="card-body">
-                    <h5 class="card-title">@agente.NombreCompleto</h5>
+                    <h5 class="card-title">@agente.FullName</h5>
                     <p class="card-text">
-                        <span class="badge bg-info">@agente.CantidadPropiedades propiedades</span>
+                        <span class="badge bg-info">@agente.PropertyCount propiedades</span>
                     </p>
                     <a asp-action="Detalle" asp-route-id="@agente.Id" class="btn btn-outline-primary">Ver Detalle</a>
                 </div>

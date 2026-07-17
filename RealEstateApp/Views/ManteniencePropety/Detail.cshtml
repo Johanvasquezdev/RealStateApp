@@ -1,4 +1,4 @@
-﻿@model AgentPropertyViewModel
+@model AgentPropertyViewModel
 @{ ViewData["Title"] = "Detalle de Propiedad"; }
 
 <h2>Propiedad @Model.Code</h2>
@@ -23,28 +23,26 @@
             <dd class="col-sm-8">@Model.SaleType</dd>
             <dt class="col-sm-4">Descripción</dt>
             <dd class="col-sm-8">@Model.Description</dd>
+            <div class="row">
+                @if (Model.Images != null && Model.Images.Any())
+                {
+                    @foreach (var img in Model.Images)
+                    {
+                        <div class="col-md-3 mb-3">
+                            <img src="@img" class="img-fluid rounded" alt="Imagen de propiedad">
+                        </div>
+                    }
+                }
+            </div>
         </dl>
     </div>
 </div>
 
-@if (Model.Imagenes.Any())
-{
-    <h4>Imágenes</h4>
-    <div class="row">
-        @foreach (var img in Model.Imagenes)
-        {
-            <div class="col-md-3 mb-2">
-                <img src="~/images/properties/@img" class="img-fluid img-thumbnail" />
-            </div>
-        }
-    </div>
-}
-
-@if (Model.Mejoras.Any())
+@if (Model.Improvements.Any())
 {
     <h4>Mejoras</h4>
     <div>
-        @foreach (var mejora in Model.Mejoras)
+        @foreach (var mejora in Model.Improvements)
         {
             <span class="badge bg-info me-1">@mejora</span>
         }

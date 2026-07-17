@@ -2,12 +2,12 @@ using RealEstateApp.Core.Application.DTOs.PunchCard;
 
 namespace RealEstateApp.Core.Application.Interfaces.Services;
 
-public interface SummaryPunchCardService
+public interface ISummaryPunchCardService
 {
-    Task<ResultimportationPunchCardDto> ProcesarImportacionAsync(List<RowPunchCardImportada> filas, string nombreArchivo, string? usuarioId, string? usuarioNombre);
-    Task<IEnumerable<SessionPunchCardDto>> GetSesionesAsync();
-    Task<List<RegistrationPunchCardDto>> GetRegistrosAsync(FilterPunchCardDto filtro);
-    Task<int> GetTotalRegistrosAsync(FilterPunchCardDto filtro);
+    Task<PunchCardImportResultDto> ProcessImportAsync(List<ImportedPunchCardRow> rows, string fileName, string? userId, string? userName);
+    Task<IEnumerable<SessionPunchCardDto>> GetSessionsAsync();
+    Task<List<RegistrationPunchCardDto>> GetRecordsAsync(FilterPunchCardDto filter);
+    Task<int> GetTotalRecordsAsync(FilterPunchCardDto filter);
     Task<RegistrationPunchCardDto?> GetByIdAsync(int id);
-    Task<RegistrationPunchCardDto?> EditarRegistroAsync(EditPunchCardDto dto, string? editadoPor);
+    Task<RegistrationPunchCardDto?> EditRecordAsync(EditPunchCardDto dto, string? editedBy);
 }

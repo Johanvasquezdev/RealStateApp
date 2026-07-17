@@ -1,11 +1,11 @@
 namespace RealEstateApp.Core.Application.DTOs.PunchCard;
 
-public class RowPunchCardImportada
+public class ImportedPunchCardRow
 {
-    public string NombreEmpleado { get; set; } = string.Empty;
-    public string? Departamento { get; set; }
-    public DateTime Fecha { get; set; }
-    public string? HoraEntrada { get; set; }
-    public string? HoraSalida { get; set; }
-    public decimal? HorasTrabajadas { get; set; }
+    public string EmployeeName { get; set; } = string.Empty;
+    public string? Department { get; set; }
+    public DateTime Date { get; set; }
+    public string? ClockInTime { get; set; }
+    public string? ClockOutTime { get; set; }
+    public decimal? HoursWorked { get; set; }
 }

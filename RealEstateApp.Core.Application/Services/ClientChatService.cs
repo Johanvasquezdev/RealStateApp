@@ -7,7 +7,7 @@ using RealEstateApp.Core.Domain.Common;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ClientChatService : Interfaces.Services.ClientChatService
+public class ClientChatService : IClientChatService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _userService;

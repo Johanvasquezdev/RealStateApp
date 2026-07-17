@@ -9,12 +9,12 @@ namespace RealEstateApp.Controllers;
 [Authorize(Roles = "Administrador")]
 public class SummaryPunchCardController : Controller
 {
-    private readonly SummaryPunchCardService _resumenService;
+    private readonly ISummaryPunchCardService _resumenService;
     private readonly ImporterPunchCardService _importadorService;
     private readonly ExportPunchCardService _exportacionService;
 
     public SummaryPunchCardController(
-        SummaryPunchCardService resumenService,
+        ISummaryPunchCardService resumenService,
         ImporterPunchCardService importadorService,
         ExportPunchCardService exportacionService)
     {
@@ -25,7 +25,7 @@ public class SummaryPunchCardController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var sesiones = await _resumenService.GetSesionesAsync();
+        var sesiones = await _resumenService.GetSessionsAsync();
         return View(sesiones);
     }
 
@@ -34,18 +34,18 @@ public class SummaryPunchCardController : Controller
         var lastSesion = sesionId ?? GetCookieInt("PunchCard_SesionId");
         var filtro = new FilterPunchCardDto
         {
-            SesionId = lastSesion,
-            NombreEmpleado = GetCookieString("PunchCard_Nombre"),
-            SoloLicencias = GetCookieBool("PunchCard_SoloLicencias")
+            SessionId = lastSesion,
+            EmployeeName = GetCookieString("PunchCard_Nombre"),
+            OnLeaveOnly = GetCookieBool("PunchCard_SoloLicencias")
         };
 
-        ViewBag.Sesiones = await _resumenService.GetSesionesAsync();
+        ViewBag.Sesiones = await _resumenService.GetSessionsAsync();
         ViewBag.Filtro = filtro;
 
-        var registros = await _resumenService.GetRegistrosAsync(filtro);
-        var total = await _resumenService.GetTotalRegistrosAsync(filtro);
+        var registros = await _resumenService.GetRecordsAsync(filtro);
+        var total = await _resumenService.GetTotalRecordsAsync(filtro);
         ViewBag.TotalRegistros = total;
-        ViewBag.TotalPaginas = (int)Math.Ceiling((double)total / filtro.TamanoPagina);
+        ViewBag.TotalPaginas = (int)Math.Ceiling((double)total / filtro.PageSize);
 
         return View(registros);
     }
@@ -53,17 +53,17 @@ public class SummaryPunchCardController : Controller
     [HttpPost]
     public async Task<IActionResult> Registros(FilterPunchCardDto filtro)
     {
-        SetCookie("PunchCard_SesionId", filtro.SesionId?.ToString() ?? "");
-        SetCookie("PunchCard_Nombre", filtro.NombreEmpleado ?? "");
-        SetCookie("PunchCard_SoloLicencias", filtro.SoloLicencias.ToString());
+        SetCookie("PunchCard_SesionId", filtro.SessionId?.ToString() ?? "");
+        SetCookie("PunchCard_Nombre", filtro.EmployeeName ?? "");
+        SetCookie("PunchCard_SoloLicencias", filtro.OnLeaveOnly.ToString());
 
-        ViewBag.Sesiones = await _resumenService.GetSesionesAsync();
+        ViewBag.Sesiones = await _resumenService.GetSessionsAsync();
         ViewBag.Filtro = filtro;
 
-        var registros = await _resumenService.GetRegistrosAsync(filtro);
-        var total = await _resumenService.GetTotalRegistrosAsync(filtro);
+        var registros = await _resumenService.GetRecordsAsync(filtro);
+        var total = await _resumenService.GetTotalRecordsAsync(filtro);
         ViewBag.TotalRegistros = total;
-        ViewBag.TotalPaginas = (int)Math.Ceiling((double)total / filtro.TamanoPagina);
+        ViewBag.TotalPaginas = (int)Math.Ceiling((double)total / filtro.PageSize);
 
         return View(registros);
     }
@@ -99,14 +99,14 @@ public class SummaryPunchCardController : Controller
         try
         {
             using var stream = archivo.OpenReadStream();
-            var filas = await _importadorService.LeerArchivoAsync(stream, archivo.FileName);
+            var filas = await _importadorService.ReadFileAsync(stream, archivo.FileName);
 
             var usuarioId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             var usuarioNombre = User.Identity?.Name;
-            var resultado = await _resumenService.ProcesarImportacionAsync(filas, archivo.FileName, usuarioId, usuarioNombre);
+            var resultado = await _resumenService.ProcessImportAsync(filas, archivo.FileName, usuarioId, usuarioNombre);
 
-            TempData["Success"] = $"Archivo importado: {resultado.RegistrosInsertados} registros insertados.";
-            return RedirectToAction(nameof(Registros), new { sesionId = resultado.SesionId });
+            TempData["Success"] = $"Archivo importado: {resultado.RecordsInserted} registros insertados.";
+            return RedirectToAction(nameof(Registros), new { sesionId = resultado.SessionId });
         }
         catch (Exception ex)
         {
@@ -123,9 +123,9 @@ public class SummaryPunchCardController : Controller
         var dto = new EditPunchCardDto
         {
             Id = registro.Id,
-            NombreEmpleado = registro.NombreEmpleado,
-            TieneLicencia = registro.Estado == EstadoPunchCard.Licencia,
-            Observacion = registro.Observacion
+            EmployeeName = registro.EmployeeName,
+            IsOnLeave = registro.Status == PunchCardStatus.OnLeave,
+            Notes = registro.Notes
         };
         return View(dto);
     }
@@ -138,26 +138,26 @@ public class SummaryPunchCardController : Controller
         if (!ModelState.IsValid) return View(dto);
 
         var editadoPor = User.Identity?.Name ?? "Sistema";
-        await _resumenService.EditarRegistroAsync(dto, editadoPor);
+        await _resumenService.EditRecordAsync(dto, editadoPor);
         TempData["Success"] = "Registro actualizado correctamente.";
         return RedirectToAction(nameof(Registros), new { sesionId = GetCookieInt("PunchCard_SesionId") });
     }
 
     public async Task<IActionResult> ExportarExcel(int sesionId)
     {
-        var bytes = await _exportacionService.ExportarExcelAsync(sesionId);
+        var bytes = await _exportacionService.ExportExcelAsync(sesionId);
         return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"ResumenPunchCard_{sesionId}.xlsx");
     }
 
     public async Task<IActionResult> ExportarPdf(int sesionId)
     {
-        var bytes = await _exportacionService.ExportarPdfAsync(sesionId);
+        var bytes = await _exportacionService.ExportPdfAsync(sesionId);
         return File(bytes, "application/pdf", $"ResumenPunchCard_{sesionId}.pdf");
     }
 
     public async Task<IActionResult> ExportarWord(int sesionId)
     {
-        var bytes = await _exportacionService.ExportarWordAsync(sesionId);
+        var bytes = await _exportacionService.ExportWordAsync(sesionId);
         return File(bytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"ResumenPunchCard_{sesionId}.docx");
     }
 

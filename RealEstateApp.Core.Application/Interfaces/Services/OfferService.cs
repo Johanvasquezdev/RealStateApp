@@ -1,11 +1,11 @@
-﻿using RealEstateApp.Core.Application.ViewModels.AgentOffers;
+using RealEstateApp.Core.Application.ViewModels.AgentOffers;
 
 namespace RealEstateApp.Core.Application.Interfaces.Services;
 
 public interface OfferService
 {
-    Task<List<AgentOfferSummaryViewModel>> GetOfertasResumenByPropertyAsync(int propertyId, string agenteId);
-    Task<List<AgentOfferDetailViewModel>> GetOfertasByClientePropertyAsync(int propertyId, string clienteId, string agenteId);
-    Task AceptarOfertaAsync(int ofertaId, string agenteId);
-    Task RechazarOfertaAsync(int ofertaId, string agenteId);
+    Task<List<AgentOfferSummaryViewModel>> GetOfferSummaryByPropertyAsync(int propertyId, string agentId);
+    Task<List<AgentOfferDetailViewModel>> GetOffersByClientPropertyAsync(int propertyId, string clientId, string agentId);
+    Task AcceptOfferAsync(int offerId, string agentId);
+    Task RejectOfferAsync(int offerId, string agentId);
 }

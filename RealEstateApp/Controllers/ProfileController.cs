@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.AgentProfile;
@@ -18,16 +18,16 @@ public class ProfileController : Controller
     public async Task<IActionResult> Index()
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var vm = await _perfilService.GetPerfilAsync(userId);
+        var vm = await _perfilService.GetProfileAsync(userId);
         return View(vm);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Index(AgentProfileViewModel vm)
+    public async Task<IActionResult> Edit(AgentProfileViewModel vm)
     {
-        if (!ModelState.IsValid) return View(vm);
+        if (!ModelState.IsValid) return View("Index", vm);
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        await _perfilService.UpdatePerfilAsync(userId, vm);
+        await _perfilService.UpdateProfileAsync(userId, vm);
         TempData["Exito"] = "Perfil actualizado correctamente.";
         return RedirectToAction("Index");
     }

@@ -38,12 +38,12 @@ else
                 @foreach (var s in Model)
                 {
                     <tr>
-                        <td>@s.NombreArchivo</td>
-                        <td>@s.TotalRegistros</td>
-                        <td>@s.RegistrosProcesados</td>
-                        <td>@s.RegistrosConError</td>
-                        <td>@(s.UsuarioNombre ?? "Sistema")</td>
-                        <td>@s.FechaSubida.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@s.FileName</td>
+                        <td>@s.TotalRecords</td>
+                        <td>@s.ProcessedRecords</td>
+                        <td>@s.ErrorRecords</td>
+                        <td>@(s.UserName ?? "Sistema")</td>
+                        <td>@s.UploadDate.ToString("dd/MM/yyyy HH:mm")</td>
                         <td>
                             <a asp-action="Registros" asp-route-sesionId="@s.Id" class="btn btn-sm btn-primary">Ver Registros</a>
                             <a asp-action="ExportarExcel" asp-route-sesionId="@s.Id" class="btn btn-sm btn-success">Excel</a>

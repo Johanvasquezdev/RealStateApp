@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.AgentProperties;
@@ -18,7 +18,7 @@ public class PropiertyMaintenanceController : Controller
     public async Task<IActionResult> Index()
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var propiedades = await _propiedadService.GetPropiedadesByAgenteAsync(userId);
+        var propiedades = await _propiedadService.GetPropertiesByAgentAsync(userId);
         return View(propiedades);
     }
 
@@ -39,7 +39,7 @@ public class PropiertyMaintenanceController : Controller
     public async Task<IActionResult> Edit(int id)
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var vm = await _propiedadService.GetPropiedadForEditAsync(id, userId);
+        var vm = await _propiedadService.GetPropertyForEditAsync(id, userId);
         if (vm is null) return NotFound();
         return View(vm);
     }
@@ -56,7 +56,7 @@ public class PropiertyMaintenanceController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var vm = await _propiedadService.GetPropiedadForEditAsync(id, userId);
+        var vm = await _propiedadService.GetPropertyForEditAsync(id, userId);
         if (vm is null) return NotFound();
         return View(vm);
     }
@@ -71,8 +71,8 @@ public class PropiertyMaintenanceController : Controller
 
     public async Task<IActionResult> Detail(int id)
     {
-        var vm = await _propiedadService.GetPropiedadDetailAsync(id);
-        if (vm is null) return NotFound();
-        return View(vm);
+        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        if (property == null) return NotFound();
+        return View(property);
     }
 }

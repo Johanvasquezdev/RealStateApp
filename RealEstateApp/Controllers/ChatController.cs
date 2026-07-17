@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.AgentChats;
@@ -18,23 +18,25 @@ public class ChatController : Controller
     public async Task<IActionResult> Index(int propertyId)
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var conversaciones = await _chatService.GetConversacionesByPropertyAsync(propertyId, userId);
+        var conversaciones = await _chatService.GetConversationsByPropertyAsync(propertyId, userId);
         ViewBag.PropertyId = propertyId;
         return View(conversaciones);
     }
 
-    public async Task<IActionResult> Conversacion(int propertyId, string clienteId)
+    public async Task<IActionResult> Conversacion(int propertyId, string clientId)
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var vm = await _chatService.GetConversacionDetalleAsync(propertyId, clienteId, userId);
-        return View(vm);
+        var detalle = await _chatService.GetConversationDetailAsync(propertyId, clientId, userId);
+        if (detalle == null) return NotFound();
+        return View(detalle);
     }
 
     [HttpPost]
     public async Task<IActionResult> EnviarMensaje(AgentSendMessageViewModel vm)
     {
+        if (!ModelState.IsValid) return RedirectToAction("Conversacion", new { propertyId = vm.PropertyId, clientId = vm.ReceiverId });
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        await _chatService.EnviarMensajeAsync(vm, userId);
-        return RedirectToAction("Conversacion", new { propertyId = vm.PropertyId, clienteId = vm.ReceiverId });
+        await _chatService.SendMessageAsync(vm, userId);
+        return RedirectToAction("Conversacion", new { propertyId = vm.PropertyId, clientId = vm.ReceiverId });
     }
 }

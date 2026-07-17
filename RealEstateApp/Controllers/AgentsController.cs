@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
 
 namespace RealEstateApp.Controllers;
@@ -14,16 +14,16 @@ public class AgentsController : Controller
 
     public async Task<IActionResult> Index(string? nombreFilter)
     {
-        var agentes = await _agenteService.GetAgentesActivosAsync(nombreFilter);
+        var agentes = await _agenteService.GetActiveAgentsAsync(nombreFilter);
         ViewBag.NombreFilter = nombreFilter;
         return View(agentes);
     }
 
     public async Task<IActionResult> Detalle(string id)
     {
-        var agente = await _agenteService.GetAgenteByIdAsync(id);
-        if (agente is null) return NotFound();
-        var propiedades = await _agenteService.GetPropiedadesByAgenteAsync(id);
+        var agente = await _agenteService.GetAgentByIdAsync(id);
+        if (agente == null) return NotFound();
+        var propiedades = await _agenteService.GetPropertiesByAgentAsync(id);
         ViewBag.Propiedades = propiedades;
         return View(agente);
     }

@@ -6,17 +6,17 @@ namespace RealEstateApp.Infrastructure.Persistence.Services;
 
 public class ImportadorPunchCardCsv : ImporterPunchCardService
 {
-    public async Task<List<RowPunchCardImportada>> LeerArchivoAsync(Stream stream, string nombreArchivo)
+    public async Task<List<ImportedPunchCardRow>> ReadFileAsync(Stream stream, string nombreArchivo)
     {
         var extension = Path.GetExtension(nombreArchivo).ToLowerInvariant();
         return extension == ".csv"
-            ? await LeerCsvAsync(stream)
-            : await LeerExcelAsync(stream);
+            ? await ReadCsvAsync(stream)
+            : await ReadExcelAsync(stream);
     }
 
-    private async Task<List<RowPunchCardImportada>> LeerCsvAsync(Stream stream)
+    private async Task<List<ImportedPunchCardRow>> ReadCsvAsync(Stream stream)
     {
-        var filas = new List<RowPunchCardImportada>();
+        var filas = new List<ImportedPunchCardRow>();
         using var reader = new StreamReader(stream);
         var lines = await reader.ReadToEndAsync();
         var rows = lines.Split('\n', StringSplitOptions.RemoveEmptyEntries);
@@ -37,23 +37,23 @@ public class ImportadorPunchCardCsv : ImporterPunchCardService
             var cols = rows[i].Split(delimiter).Select(c => c.Trim().Trim('"')).ToArray();
             if (cols.Length <= nameIdx || string.IsNullOrWhiteSpace(cols[nameIdx])) continue;
 
-            var fila = new RowPunchCardImportada
+            var fila = new ImportedPunchCardRow
             {
-                NombreEmpleado = cols[nameIdx],
-                Departamento = deptIdx >= 0 && deptIdx < cols.Length ? cols[deptIdx] : null,
-                Fecha = dateIdx >= 0 && dateIdx < cols.Length && DateTime.TryParse(cols[dateIdx], out var f) ? f : DateTime.Today,
-                HoraEntrada = entryIdx >= 0 && entryIdx < cols.Length ? ParseTime(cols[entryIdx]) : null,
-                HoraSalida = exitIdx >= 0 && exitIdx < cols.Length ? ParseTime(cols[exitIdx]) : null,
-                HorasTrabajadas = hoursIdx >= 0 && hoursIdx < cols.Length && decimal.TryParse(cols[hoursIdx], out var h) ? h : null
+                EmployeeName = cols[nameIdx],
+                Department = deptIdx >= 0 && deptIdx < cols.Length ? cols[deptIdx] : null,
+                Date = dateIdx >= 0 && dateIdx < cols.Length && DateTime.TryParse(cols[dateIdx], out var f) ? f : DateTime.Today,
+                ClockInTime = entryIdx >= 0 && entryIdx < cols.Length ? ParseTime(cols[entryIdx]) : null,
+                ClockOutTime = exitIdx >= 0 && exitIdx < cols.Length ? ParseTime(cols[exitIdx]) : null,
+                HoursWorked = hoursIdx >= 0 && hoursIdx < cols.Length && decimal.TryParse(cols[hoursIdx], out var h) ? h : null
             };
             filas.Add(fila);
         }
         return filas;
     }
 
-    private async Task<List<RowPunchCardImportada>> LeerExcelAsync(Stream stream)
+    private async Task<List<ImportedPunchCardRow>> ReadExcelAsync(Stream stream)
     {
-        var filas = new List<RowPunchCardImportada>();
+        var filas = new List<ImportedPunchCardRow>();
         using var workbook = new XLWorkbook(stream);
         var ws = workbook.Worksheet(1);
         if (ws == null) return filas;
@@ -99,14 +99,14 @@ public class ImportadorPunchCardCsv : ImporterPunchCardService
             var nombre = nameC > 0 ? ws.Cell(r, nameC).GetString()?.Trim() : null;
             if (string.IsNullOrWhiteSpace(nombre)) continue;
 
-            filas.Add(new RowPunchCardImportada
+            filas.Add(new ImportedPunchCardRow
             {
-                NombreEmpleado = nombre,
-                Departamento = deptC > 0 ? ws.Cell(r, deptC).GetString()?.Trim() : null,
-                Fecha = dateC > 0 && DateTime.TryParse(ws.Cell(r, dateC).GetString(), out var f) ? f : DateTime.Today,
-                HoraEntrada = entryC > 0 ? ParseTime(ws.Cell(r, entryC).GetString()) : null,
-                HoraSalida = exitC > 0 ? ParseTime(ws.Cell(r, exitC).GetString()) : null,
-                HorasTrabajadas = hoursC > 0 && decimal.TryParse(ws.Cell(r, hoursC).GetString(), out var h) ? h : null
+                EmployeeName = nombre,
+                Department = deptC > 0 ? ws.Cell(r, deptC).GetString()?.Trim() : null,
+                Date = dateC > 0 && DateTime.TryParse(ws.Cell(r, dateC).GetString(), out var f) ? f : DateTime.Today,
+                ClockInTime = entryC > 0 ? ParseTime(ws.Cell(r, entryC).GetString()) : null,
+                ClockOutTime = exitC > 0 ? ParseTime(ws.Cell(r, exitC).GetString()) : null,
+                HoursWorked = hoursC > 0 && decimal.TryParse(ws.Cell(r, hoursC).GetString(), out var h) ? h : null
             });
         }
 
