@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
 
@@ -17,7 +17,7 @@ public class AgentHomeController : Controller
     public async Task<IActionResult> Index()
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var propiedades = await _propiedadService.GetPropiedadesByAgenteAsync(userId);
+        var propiedades = await _propiedadService.GetPropertiesByAgentAsync(userId);
         return View(propiedades);
     }
 }

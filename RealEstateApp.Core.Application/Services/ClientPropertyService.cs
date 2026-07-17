@@ -8,7 +8,7 @@ using RealEstateApp.Core.Domain.Common;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ClientPropertyService : Interfaces.Services.ClientPropertyService
+public class ClientPropertyService : IClientPropertyService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -29,7 +29,7 @@ public class ClientPropertyService : Interfaces.Services.ClientPropertyService
     {
         var repo = _unitOfWork.Repository<Property>();
         var properties = await repo.FindWithIncludesAsync(
-            p => p.Status == PropertyStatus.Disponible,
+            p => p.Status == PropertyStatus.Available,
             "PropertyType", "SaleType", "Images", "Agent");
 
         // Apply filters
@@ -81,7 +81,7 @@ public class ClientPropertyService : Interfaces.Services.ClientPropertyService
     {
         var repo = _unitOfWork.Repository<Property>();
         var prop = await repo.FirstOrDefaultWithIncludesAsync(
-            p => p.Id == id && p.Status == PropertyStatus.Disponible,
+            p => p.Id == id && p.Status == PropertyStatus.Available,
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
 
         if (prop == null) return null;
@@ -114,11 +114,11 @@ public class ClientPropertyService : Interfaces.Services.ClientPropertyService
         var offerRepo = _unitOfWork.Repository<Offer>();
         
         // Cannot make offer if another offer is already accepted
-        var hasAcceptedOffer = await offerRepo.AnyAsync(o => o.PropertyId == propertyId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Aceptada);
+        var hasAcceptedOffer = await offerRepo.AnyAsync(o => o.PropertyId == propertyId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Accepted);
         if (hasAcceptedOffer) return false;
 
         // Cannot make offer if THIS client already has a pending offer
-        var hasPendingOffer = await offerRepo.AnyAsync(o => o.PropertyId == propertyId && o.ClientId == clientId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pendiente);
+        var hasPendingOffer = await offerRepo.AnyAsync(o => o.PropertyId == propertyId && o.ClientId == clientId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending);
         if (hasPendingOffer) return false;
 
         return true;

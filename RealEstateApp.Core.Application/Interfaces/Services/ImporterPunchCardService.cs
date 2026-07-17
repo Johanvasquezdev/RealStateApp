@@ -4,5 +4,5 @@ namespace RealEstateApp.Core.Application.Interfaces.Services;
 
 public interface ImporterPunchCardService
 {
-    Task<List<RowPunchCardImportada>> LeerArchivoAsync(Stream stream, string nombreArchivo);
+    Task<List<ImportedPunchCardRow>> ReadFileAsync(Stream stream, string fileName);
 }

@@ -7,7 +7,7 @@ using RealEstateApp.Core.Domain.Common;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ClientOfferService : Interfaces.Services.ClientOfferService
+public class ClientOfferService : IClientOfferService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _userService;
@@ -24,7 +24,7 @@ public class ClientOfferService : Interfaces.Services.ClientOfferService
         var repo = _unitOfWork.Repository<Offer>();
         
         // Check if there is already a pending offer from this client
-        bool hasPending = await repo.AnyAsync(o => o.PropertyId == vm.PropertyId && o.ClientId == vm.ClientId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pendiente);
+        bool hasPending = await repo.AnyAsync(o => o.PropertyId == vm.PropertyId && o.ClientId == vm.ClientId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending);
         if (hasPending) throw new Exception("Ya tienes una oferta pendiente para esta propiedad.");
 
         var entity = new Offer
@@ -32,7 +32,7 @@ public class ClientOfferService : Interfaces.Services.ClientOfferService
             PropertyId = vm.PropertyId,
             ClientId = vm.ClientId,
             Amount = (double)vm.Amount,
-            Status = RealEstateApp.Core.Domain.Enums.OfferStatus.Pendiente,
+            Status = RealEstateApp.Core.Domain.Enums.OfferStatus.Pending,
             Created = DateTime.UtcNow
         };
 
@@ -84,7 +84,7 @@ public class ClientOfferService : Interfaces.Services.ClientOfferService
         var repo = _unitOfWork.Repository<Offer>();
         var offer = await repo.FirstOrDefaultAsync(o => o.Id == offerId && o.ClientId == clientId);
         
-        if (offer != null && offer.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pendiente)
+        if (offer != null && offer.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending)
         {
             await repo.DeleteAsync(offer);
             await _unitOfWork.SaveChangesAsync();

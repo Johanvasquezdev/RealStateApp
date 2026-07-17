@@ -16,8 +16,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<FavoriteProperty> FavoriteProperties { get; set; }
     public DbSet<Offer> Offers { get; set; }
     public DbSet<Message> Messages { get; set; }
-    public DbSet<SesionPunchCard> SesionesPunchCard { get; set; }
-    public DbSet<RegistroPunchCard> RegistrosPunchCard { get; set; }
+    public DbSet<PunchCardSession> PunchCardSessions { get; set; }
+    public DbSet<PunchCardRecord> PunchCardRecords { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -42,29 +42,29 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        modelBuilder.Entity<SesionPunchCard>(entity =>
+        modelBuilder.Entity<PunchCardSession>(entity =>
         {
-            entity.Property(e => e.NombreArchivo).HasMaxLength(250).IsRequired();
-            entity.Property(e => e.UsuarioId).HasMaxLength(450);
-            entity.Property(e => e.UsuarioNombre).HasMaxLength(200);
+            entity.Property(e => e.FileName).HasMaxLength(250).IsRequired();
+            entity.Property(e => e.UserId).HasMaxLength(450);
+            entity.Property(e => e.UserName).HasMaxLength(200);
         });
 
-        modelBuilder.Entity<RegistroPunchCard>(entity =>
+        modelBuilder.Entity<PunchCardRecord>(entity =>
         {
-            entity.HasIndex(e => e.SesionPunchCardId);
-            entity.HasIndex(e => new { e.SesionPunchCardId, e.NombreEmpleado, e.Fecha });
+            entity.HasIndex(e => e.PunchCardSessionId);
+            entity.HasIndex(e => new { e.PunchCardSessionId, e.EmployeeName, e.Date });
 
-            entity.Property(e => e.NombreEmpleado).HasMaxLength(200).IsRequired();
-            entity.Property(e => e.Departamento).HasMaxLength(100);
-            entity.Property(e => e.HoraEntrada).HasMaxLength(10);
-            entity.Property(e => e.HoraSalida).HasMaxLength(10);
-            entity.Property(e => e.Observacion).HasMaxLength(500);
-            entity.Property(e => e.NombreOriginal).HasMaxLength(200);
-            entity.Property(e => e.HorasTrabajadas).HasColumnType("decimal(18,2)");
+            entity.Property(e => e.EmployeeName).HasMaxLength(200).IsRequired();
+            entity.Property(e => e.Department).HasMaxLength(100);
+            entity.Property(e => e.ClockInTime).HasMaxLength(10);
+            entity.Property(e => e.ClockOutTime).HasMaxLength(10);
+            entity.Property(e => e.Notes).HasMaxLength(500);
+            entity.Property(e => e.OriginalName).HasMaxLength(200);
+            entity.Property(e => e.HoursWorked).HasColumnType("decimal(18,2)");
 
-            entity.HasOne(e => e.SesionPunchCard)
-                .WithMany(s => s.Registros)
-                .HasForeignKey(e => e.SesionPunchCardId)
+            entity.HasOne(e => e.PunchCardSession)
+                .WithMany(s => s.Records)
+                .HasForeignKey(e => e.PunchCardSessionId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

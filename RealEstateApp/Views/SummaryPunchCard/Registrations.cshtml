@@ -21,36 +21,36 @@
     @Html.AntiForgeryToken()
     <div class="col-md-3">
         <label class="form-label">Sesion</label>
-        <select name="SesionId" class="form-select">
+        <select name="SessionId" class="form-select">
             <option value="">Todas</option>
             @foreach (var s in sesiones)
             {
-                <option value="@s.Id" selected="@(filtro.SesionId == s.Id)">@s.NombreArchivo (@s.FechaSubida.ToString("dd/MM/yyyy"))</option>
+                <option value="@s.Id" selected="@(filtro.SessionId == s.Id)">@s.FileName (@s.UploadDate.ToString("dd/MM/yyyy"))</option>
             }
         </select>
     </div>
     <div class="col-md-3">
         <label class="form-label">Nombre</label>
-        <input type="text" name="NombreEmpleado" value="@filtro.NombreEmpleado" class="form-control" placeholder="Buscar..." />
+        <input type="text" name="EmployeeName" value="@filtro.EmployeeName" class="form-control" placeholder="Buscar..." />
     </div>
     <div class="col-md-2 d-flex align-items-end">
         <div class="form-check">
-            <input type="checkbox" name="SoloLicencias" value="true" class="form-check-input" @(filtro.SoloLicencias ? "checked" : "") />
+            <input type="checkbox" name="OnLeaveOnly" value="true" class="form-check-input" @(filtro.OnLeaveOnly ? "checked" : "") />
             <label class="form-check-label">Solo Licencias</label>
         </div>
     </div>
     <div class="col-md-2 d-flex align-items-end">
-        <input type="hidden" name="Pagina" value="1" />
-        <input type="hidden" name="TamanoPagina" value="@filtro.TamanoPagina" />
+        <input type="hidden" name="Page" value="1" />
+        <input type="hidden" name="PageSize" value="@filtro.PageSize" />
         <button type="submit" class="btn btn-primary">Filtrar</button>
     </div>
     <div class="col-md-2 d-flex align-items-end">
-        @if (filtro.SesionId.HasValue)
+        @if (filtro.SessionId.HasValue)
         {
             <div class="btn-group">
-                <a asp-action="ExportarExcel" asp-route-sesionId="@filtro.SesionId" class="btn btn-success btn-sm">Excel</a>
-                <a asp-action="ExportarPdf" asp-route-sesionId="@filtro.SesionId" class="btn btn-danger btn-sm">PDF</a>
-                <a asp-action="ExportarWord" asp-route-sesionId="@filtro.SesionId" class="btn badge-gold btn-sm">Word</a>
+                <a asp-action="ExportarExcel" asp-route-sesionId="@filtro.SessionId" class="btn btn-success btn-sm">Excel</a>
+                <a asp-action="ExportarPdf" asp-route-sesionId="@filtro.SessionId" class="btn btn-danger btn-sm">PDF</a>
+                <a asp-action="ExportarWord" asp-route-sesionId="@filtro.SessionId" class="btn badge-gold btn-sm">Word</a>
             </div>
         }
     </div>
@@ -82,25 +82,25 @@ else
             <tbody>
                 @foreach (var r in Model)
                 {
-                    <tr class="@((r.Estado == EstadoPunchCard.Licencia) ? "table-warning" : (r.Estado == EstadoPunchCard.Ausente) ? "table-danger" : "")">
+                    <tr class="@((r.Status == RealEstateApp.Core.Domain.Enums.PunchCardStatus.OnLeave) ? "table-warning" : (r.Status == RealEstateApp.Core.Domain.Enums.PunchCardStatus.Absent) ? "table-danger" : "")">
                         <td>
-                            @r.NombreEmpleado
-                            @if (r.NombreEditado)
+                            @r.EmployeeName
+                            @if (r.NameEdited)
                             {
                                 <span class="badge badge-gold" title="Nombre editado manualmente">*</span>
                             }
                         </td>
-                        <td>@(r.Departamento ?? "-")</td>
-                        <td>@r.Fecha.ToString("dd/MM/yyyy")</td>
-                        <td>@(r.HoraEntrada ?? "-")</td>
-                        <td>@(r.HoraSalida ?? "-")</td>
-                        <td>@(r.HorasTrabajadas?.ToString("N2") ?? "-")</td>
+                        <td>@(r.Department ?? "-")</td>
+                        <td>@r.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@(r.ClockInTime ?? "-")</td>
+                        <td>@(r.ClockOutTime ?? "-")</td>
+                        <td>@(r.HoursWorked?.ToString("N2") ?? "-")</td>
                         <td>
-                            @if (r.Estado == EstadoPunchCard.Normal)
+                            @if (r.Status == RealEstateApp.Core.Domain.Enums.PunchCardStatus.Normal)
                             {
                                 <span class="badge bg-success">Normal</span>
                             }
-                            else if (r.Estado == EstadoPunchCard.Licencia)
+                            else if (r.Status == RealEstateApp.Core.Domain.Enums.PunchCardStatus.OnLeave)
                             {
                                 <span class="badge bg-warning text-dark">Licencia</span>
                             }
@@ -109,7 +109,7 @@ else
                                 <span class="badge bg-danger">Ausente</span>
                             }
                         </td>
-                        <td>@(r.Observacion ?? "-")</td>
+                        <td>@(r.Notes ?? "-")</td>
                         <td>
                             <a asp-action="Editar" asp-route-id="@r.Id" class="btn btn-sm btn-warning">Editar</a>
                         </td>
@@ -125,13 +125,13 @@ else
             <ul class="pagination">
                 @for (int p = 1; p <= totalPaginas; p++)
                 {
-                    <li class="page-item @(p == filtro.Pagina ? "active" : "")">
+                    <li class="page-item @(p == filtro.Page ? "active" : "")">
                         <form method="post" class="page-link" style="border:none;background:none;padding:0;">
-                            <input type="hidden" name="SesionId" value="@filtro.SesionId" />
-                            <input type="hidden" name="NombreEmpleado" value="@filtro.NombreEmpleado" />
-                            <input type="hidden" name="SoloLicencias" value="@filtro.SoloLicencias" />
-                            <input type="hidden" name="Pagina" value="@p" />
-                            <input type="hidden" name="TamanoPagina" value="@filtro.TamanoPagina" />
+                            <input type="hidden" name="SessionId" value="@filtro.SessionId" />
+                            <input type="hidden" name="EmployeeName" value="@filtro.EmployeeName" />
+                            <input type="hidden" name="OnLeaveOnly" value="@filtro.OnLeaveOnly" />
+                            <input type="hidden" name="Page" value="@p" />
+                            <input type="hidden" name="PageSize" value="@filtro.PageSize" />
                             <button type="submit" class="page-link" style="border:none;background:none;color:inherit;">@p</button>
                         </form>
                     </li>

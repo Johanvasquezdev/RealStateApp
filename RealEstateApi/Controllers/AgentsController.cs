@@ -19,14 +19,14 @@ public class AgentsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var agentes = await _agenteService.GetAgentesActivosAsync(null);
+        var agentes = await _agenteService.GetActiveAgentsAsync(null);
         return Ok(agentes);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
-        var agente = await _agenteService.GetAgenteByIdAsync(id);
+        var agente = await _agenteService.GetAgentByIdAsync(id);
         if (agente is null) return NotFound();
         return Ok(agente);
     }
@@ -34,7 +34,7 @@ public class AgentsController : ControllerBase
     [HttpGet("{id}/properties")]
     public async Task<IActionResult> GetProperties(string id)
     {
-        var propiedades = await _agenteService.GetPropiedadesByAgenteAsync(id);
+        var propiedades = await _agenteService.GetPropertiesByAgentAsync(id);
         return Ok(propiedades);
     }
 }

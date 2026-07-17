@@ -5,7 +5,7 @@ using RealEstateApp.Core.Domain.Common;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ClientAgentService : Interfaces.Services.ClientAgentService
+public class ClientAgentService : IClientAgentService
 {
     private readonly IUserService _userService;
     private readonly IMapper _mapper;

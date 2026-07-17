@@ -1,4 +1,4 @@
-﻿@model List<AgentOfferSummaryViewModel>
+@model List<AgentOfferSummaryViewModel>
 @{ ViewData["Title"] = "Ofertas por Propiedad"; }
 
 <h2>Ofertas</h2>
@@ -17,14 +17,15 @@
             @foreach (var o in Model)
             {
                 <tr>
-                    <td>@o.ClienteNombre</td>
-                    <td>@o.CantidadOfertas</td>
-                    <td>RD$ @o.UltimaOferta.ToString("N2")</td>
+                    <td>@o.ClientName</td>
+                    <td>@o.OfferCount</td>
+                    <td>RD$ @o.LatestOfferAmount.ToString("N2")</td>
                     <td>
-                        <span class="badge @(o.Estado == "Pendiente" ? "bg-warning" : o.Estado == "Aceptada" ? "bg-success" : "bg-danger")">@o.Estado</span>
+                        <span class="badge @(o.Status == "Pending" ? "bg-warning" : o.Status == "Accepted" ? "bg-success" : "bg-danger")">@o.Status</span>
                     </td>
                     <td>
-                        <a asp-action="Detalle" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clienteId="@o.ClienteId" class="btn btn-sm btn-info">Ver Detalle</a>
+                        <a asp-action="Detalle" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-info">Ver Detalle</a>
+                        <a asp-controller="Chat" asp-action="Conversacion" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-outline-primary">Chat</a>
                     </td>
                 </tr>
             }

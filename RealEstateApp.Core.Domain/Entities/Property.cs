@@ -12,7 +12,7 @@ public class Property : AuditableBaseEntity
     public int Rooms { get; set; }
     public int Bathrooms { get; set; }
     public string Description { get; set; } = null!;
-    public PropertyStatus Status { get; set; } = PropertyStatus.Disponible;
+    public PropertyStatus Status { get; set; } = PropertyStatus.Available;
 
     public string AgentId { get; set; } = null!; // Relates to Identity User
 

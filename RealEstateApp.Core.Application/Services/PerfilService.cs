@@ -1,18 +1,18 @@
-﻿using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Core.Application.ViewModels.AgentProfile;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class PerfilService : ProfileService
+public class ProfileService : Interfaces.Services.ProfileService
 {
     private readonly IUserService _userService;
 
-    public PerfilService(IUserService userService)
+    public ProfileService(IUserService userService)
     {
         _userService = userService;
     }
 
-    public async Task<AgentProfileViewModel> GetPerfilAsync(string userId)
+    public async Task<AgentProfileViewModel> GetProfileAsync(string userId)
     {
         var user = await _userService.FindByIdAsync(userId);
         if (user is null)
@@ -30,7 +30,7 @@ public class PerfilService : ProfileService
         };
     }
 
-    public async Task<bool> UpdatePerfilAsync(string userId, AgentProfileViewModel vm)
+    public async Task<bool> UpdateProfileAsync(string userId, AgentProfileViewModel vm)
     {
         return await _userService.UpdateUserAsync(userId, vm.FirstName, vm.LastName, vm.Email, vm.PhoneNumber);
     }

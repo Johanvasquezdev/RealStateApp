@@ -1,11 +1,11 @@
 namespace RealEstateApp.Core.Application.DTOs.PunchCard;
 
-public class ResultimportationPunchCardDto
+public class PunchCardImportResultDto
 {
-    public int SesionId { get; set; }
-    public int TotalFilas { get; set; }
-    public int RegistrosInsertados { get; set; }
-    public int DuplicadosOmitidos { get; set; }
-    public string NombreArchivo { get; set; } = string.Empty;
-    public List<string> Errores { get; set; } = new();
+    public int SessionId { get; set; }
+    public int TotalRows { get; set; }
+    public int RecordsInserted { get; set; }
+    public int DuplicatesSkipped { get; set; }
+    public string FileName { get; set; } = string.Empty;
+    public List<string> Errors { get; set; } = new();
 }

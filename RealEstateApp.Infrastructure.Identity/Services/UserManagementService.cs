@@ -125,8 +125,8 @@ public class UserManagementService: Core.Application.Interfaces.UserManagementSe
 
         return new AdminDashboardViewModel
         {
-            AvailableProperties = allProperties.Count(p => p.Status == PropertyStatus.Disponible),
-            SoldProperties = allProperties.Count(p => p.Status == PropertyStatus.Vendida),
+            AvailableProperties = allProperties.Count(p => p.Status == PropertyStatus.Available),
+            SoldProperties = allProperties.Count(p => p.Status == PropertyStatus.Sold),
             ActiveAgents = agents.Count(a => a.IsActive),
             InactiveAgents = agents.Count(a => !a.IsActive),
             ActiveClients = clients.Count(c => c.IsActive),

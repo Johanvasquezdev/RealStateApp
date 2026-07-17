@@ -22,7 +22,7 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
         _logger = logger;
     }
 
-    public async Task<byte[]> ExportarExcelAsync(int sesionId)
+    public async Task<byte[]> ExportExcelAsync(int sesionId)
     {
         var registros = await GetRegistrosAsync(sesionId);
         var sesion = await GetSesionAsync(sesionId);
@@ -43,14 +43,14 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
         int fila = 2;
         foreach (var r in registros)
         {
-            ws.Cell(fila, 1).Value = r.NombreEmpleado;
-            ws.Cell(fila, 2).Value = r.Departamento ?? "-";
-            ws.Cell(fila, 3).Value = r.Fecha.ToString("dd/MM/yyyy");
-            ws.Cell(fila, 4).Value = r.HoraEntrada ?? "-";
-            ws.Cell(fila, 5).Value = r.HoraSalida ?? "-";
-            ws.Cell(fila, 6).Value = r.HorasTrabajadas?.ToString("F2") ?? "-";
-            ws.Cell(fila, 7).Value = r.Estado.ToString();
-            ws.Cell(fila, 8).Value = r.Observacion ?? "-";
+            ws.Cell(fila, 1).Value = r.EmployeeName;
+            ws.Cell(fila, 2).Value = r.Department ?? "-";
+            ws.Cell(fila, 3).Value = r.Date.ToString("dd/MM/yyyy");
+            ws.Cell(fila, 4).Value = r.ClockInTime ?? "-";
+            ws.Cell(fila, 5).Value = r.ClockOutTime ?? "-";
+            ws.Cell(fila, 6).Value = r.HoursWorked?.ToString("F2") ?? "-";
+            ws.Cell(fila, 7).Value = r.Status.ToString();
+            ws.Cell(fila, 8).Value = r.Notes ?? "-";
             fila++;
         }
 
@@ -61,7 +61,7 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
         return stream.ToArray();
     }
 
-    public async Task<byte[]> ExportarPdfAsync(int sesionId)
+    public async Task<byte[]> ExportPdfAsync(int sesionId)
     {
         var registros = await GetRegistrosAsync(sesionId);
         var sesion = await GetSesionAsync(sesionId);
@@ -76,8 +76,8 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
                 page.Header().Column(col =>
                 {
                     col.Item().Text("Resumen de Punch Card").Bold().FontSize(18).FontColor("#8B0000");
-                    col.Item().Text($"Archivo: {sesion?.NombreArchivo ?? "N/A"}").FontSize(10);
-                    col.Item().Text($"Fecha de subida: {sesion?.FechaSubida:dd/MM/yyyy HH:mm}").FontSize(10);
+                    col.Item().Text($"Archivo: {sesion?.FileName ?? "N/A"}").FontSize(10);
+                    col.Item().Text($"Fecha de subida: {sesion?.UploadDate:dd/MM/yyyy HH:mm}").FontSize(10);
                     col.Item().Text($"Total registros: {registros.Count}").FontSize(10);
                     col.Item().PaddingBottom(10).LineHorizontal(1);
                 });
@@ -110,14 +110,14 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
 
                     foreach (var r in registros)
                     {
-                        table.Cell().Text(r.NombreEmpleado);
-                        table.Cell().Text(r.Departamento ?? "-");
-                        table.Cell().Text(r.Fecha.ToString("dd/MM/yyyy"));
-                        table.Cell().Text(r.HoraEntrada ?? "-");
-                        table.Cell().Text(r.HoraSalida ?? "-");
-                        table.Cell().Text(r.HorasTrabajadas?.ToString("F2") ?? "-");
-                        table.Cell().Text(r.Estado.ToString());
-                        table.Cell().Text(r.Observacion ?? "-");
+                        table.Cell().Text(r.EmployeeName);
+                        table.Cell().Text(r.Department ?? "-");
+                        table.Cell().Text(r.Date.ToString("dd/MM/yyyy"));
+                        table.Cell().Text(r.ClockInTime ?? "-");
+                        table.Cell().Text(r.ClockOutTime ?? "-");
+                        table.Cell().Text(r.HoursWorked?.ToString("F2") ?? "-");
+                        table.Cell().Text(r.Status.ToString());
+                        table.Cell().Text(r.Notes ?? "-");
                     }
                 });
 
@@ -136,7 +136,7 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
         return stream.ToArray();
     }
 
-    public async Task<byte[]> ExportarWordAsync(int sesionId)
+    public async Task<byte[]> ExportWordAsync(int sesionId)
     {
         var registros = await GetRegistrosAsync(sesionId);
         var sesion = await GetSesionAsync(sesionId);
@@ -145,8 +145,8 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
         using (var document = Xceed.Words.NET.DocX.Create(stream))
         {
             document.InsertParagraph("Resumen de Punch Card").FontSize(16).Bold();
-            document.InsertParagraph($"Archivo: {sesion?.NombreArchivo ?? "N/A"}");
-            document.InsertParagraph($"Fecha: {sesion?.FechaSubida:dd/MM/yyyy HH:mm} | Total registros: {registros.Count}");
+            document.InsertParagraph($"Archivo: {sesion?.FileName ?? "N/A"}");
+            document.InsertParagraph($"Fecha: {sesion?.UploadDate:dd/MM/yyyy HH:mm} | Total registros: {registros.Count}");
             document.InsertParagraph();
 
             var table = document.AddTable(registros.Count + 1, 8);
@@ -161,14 +161,14 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
             for (int row = 0; row < registros.Count; row++)
             {
                 var r = registros[row];
-                table.Rows[row + 1].Cells[0].Paragraphs[0].Append(r.NombreEmpleado);
-                table.Rows[row + 1].Cells[1].Paragraphs[0].Append(r.Departamento ?? "-");
-                table.Rows[row + 1].Cells[2].Paragraphs[0].Append(r.Fecha.ToString("dd/MM/yyyy"));
-                table.Rows[row + 1].Cells[3].Paragraphs[0].Append(r.HoraEntrada ?? "-");
-                table.Rows[row + 1].Cells[4].Paragraphs[0].Append(r.HoraSalida ?? "-");
-                table.Rows[row + 1].Cells[5].Paragraphs[0].Append(r.HorasTrabajadas?.ToString("F2") ?? "-");
-                table.Rows[row + 1].Cells[6].Paragraphs[0].Append(r.Estado.ToString());
-                table.Rows[row + 1].Cells[7].Paragraphs[0].Append(r.Observacion ?? "-");
+                table.Rows[row + 1].Cells[0].Paragraphs[0].Append(r.EmployeeName);
+                table.Rows[row + 1].Cells[1].Paragraphs[0].Append(r.Department ?? "-");
+                table.Rows[row + 1].Cells[2].Paragraphs[0].Append(r.Date.ToString("dd/MM/yyyy"));
+                table.Rows[row + 1].Cells[3].Paragraphs[0].Append(r.ClockInTime ?? "-");
+                table.Rows[row + 1].Cells[4].Paragraphs[0].Append(r.ClockOutTime ?? "-");
+                table.Rows[row + 1].Cells[5].Paragraphs[0].Append(r.HoursWorked?.ToString("F2") ?? "-");
+                table.Rows[row + 1].Cells[6].Paragraphs[0].Append(r.Status.ToString());
+                table.Rows[row + 1].Cells[7].Paragraphs[0].Append(r.Notes ?? "-");
             }
 
             document.InsertTable(table);
@@ -180,25 +180,25 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
 
     private async Task<List<RegistrationPunchCardDto>> GetRegistrosAsync(int sesionId)
     {
-        var repo = _unitOfWork.Repository<RegistroPunchCard>();
-        var all = await repo.FindAsync(r => r.SesionPunchCardId == sesionId);
-        return all.OrderBy(r => r.NombreEmpleado).ThenBy(r => r.Fecha).Select(r => new RegistrationPunchCardDto
+        var repo = _unitOfWork.Repository<PunchCardRecord>();
+        var all = await repo.FindAsync(r => r.PunchCardSessionId == sesionId);
+        return all.OrderBy(r => r.EmployeeName).ThenBy(r => r.Date).Select(r => new RegistrationPunchCardDto
         {
             Id = r.Id,
-            NombreEmpleado = r.NombreEmpleado,
-            Departamento = r.Departamento,
-            Fecha = r.Fecha,
-            HoraEntrada = r.HoraEntrada,
-            HoraSalida = r.HoraSalida,
-            HorasTrabajadas = r.HorasTrabajadas,
-            Estado = r.Estado,
-            Observacion = r.Observacion
+            EmployeeName = r.EmployeeName,
+            Department = r.Department,
+            Date = r.Date,
+            ClockInTime = r.ClockInTime,
+            ClockOutTime = r.ClockOutTime,
+            HoursWorked = r.HoursWorked,
+            Status = r.Status,
+            Notes = r.Notes
         }).ToList();
     }
 
-    private async Task<SesionPunchCard?> GetSesionAsync(int sesionId)
+    private async Task<PunchCardSession?> GetSesionAsync(int sesionId)
     {
-        var repo = _unitOfWork.Repository<SesionPunchCard>();
+        var repo = _unitOfWork.Repository<PunchCardSession>();
         return await repo.GetByIdAsync(sesionId);
     }
 }

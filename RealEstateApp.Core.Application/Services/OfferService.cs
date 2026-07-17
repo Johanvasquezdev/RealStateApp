@@ -18,58 +18,58 @@ public class OfferService : Interfaces.Services.OfferService
         _userService = userService;
     }
 
-    public async Task<List<AgentOfferSummaryViewModel>> GetOfertasResumenByPropertyAsync(int propertyId, string agenteId)
+    public async Task<List<AgentOfferSummaryViewModel>> GetOfferSummaryByPropertyAsync(int propertyId, string agentId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var property = await propertyRepo.GetByIdAsync(propertyId);
-        if (property is null || property.AgentId != agenteId)
+        if (property is null || property.AgentId != agentId)
             return new();
 
         var offerRepo = _unitOfWork.Repository<Offer>();
-        var ofertas = await offerRepo.FindAsync(o => o.PropertyId == propertyId);
-        var grouped = ofertas.GroupBy(o => o.ClientId);
+        var offers = await offerRepo.FindAsync(o => o.PropertyId == propertyId);
+        var grouped = offers.GroupBy(o => o.ClientId);
 
         var result = new List<AgentOfferSummaryViewModel>();
         foreach (var group in grouped)
         {
             var client = await _userService.FindByIdAsync(group.Key);
-            var ultima = group.OrderByDescending(o => o.Created).First();
+            var last = group.OrderByDescending(o => o.Created).First();
             result.Add(new AgentOfferSummaryViewModel
             {
-                ClienteId = group.Key,
-                ClienteNombre = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
-                CantidadOfertas = group.Count(),
-                UltimaOferta = ultima.Amount,
-                Estado = ultima.Status.ToString()
+                ClientId = group.Key,
+                ClientName = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
+                OfferCount = group.Count(),
+                LatestOfferAmount = last.Amount,
+                Status = last.Status.ToString()
             });
         }
         return result;
     }
 
-    public async Task<List<AgentOfferDetailViewModel>> GetOfertasByClientePropertyAsync(int propertyId, string clienteId, string agenteId)
+    public async Task<List<AgentOfferDetailViewModel>> GetOffersByClientPropertyAsync(int propertyId, string clientId, string agentId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var property = await propertyRepo.GetByIdAsync(propertyId);
-        if (property is null || property.AgentId != agenteId)
+        if (property is null || property.AgentId != agentId)
             return new();
 
-        var client = await _userService.FindByIdAsync(clienteId);
+        var client = await _userService.FindByIdAsync(clientId);
         var offerRepo = _unitOfWork.Repository<Offer>();
-        var ofertas = await offerRepo.FindAsync(o => o.PropertyId == propertyId && o.ClientId == clienteId);
-        ofertas = ofertas.OrderByDescending(o => o.Created).ToList();
+        var offers = await offerRepo.FindAsync(o => o.PropertyId == propertyId && o.ClientId == clientId);
+        offers = offers.OrderByDescending(o => o.Created).ToList();
 
-        return ofertas.Select(o => new AgentOfferDetailViewModel
+        return offers.Select(o => new AgentOfferDetailViewModel
         {
             Id = o.Id,
-            ClienteNombre = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
+            ClientName = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
             Amount = o.Amount,
             Status = o.Status.ToString(),
             Created = o.Created
         }).ToList();
     }
 
-    #region AceptarOfertaAsync(
-    public async Task AceptarOfertaAsync(int ofertaId, string agenteId)
+    #region AcceptOfferAsync
+    public async Task AcceptOfferAsync(int offerId, string agentId)
     {
         using var tx = await _unitOfWork.BeginTransactionAsync();
         try
@@ -77,24 +77,24 @@ public class OfferService : Interfaces.Services.OfferService
             var offerRepo = _unitOfWork.Repository<Offer>();
             var propertyRepo = _unitOfWork.Repository<Property>();
 
-            var oferta = await offerRepo.FirstOrDefaultWithIncludesAsync(
-                o => o.Id == ofertaId, "Property");
-            if (oferta is null || oferta.Property.AgentId != agenteId || oferta.Status != OfferStatus.Pendiente)
+            var offer = await offerRepo.FirstOrDefaultWithIncludesAsync(
+                o => o.Id == offerId, "Property");
+            if (offer is null || offer.Property.AgentId != agentId || offer.Status != OfferStatus.Pending)
                 return;
 
-            oferta.Status = OfferStatus.Aceptada;
-            await offerRepo.UpdateAsync(oferta);
+            offer.Status = OfferStatus.Accepted;
+            await offerRepo.UpdateAsync(offer);
 
-            var otrasPendientes = await offerRepo.FindAsync(
-                o => o.PropertyId == oferta.PropertyId && o.Id != ofertaId && o.Status == OfferStatus.Pendiente);
-            foreach (var o in otrasPendientes)
+            var otherPending = await offerRepo.FindAsync(
+                o => o.PropertyId == offer.PropertyId && o.Id != offerId && o.Status == OfferStatus.Pending);
+            foreach (var o in otherPending)
             {
-                o.Status = OfferStatus.Rechazada;
+                o.Status = OfferStatus.Rejected;
                 await offerRepo.UpdateAsync(o);
             }
 
-            oferta.Property.Status = PropertyStatus.Vendida;
-            await propertyRepo.UpdateAsync(oferta.Property);
+            offer.Property.Status = PropertyStatus.Sold;
+            await propertyRepo.UpdateAsync(offer.Property);
 
             await _unitOfWork.SaveChangesAsync();
             await tx.CommitAsync();
@@ -107,17 +107,17 @@ public class OfferService : Interfaces.Services.OfferService
     }
     #endregion
 
-    #region RechazarOfertaAsync
-    public async Task RechazarOfertaAsync(int ofertaId, string agenteId)
+    #region RejectOfferAsync
+    public async Task RejectOfferAsync(int offerId, string agentId)
     {
         var offerRepo = _unitOfWork.Repository<Offer>();
-        var oferta = await offerRepo.FirstOrDefaultWithIncludesAsync(
-            o => o.Id == ofertaId, "Property");
-        if (oferta is null || oferta.Property.AgentId != agenteId || oferta.Status != OfferStatus.Pendiente)
+        var offer = await offerRepo.FirstOrDefaultWithIncludesAsync(
+            o => o.Id == offerId, "Property");
+        if (offer is null || offer.Property.AgentId != agentId || offer.Status != OfferStatus.Pending)
             return;
 
-        oferta.Status = OfferStatus.Rechazada;
-        await offerRepo.UpdateAsync(oferta);
+        offer.Status = OfferStatus.Rejected;
+        await offerRepo.UpdateAsync(offer);
         await _unitOfWork.SaveChangesAsync();
     } 
     #endregion
