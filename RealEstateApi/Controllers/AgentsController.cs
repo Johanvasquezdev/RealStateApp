@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces.Services;
 
@@ -5,6 +6,7 @@ namespace RealEstateApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Admin,Developer")]
 public class AgentsController : ControllerBase
 {
     private readonly AgentService _agenteService;

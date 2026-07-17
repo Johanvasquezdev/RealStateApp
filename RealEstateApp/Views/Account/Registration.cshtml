@@ -1,74 +1,121 @@
-﻿@model RegisterViewModel
+@model RegisterViewModel
 @{ ViewData["Title"] = "Registro"; }
 
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow">
-            <div class="card-body">
-                <h3 class="card-title text-center">Registro</h3>
-                <form method="post" enctype="multipart/form-data">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="FirstName" class="form-label"></label>
-                            <input asp-for="FirstName" class="form-control" />
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
+<div class="container py-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-lg-10 col-xl-9">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden reveal-hidden">
+                <div class="row g-0">
+                    <div class="col-md-5 bg-primary text-white d-none d-md-flex flex-column justify-content-center align-items-center p-5 position-relative overflow-hidden">
+                        <!-- Background pattern -->
+                        <div class="position-absolute opacity-25" style="top: -50px; right: -50px; transform: rotate(45deg);">
+                            <i class="bi bi-house-door" style="font-size: 15rem;"></i>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="LastName" class="form-label"></label>
-                            <input asp-for="LastName" class="form-control" />
-                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        <div class="position-relative z-1 text-center">
+                            <h2 class="fw-bolder mb-3">Encuentra Tu Espacio Ideal</h2>
+                            <p class="mb-4 opacity-75">Únete a nuestra plataforma y explora las mejores opciones inmobiliarias del mercado.</p>
+                            <img src="/img/default-property.jpg" class="img-fluid rounded-4 shadow opacity-75" alt="Real Estate" style="max-height: 250px; object-fit: cover; mix-blend-mode: luminosity;">
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="PhoneNumber" class="form-label"></label>
-                        <input asp-for="PhoneNumber" class="form-control" />
-                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="ProfilePicture" class="form-label">Foto de perfil</label>
-                        <input asp-for="ProfilePicture" class="form-control" type="file" accept="image/*" />
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="Username" class="form-label"></label>
-                        <input asp-for="Username" class="form-control" />
-                        <span asp-validation-for="Username" class="text-danger"></span>
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="Email" class="form-label"></label>
-                        <input asp-for="Email" class="form-control" type="email" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="Password" class="form-label"></label>
-                            <input asp-for="Password" class="form-control" type="password" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
+                    
+                    <div class="col-md-7">
+                        <div class="card-body p-4 p-lg-5">
+                            <div class="text-center mb-4 d-md-none">
+                                <h2 class="fw-bolder text-primary mb-1">Registro</h2>
+                                <p class="text-muted">Crea tu cuenta ahora</p>
+                            </div>
+                            
+                            <h3 class="fw-bold mb-4 d-none d-md-block text-dark">Crea tu Cuenta</h3>
+
+                            <form method="post" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small fw-bold"></div>
+                                
+                                <div class="row g-3 mb-3">
+                                    <div class="col-sm-6 form-floating">
+                                        <input asp-for="FirstName" class="form-control rounded-3" placeholder="Nombre" />
+                                        <label asp-for="FirstName" class="ms-2 text-muted">Nombre</label>
+                                        <span asp-validation-for="FirstName" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-sm-6 form-floating">
+                                        <input asp-for="LastName" class="form-control rounded-3" placeholder="Apellido" />
+                                        <label asp-for="LastName" class="ms-2 text-muted">Apellido</label>
+                                        <span asp-validation-for="LastName" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Username" class="form-control rounded-3" placeholder="Usuario" />
+                                    <label asp-for="Username" class="text-muted"><i class="bi bi-person me-2"></i>Nombre de Usuario</label>
+                                    <span asp-validation-for="Username" class="text-danger small"></span>
+                                </div>
+                                
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Email" class="form-control rounded-3" type="email" placeholder="Correo" />
+                                    <label asp-for="Email" class="text-muted"><i class="bi bi-envelope me-2"></i>Correo Electrónico</label>
+                                    <span asp-validation-for="Email" class="text-danger small"></span>
+                                </div>
+                                
+                                <div class="form-floating mb-3">
+                                    <input asp-for="PhoneNumber" class="form-control rounded-3" placeholder="Teléfono" />
+                                    <label asp-for="PhoneNumber" class="text-muted"><i class="bi bi-telephone me-2"></i>Teléfono</label>
+                                    <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <div class="col-sm-6 form-floating">
+                                        <input asp-for="Password" class="form-control rounded-3" type="password" placeholder="Contraseña" />
+                                        <label asp-for="Password" class="ms-2 text-muted">Contraseña</label>
+                                        <span asp-validation-for="Password" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-sm-6 form-floating">
+                                        <input asp-for="ConfirmPassword" class="form-control rounded-3" type="password" placeholder="Confirmar" />
+                                        <label asp-for="ConfirmPassword" class="ms-2 text-muted">Confirmar</label>
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="TipoUsuario" class="form-label text-muted small fw-bold mb-1">Tipo de Cuenta</label>
+                                    <select asp-for="TipoUsuario" class="form-select form-select-lg rounded-3 fs-6">
+                                        <option value="">Selecciona tu rol...</option>
+                                        <option value="Cliente">Quiero buscar propiedades (Cliente)</option>
+                                        <option value="Agente">Quiero publicar propiedades (Agente)</option>
+                                    </select>
+                                    <span asp-validation-for="TipoUsuario" class="text-danger small"></span>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label asp-for="ProfilePicture" class="form-label text-muted small fw-bold mb-1">Foto de Perfil (Opcional)</label>
+                                    <input asp-for="ProfilePicture" class="form-control rounded-3" type="file" accept="image/*" />
+                                </div>
+
+                                <div class="d-grid mb-3 mt-4">
+                                    <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm py-3 transition-all hover-lift">
+                                        Completar Registro <i class="bi bi-check-circle ms-2"></i>
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <div class="text-center mt-4 pt-4 border-top">
+                                <p class="text-muted mb-0">
+                                    ¿Ya tienes una cuenta? 
+                                    <a asp-action="Login" class="text-primary fw-bold text-decoration-none">Inicia Sesión aquí</a>
+                                </p>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="ConfirmPassword" class="form-label"></label>
-                            <input asp-for="ConfirmPassword" class="form-control" type="password" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label asp-for="TipoUsuario" class="form-label">Tipo de usuario</label>
-                        <select asp-for="TipoUsuario" class="form-select">
-                            <option value="">-- Seleccione --</option>
-                            <option value="Cliente">Cliente</option>
-                            <option value="Agente">Agente</option>
-                        </select>
-                        <span asp-validation-for="TipoUsuario" class="text-danger"></span>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Registrarse</button>
-                </form>
-                <p class="mt-3 text-center">
-                    ¿Ya tienes cuenta? <a asp-action="Login">Inicia sesión</a>
-                </p>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .transition-all { transition: all 0.3s ease; }
+    .hover-lift:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+    .form-control:focus, .form-select:focus { border-color: var(--bs-primary); box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15); }
+    .z-1 { z-index: 1; }
+</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

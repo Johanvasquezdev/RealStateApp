@@ -51,4 +51,6 @@ public class ClientPropertyDetailViewModel
     public string AgentEmail { get; set; } = null!;
     
     public string AgentPhotoUrl { get; set; } = null!;
+
+    public bool CanMakeOffer { get; set; }
 }

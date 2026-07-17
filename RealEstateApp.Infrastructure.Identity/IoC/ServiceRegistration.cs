@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using RealEstateApp.Core.Application.Interfaces.Services;
 using RealEstateApp.Infrastructure.Identity.Entities;
 using RealEstateApp.Infrastructure.Identity.Services;
+using RealEstateApp.Infrastructure.Identity.Context;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 namespace RealEstateApp.Infrastructure.Identity.IoC;
@@ -14,6 +16,20 @@ public static class ServiceRegistration
 {
     public static IServiceCollection AddIdentityInfrastructure(this IServiceCollection services, IConfiguration config)
     {
+        if (config.GetValue<bool>("UseInMemoryDatabase"))
+        {
+            services.AddDbContext<IdentityContext>(options =>
+                options.UseInMemoryDatabase("IdentityDb"));
+        }
+        else
+        {
+            services.AddDbContext<IdentityContext>(options =>
+            {
+                options.UseNpgsql(config.GetConnectionString("DefaultConnection"),
+                m => m.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName));
+            });
+        }
+
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
             options.Password.RequireDigit = true;
@@ -25,6 +41,7 @@ public static class ServiceRegistration
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             options.Lockout.MaxFailedAccessAttempts = 5;
         })
+        .AddEntityFrameworkStores<IdentityContext>()
         .AddDefaultTokenProviders();
 
         services.ConfigureApplicationCookie(options =>

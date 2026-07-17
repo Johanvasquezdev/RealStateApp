@@ -1,0 +1,153 @@
+@model List<RealEstateApp.Core.Application.ViewModels.Properties.ClientPropertyViewModel>
+@{
+    ViewData["Title"] = "Propiedades";
+    var filter = ViewBag.Filter as RealEstateApp.Core.Application.ViewModels.Properties.ClientFilterPropertyViewModel ?? new RealEstateApp.Core.Application.ViewModels.Properties.ClientFilterPropertyViewModel();
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Sidebar Filtros -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm border-0 rounded-4 sticky-top" style="top: 20px;">
+                <div class="card-header bg-white border-0 pt-4 pb-0">
+                    <h5 class="fw-bold mb-0 text-primary">
+                        <i class="bi bi-funnel-fill me-2"></i>Filtros de Búsqueda
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="ClientProperty" asp-action="Index" method="get">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Código de Propiedad</label>
+                            <input type="text" name="Code" class="form-control rounded-3" placeholder="Ej. 123456" value="@filter.Code" />
+                        </div>
+
+                        <!-- Add a hidden select or fetch property types for dropdown in a real scenario.
+                             For now we use a generic input or just assume ViewBag.PropertyTypes is populated.
+                             Actually, let's just make it a number input if we don't have the list here. -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">ID Tipo de Propiedad</label>
+                            <input type="number" name="PropertyTypeId" class="form-control rounded-3" value="@filter.PropertyTypeId" />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label text-muted small fw-bold">Precio Mín</label>
+                                <input type="number" step="0.01" name="MinPrice" class="form-control rounded-3" value="@filter.MinPrice" />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label text-muted small fw-bold">Precio Máx</label>
+                                <input type="number" step="0.01" name="MaxPrice" class="form-control rounded-3" value="@filter.MaxPrice" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label text-muted small fw-bold">Habitaciones</label>
+                                <input type="number" name="Rooms" class="form-control rounded-3" value="@filter.Rooms" />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label text-muted small fw-bold">Baños</label>
+                                <input type="number" name="Bathrooms" class="form-control rounded-3" value="@filter.Bathrooms" />
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary rounded-3 fw-bold py-2 shadow-sm">
+                                <i class="bi bi-search me-2"></i>Buscar
+                            </button>
+                            <a asp-action="Index" class="btn btn-light rounded-3 fw-bold py-2">
+                                Limpiar Filtros
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Propiedades Listado -->
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold m-0">Inmuebles Disponibles</h2>
+                <span class="badge bg-primary rounded-pill px-3 py-2">@Model.Count() encontrados</span>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info rounded-4 border-0 shadow-sm text-center p-5">
+                    <h4 class="alert-heading fw-bold mb-3">No hay propiedades</h4>
+                    <p class="mb-0">No encontramos ninguna propiedad que coincida con tu búsqueda. Intenta ajustar los filtros.</p>
+                </div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    @foreach (var prop in Model)
+                    {
+                        <div class="col">
+                            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden property-card hover-lift">
+                                <div class="position-relative">
+                                    <img src="@(string.IsNullOrEmpty(prop.MainImageUrl) ? "/img/default-property.jpg" : prop.MainImageUrl)" class="card-img-top property-image" alt="Propiedad" style="height: 200px; object-fit: cover;">
+                                    <div class="position-absolute top-0 start-0 m-3">
+                                        <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold">
+                                            <i class="bi bi-tag-fill text-primary me-1"></i> @prop.PropertyTypeName
+                                        </span>
+                                    </div>
+                                    <div class="position-absolute top-0 end-0 m-3">
+                                        <span class="badge bg-dark bg-opacity-75 text-white shadow-sm px-3 py-2 rounded-pill fw-bold">
+                                            Cod: @prop.Code
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <h5 class="card-title fw-bold text-truncate mb-1">@prop.PropertyTypeName en @prop.SaleTypeName</h5>
+                                    <h4 class="text-primary fw-bolder mb-3">$@prop.Price.ToString("N2")</h4>
+                                    
+                                    <div class="d-flex justify-content-between text-muted small mb-4">
+                                        <div class="d-flex align-items-center" title="Habitaciones">
+                                            <i class="bi bi-door-open fs-5 me-2 text-secondary"></i>
+                                            <span class="fw-bold">@prop.Rooms</span>
+                                        </div>
+                                        <div class="d-flex align-items-center" title="Baños">
+                                            <i class="bi bi-droplet fs-5 me-2 text-secondary"></i>
+                                            <span class="fw-bold">@prop.Bathrooms</span>
+                                        </div>
+                                        <div class="d-flex align-items-center" title="Tamaño">
+                                            <i class="bi bi-arrows-fullscreen fs-5 me-2 text-secondary"></i>
+                                            <span class="fw-bold">@prop.LandSize mt²</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid mt-auto">
+                                        <a asp-action="Details" asp-route-id="@prop.Id" class="btn btn-outline-primary rounded-3 fw-bold py-2 btn-hover-filled">
+                                            Ver Detalles
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .property-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.15)!important;
+    }
+    .btn-hover-filled:hover {
+        background-color: var(--bs-primary);
+        color: white;
+    }
+    .property-image {
+        transition: transform 0.5s ease;
+    }
+    .hover-lift:hover .property-image {
+        transform: scale(1.05);
+    }
+</style>
