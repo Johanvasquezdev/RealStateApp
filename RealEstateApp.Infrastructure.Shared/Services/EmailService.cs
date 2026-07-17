@@ -3,7 +3,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using RealEstateApp.Core.Application.DTOs.Email;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Domain.Settings;
 using System.Threading.Tasks;
 
@@ -39,3 +39,4 @@ public class EmailService : IEmailService
         await smtp.DisconnectAsync(true);
     }
 }
+

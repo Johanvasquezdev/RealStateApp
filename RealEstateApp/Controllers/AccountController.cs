@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Accounts;
 
 namespace RealEstateApp.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly AuthService _authService;
+    private readonly IAuthService _authService;
 
-    public AccountController(AuthService authService)
+    public AccountController(IAuthService authService)
     {
         _authService = authService;
     }
@@ -61,3 +61,5 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 }
+
+

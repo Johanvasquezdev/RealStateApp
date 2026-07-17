@@ -1,9 +1,9 @@
-Ôªøusing RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Accounts;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class AuthService : Interfaces.Services.AuthService
+public class AuthService : IAuthService
 {
     private readonly IUserService _userService;
 
@@ -17,11 +17,11 @@ public class AuthService : Interfaces.Services.AuthService
     {
         var existingUser = await _userService.FindByNameAsync(vm.Username);
         if (existingUser is not null)
-            return new RegisterResult { Exito = false, Mensaje = "El nombre de usuario ya est√° en uso." };
+            return new RegisterResult { Exito = false, Mensaje = "El nombre de usuario ya est· en uso." };
 
         var existingEmail = await _userService.FindByEmailAsync(vm.Email);
         if (existingEmail is not null)
-            return new RegisterResult { Exito = false, Mensaje = "El correo electr√≥nico ya est√° registrado." };
+            return new RegisterResult { Exito = false, Mensaje = "El correo electrÛnico ya est· registrado." };
 
         var (succeeded, error, userId) = await _userService.CreateUserAsync(
             vm.Username, vm.Email, vm.Password, vm.FirstName, vm.LastName,
@@ -37,7 +37,7 @@ public class AuthService : Interfaces.Services.AuthService
 
         var mensaje = vm.TipoUsuario == "Cliente"
             ? "Registro exitoso. Revise su correo para activar su cuenta."
-            : "Registro exitoso. Un administrador debe activar su cuenta antes de iniciar sesi√≥n.";
+            : "Registro exitoso. Un administrador debe activar su cuenta antes de iniciar sesiÛn.";
 
         return new RegisterResult { Exito = true, Mensaje = mensaje, TipoUsuario = vm.TipoUsuario };
     }
@@ -50,21 +50,21 @@ public class AuthService : Interfaces.Services.AuthService
                    ?? await _userService.FindByNameAsync(vm.UsuarioOCorreo);
 
         if (user is null)
-            return new LoginResult { Exito = false, Mensaje = "Los datos de acceso son inv√°lidos." };
+            return new LoginResult { Exito = false, Mensaje = "Los datos de acceso son inv·lidos." };
 
         if (!user.IsActive)
-            return new LoginResult { Exito = false, Mensaje = "El usuario se encuentra inactivo y no puede iniciar sesi√≥n." };
+            return new LoginResult { Exito = false, Mensaje = "El usuario se encuentra inactivo y no puede iniciar sesiÛn." };
 
         var roles = await _userService.GetRolesAsync(user.Id);
         if (!roles.Any())
-            return new LoginResult { Exito = false, Mensaje = "El usuario no tiene un rol v√°lido asignado. P√≥ngase en contacto con un administrador." };
+            return new LoginResult { Exito = false, Mensaje = "El usuario no tiene un rol v·lido asignado. PÛngase en contacto con un administrador." };
 
         if (roles.Contains("Desarrollador"))
-            return new LoginResult { Exito = false, Mensaje = "No tiene permisos para acceder a esta aplicaci√≥n." };
+            return new LoginResult { Exito = false, Mensaje = "No tiene permisos para acceder a esta aplicaciÛn." };
 
         var signIn = await _userService.PasswordSignInAsync(vm.UsuarioOCorreo, vm.Password);
         if (!signIn.Succeeded)
-            return new LoginResult { Exito = false, Mensaje = "Los datos de acceso son inv√°lidos." };
+            return new LoginResult { Exito = false, Mensaje = "Los datos de acceso son inv·lidos." };
 
         return new LoginResult { Exito = true, Mensaje = "", Rol = roles.First(), UserId = user.Id };
     } 
@@ -75,3 +75,6 @@ public class AuthService : Interfaces.Services.AuthService
         await _userService.SignOutAsync();
     }
 }
+
+
+

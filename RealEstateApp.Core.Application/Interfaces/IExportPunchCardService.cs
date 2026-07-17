@@ -1,8 +1,10 @@
-namespace RealEstateApp.Core.Application.Interfaces.Services;
+namespace RealEstateApp.Core.Application.Interfaces;
 
-public interface ExportPunchCardService
+public interface IExportPunchCardService
 {
     Task<byte[]> ExportExcelAsync(int sessionId);
     Task<byte[]> ExportPdfAsync(int sessionId);
     Task<byte[]> ExportWordAsync(int sessionId);
 }
+
+

@@ -1,9 +1,9 @@
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.AgentProfile;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ProfileService : Interfaces.Services.ProfileService
+public class ProfileService : IProfileService
 {
     private readonly IUserService _userService;
 
@@ -35,3 +35,6 @@ public class ProfileService : Interfaces.Services.ProfileService
         return await _userService.UpdateUserAsync(userId, vm.FirstName, vm.LastName, vm.Email, vm.PhoneNumber);
     }
 }
+
+
+

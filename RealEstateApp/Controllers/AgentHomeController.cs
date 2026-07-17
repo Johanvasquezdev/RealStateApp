@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 
 namespace RealEstateApp.Controllers;
 
@@ -21,3 +21,4 @@ public class AgentHomeController : Controller
         return View(propiedades);
     }
 }
+

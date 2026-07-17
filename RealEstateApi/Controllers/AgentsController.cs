@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 
 namespace RealEstateApi.Controllers;
 
@@ -9,9 +9,9 @@ namespace RealEstateApi.Controllers;
 [Authorize(Roles = "Admin,Developer")]
 public class AgentsController : ControllerBase
 {
-    private readonly AgentService _agenteService;
+    private readonly IAgentService _agenteService;
 
-    public AgentsController(AgentService agenteService)
+    public AgentsController(IAgentService agenteService)
     {
         _agenteService = agenteService;
     }
@@ -38,3 +38,5 @@ public class AgentsController : ControllerBase
         return Ok(propiedades);
     }
 }
+
+

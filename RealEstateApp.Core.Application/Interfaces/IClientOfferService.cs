@@ -1,6 +1,6 @@
 using RealEstateApp.Core.Application.ViewModels.Offers;
 
-namespace RealEstateApp.Core.Application.Interfaces.Services;
+namespace RealEstateApp.Core.Application.Interfaces;
 
 public interface IClientOfferService
 {
@@ -8,3 +8,5 @@ public interface IClientOfferService
     Task<List<ClientOfferListViewModel>> GetClientOffersAsync(string clientId);
     Task WithdrawOfferAsync(int offerId, string clientId);
 }
+
+

@@ -1,5 +1,5 @@
 using RealEstateApp.Core.Application.DTOs.PunchCard;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
@@ -212,3 +212,6 @@ public class SummaryPunchCardService : ISummaryPunchCardService
         };
     }
 }
+
+
+

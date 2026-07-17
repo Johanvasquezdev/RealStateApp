@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 
 namespace RealEstateApp.Controllers;
@@ -76,3 +76,4 @@ public class PropiertyMaintenanceController : Controller
         return View(property);
     }
 }
+

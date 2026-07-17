@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 
 namespace RealEstateApp.Controllers;
 
 public class AgentsController : Controller
 {
-    private readonly AgentService _agenteService;
+    private readonly IAgentService _agenteService;
 
-    public AgentsController(AgentService agenteService)
+    public AgentsController(IAgentService agenteService)
     {
         _agenteService = agenteService;
     }
@@ -28,3 +28,5 @@ public class AgentsController : Controller
         return View(agente);
     }
 }
+
+

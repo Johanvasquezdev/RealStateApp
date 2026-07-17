@@ -1,5 +1,5 @@
 using RealEstateApp.Core.Application.DTOs.PunchCard;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +10,13 @@ namespace RealEstateApp.Controllers;
 public class SummaryPunchCardController : Controller
 {
     private readonly ISummaryPunchCardService _resumenService;
-    private readonly ImporterPunchCardService _importadorService;
-    private readonly ExportPunchCardService _exportacionService;
+    private readonly IImporterPunchCardService _importadorService;
+    private readonly IExportPunchCardService _exportacionService;
 
     public SummaryPunchCardController(
         ISummaryPunchCardService resumenService,
-        ImporterPunchCardService importadorService,
-        ExportPunchCardService exportacionService)
+        IImporterPunchCardService importadorService,
+        IExportPunchCardService exportacionService)
     {
         _resumenService = resumenService;
         _importadorService = importadorService;
@@ -191,3 +191,5 @@ public class SummaryPunchCardController : Controller
     }
     #endregion
 }
+
+

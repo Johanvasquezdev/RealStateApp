@@ -1,4 +1,4 @@
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.AgentChats;
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
@@ -6,7 +6,7 @@ using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ChatService : Interfaces.Services.ChatService
+public class ChatService : IChatService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _userService;
@@ -92,3 +92,6 @@ public class ChatService : Interfaces.Services.ChatService
         await _unitOfWork.SaveChangesAsync();
     }
 }
+
+
+

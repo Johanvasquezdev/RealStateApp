@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using RealEstateApp.Core.Application.DTOs;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Infrastructure.Identity.Entities;
 
 namespace RealEstateApp.Infrastructure.Identity.Services;
@@ -154,3 +154,4 @@ public class UserService : IUserService
         };
     }
 }
+

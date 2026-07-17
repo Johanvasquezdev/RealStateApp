@@ -8,7 +8,11 @@ using RealEstateApp.Core.Domain.Interfaces;
 namespace RealEstateApp.Core.Application.Services
 {
     public class SaleTypeService(IGenericRepository<SaleType> repository, IMapper mapper)
+<<<<<<< HEAD
     : GenericService<SaveSaleTypeViewModel, SaleTypeViewModel, SaleType>(repository, mapper), Interfaces.ISaleTypeService
+=======
+    : GenericService<SaveSaleTypeViewModel, SaleTypeViewModel, SaleType>(repository, mapper), ISaleTypeService
+>>>>>>> 7066142a1bf1513e7928d18cd381eb409d7b6bf2
     {
         private readonly IGenericRepository<Property> _propertyRepository = propertyRepository;
         public override async Task Delete(int id)
@@ -25,4 +29,10 @@ namespace RealEstateApp.Core.Application.Services
             await _repository.DeleteAsync(saleType);
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+
+
+>>>>>>> 7066142a1bf1513e7928d18cd381eb409d7b6bf2

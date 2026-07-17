@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RealEstateApp.Core.Application.Interfaces.Services;
+
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Infrastructure.Persistence.Contexts;
@@ -28,8 +28,9 @@ public static class ServiceRegistration
         #endregion
 
         #region Services
-        services.AddTransient<ImporterPunchCardService, ImportadorPunchCardCsv>();
-        services.AddTransient<ExportacionPunchCardService, ExportacionPunchCardService>();
+        services.AddTransient<RealEstateApp.Core.Application.Interfaces.IImporterPunchCardService, ImportadorPunchCardCsv>();
+        services.AddTransient<RealEstateApp.Core.Application.Interfaces.IExportPunchCardService, ExportacionPunchCardService>();
         #endregion
     }
 }
+

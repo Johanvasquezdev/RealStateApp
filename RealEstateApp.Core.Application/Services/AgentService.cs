@@ -1,4 +1,4 @@
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Agents;
 using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 using RealEstateApp.Core.Domain.Common;
@@ -7,7 +7,7 @@ using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class AgentService : Interfaces.Services.AgentService
+public class AgentService : IAgentService
 {
     private readonly IUserService _userService;
     private readonly IGenericRepository<Property> _propertyRepository;
@@ -85,3 +85,6 @@ public class AgentService : Interfaces.Services.AgentService
         }).ToList();
     }
 }
+
+
+

@@ -1,6 +1,6 @@
 using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 
-namespace RealEstateApp.Core.Application.Interfaces.Services;
+namespace RealEstateApp.Core.Application.Interfaces;
 
 public interface IPropertyService
 {
@@ -14,3 +14,5 @@ public interface IPropertyService
     Task DeleteAsync(int id, string agentId);
     Task<string?> GetFirstImageAsync(int propertyId);
 }
+
+

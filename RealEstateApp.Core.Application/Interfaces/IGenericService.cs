@@ -14,3 +14,5 @@ public interface IGenericService<TSaveViewModel, TViewModel, TEntity>
     Task<List<TViewModel>> GetAllViewModel();
     Task<List<TViewModel>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 }
+
+

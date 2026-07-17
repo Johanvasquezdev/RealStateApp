@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Messages;
 using System.Security.Claims;
 
@@ -46,3 +46,4 @@ public class ClientChatController : Controller
         return RedirectToAction("Conversation", new { propertyId = vm.PropertyId, agentId = vm.ReceiverId });
     }
 }
+

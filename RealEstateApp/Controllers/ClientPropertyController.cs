@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Properties;
 using System.Security.Claims;
 
@@ -33,3 +33,4 @@ public class ClientPropertyController : Controller
         return View(property);
     }
 }
+
