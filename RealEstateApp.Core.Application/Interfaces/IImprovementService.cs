@@ -3,7 +3,7 @@ using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Interfaces
 {
-    public interface ImprovementService : GenericService<SaveImprovementViewModel, ImprovementViewModel, Improvement>
+    public interface IImprovementService : IGenericService<SaveImprovementViewModel, ImprovementViewModel, Improvement>
     {
     }
 }

@@ -3,7 +3,7 @@ using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Interfaces
 {
-    public interface SaleTypeService : GenericService<SaveSaleTypeViewModel, SaleTypeViewModel, SaleType> 
+    public interface ISaleTypeService : IGenericService<SaveSaleTypeViewModel, SaleTypeViewModel, SaleType> 
     {
 
     }

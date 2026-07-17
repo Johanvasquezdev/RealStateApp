@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 namespace RealEstateApp.Core.Application.Services
 {
     public class GenericService<TSaveViewModel, TViewModel, TEntity>(IGenericRepository<TEntity> repository, IMapper mapper) 
-        : Interfaces.GenericService<TSaveViewModel, TViewModel, TEntity>
+        : Interfaces.IGenericService<TSaveViewModel, TViewModel, TEntity>
         where TSaveViewModel : class
         where TViewModel : class
         where TEntity : class

@@ -8,7 +8,7 @@ using RealEstateApp.Core.Domain.Interfaces;
 namespace RealEstateApp.Core.Application.Services
 {
     public class SaleTypeService(IGenericRepository<SaleType> repository, IMapper mapper)
-    : GenericService<SaveSaleTypeViewModel, SaleTypeViewModel, SaleType>(repository, mapper), Interfaces.SaleTypeService
+    : GenericService<SaveSaleTypeViewModel, SaleTypeViewModel, SaleType>(repository, mapper), Interfaces.ISaleTypeService
     {
         private readonly IGenericRepository<Property> _propertyRepository = propertyRepository;
         public override async Task Delete(int id)

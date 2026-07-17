@@ -11,10 +11,10 @@ public static class ServiceRegistration
     {
         services.AddAutoMapper(typeof(ServiceRegistration).Assembly);
 
-        services.AddTransient(typeof(Interfaces.GenericService<,,>), typeof(Services.GenericService<,,>));
-        services.AddTransient<Interfaces.ImprovementService, Services.ImprovementService>();
-        services.AddTransient<Interfaces.PropertyTypeService, Services.PropertyTypeService>();
-        services.AddTransient<Interfaces.SaleTypeService, Services.SaleTypeService>();
+        services.AddTransient(typeof(Interfaces.IGenericService<,,>), typeof(Services.GenericService<,,>));
+        services.AddTransient<Interfaces.IImprovementService, Services.ImprovementService>();
+        services.AddTransient<Interfaces.IPropertyTypeService, Services.PropertyTypeService>();
+        services.AddTransient<Interfaces.ISaleTypeService, Services.SaleTypeService>();
 
         services.AddTransient<Interfaces.Services.AgentService, Services.AgentService>();
         services.AddTransient<Interfaces.Services.AuthService, Services.AuthService>();

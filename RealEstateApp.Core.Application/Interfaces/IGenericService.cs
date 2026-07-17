@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace RealEstateApp.Core.Application.Interfaces;
 
-public interface GenericService<TSaveViewModel, TViewModel, TEntity>
+public interface IGenericService<TSaveViewModel, TViewModel, TEntity>
     where TSaveViewModel : class
     where TViewModel : class
     where TEntity : class
