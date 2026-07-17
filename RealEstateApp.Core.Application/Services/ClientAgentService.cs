@@ -1,5 +1,5 @@
 using AutoMapper;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Agents;
 using RealEstateApp.Core.Domain.Common;
 
@@ -65,3 +65,6 @@ public class ClientAgentService : IClientAgentService
         };
     }
 }
+
+
+

@@ -1,10 +1,10 @@
 using RealEstateApp.Core.Application.DTOs.PunchCard;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using ClosedXML.Excel;
 
 namespace RealEstateApp.Infrastructure.Persistence.Services;
 
-public class ImportadorPunchCardCsv : ImporterPunchCardService
+public class ImportadorPunchCardCsv : IImporterPunchCardService
 {
     public async Task<List<ImportedPunchCardRow>> ReadFileAsync(Stream stream, string nombreArchivo)
     {
@@ -121,3 +121,5 @@ public class ImportadorPunchCardCsv : ImporterPunchCardService
         return TimeSpan.TryParse(cleaned, out _) ? cleaned : null;
     }
 }
+
+

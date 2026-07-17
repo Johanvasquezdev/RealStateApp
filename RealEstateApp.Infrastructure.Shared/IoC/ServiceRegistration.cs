@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Domain.Settings;
 using RealEstateApp.Infrastructure.Shared.Services;
 
@@ -16,3 +16,4 @@ public static class ServiceRegistration
         services.AddTransient<IFileStorageService, SupabaseStorageService>();
     }
 }
+

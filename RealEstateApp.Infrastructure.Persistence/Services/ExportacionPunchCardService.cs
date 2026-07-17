@@ -1,5 +1,5 @@
 using RealEstateApp.Core.Application.DTOs.PunchCard;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
@@ -11,7 +11,7 @@ using QuestPDF.Infrastructure;
 
 namespace RealEstateApp.Infrastructure.Persistence.Services;
 
-public class ExportacionPunchCardService : Core.Application.Interfaces.Services.ExportPunchCardService
+public class ExportacionPunchCardService : Core.Application.Interfaces.IExportPunchCardService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<ExportacionPunchCardService> _logger;
@@ -202,3 +202,5 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
         return await repo.GetByIdAsync(sesionId);
     }
 }
+
+

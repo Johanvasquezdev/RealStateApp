@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Domain.Settings;
 
 namespace RealEstateApp.Infrastructure.Shared.Services;
@@ -71,3 +71,4 @@ public class SupabaseStorageService : IFileStorageService
         }
     }
 }
+

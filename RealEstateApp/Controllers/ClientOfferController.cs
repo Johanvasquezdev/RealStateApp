@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Offers;
 using System.Security.Claims;
 
@@ -57,3 +57,4 @@ public class ClientOfferController : Controller
         return RedirectToAction(nameof(Index));
     }
 }
+

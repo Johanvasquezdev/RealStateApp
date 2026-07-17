@@ -10,7 +10,7 @@ using RealEstateApp.Infrastructure.Identity.Entities;
 
 namespace RealEstateApp.Infrastructure.Identity.Services;
 
-public class UserManagementService: Core.Application.Interfaces.UserManagementService
+public class UserManagementService: Core.Application.Interfaces.IUserManagementService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IGenericRepository<Property> _propertyRepository;

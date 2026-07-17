@@ -8,7 +8,9 @@ using RealEstateApp.Core.Domain.Interfaces;
 namespace RealEstateApp.Core.Application.Services
 {
     public class ImprovementService(IGenericRepository<Improvement> repository, IMapper mapper)
-    : GenericService<SaveImprovementViewModel, ImprovementViewModel, Improvement>(repository, mapper), Interfaces.ImprovementService
+    : GenericService<SaveImprovementViewModel, ImprovementViewModel, Improvement>(repository, mapper), IImprovementService
     {
     }
 }
+
+

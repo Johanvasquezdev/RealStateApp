@@ -1,8 +1,8 @@
-﻿using RealEstateApp.Core.Application.DTOs;
+using RealEstateApp.Core.Application.DTOs;
 using RealEstateApp.Core.Application.ViewModels.Users;
 
 namespace RealEstateApp.Core.Application.Interfaces;
-public interface UserManagementService
+public interface IUserManagementService
 {
     Task<List<UserListItemViewModel>> GetAllAdmins();
     Task<ResultResponse> CreateAdmin(SaveAdminViewModel vm);

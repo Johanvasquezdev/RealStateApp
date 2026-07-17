@@ -1,4 +1,4 @@
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.AgentOffers;
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
@@ -7,7 +7,7 @@ using RealEstateApp.Core.Domain.Enums;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class OfferService : Interfaces.Services.OfferService
+public class OfferService : IOfferService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _userService;
@@ -122,3 +122,6 @@ public class OfferService : Interfaces.Services.OfferService
     } 
     #endregion
 }
+
+
+

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.AgentChats;
 
 namespace RealEstateApp.Controllers;
@@ -8,9 +8,9 @@ namespace RealEstateApp.Controllers;
 [Authorize(Roles = "Agente")]
 public class ChatController : Controller
 {
-    private readonly ChatService _chatService;
+    private readonly IChatService _chatService;
 
-    public ChatController(ChatService chatService)
+    public ChatController(IChatService chatService)
     {
         _chatService = chatService;
     }
@@ -40,3 +40,5 @@ public class ChatController : Controller
         return RedirectToAction("Conversacion", new { propertyId = vm.PropertyId, clientId = vm.ReceiverId });
     }
 }
+
+

@@ -1,6 +1,6 @@
 using RealEstateApp.Core.Application.ViewModels.Messages;
 
-namespace RealEstateApp.Core.Application.Interfaces.Services;
+namespace RealEstateApp.Core.Application.Interfaces;
 
 public interface IClientChatService
 {
@@ -8,3 +8,5 @@ public interface IClientChatService
     Task<List<ClientChatListViewModel>> GetConversationsAsync(string clientId);
     Task<ClientChatConversationViewModel> GetConversationWithAgentAsync(string clientId, string agentId, int propertyId);
 }
+
+

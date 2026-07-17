@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.AgentProfile;
 
 namespace RealEstateApp.Controllers;
@@ -8,9 +8,9 @@ namespace RealEstateApp.Controllers;
 [Authorize(Roles = "Agente")]
 public class ProfileController : Controller
 {
-    private readonly ProfileService _perfilService;
+    private readonly IProfileService _perfilService;
 
-    public ProfileController(ProfileService perfilService)
+    public ProfileController(IProfileService perfilService)
     {
         _perfilService = perfilService;
     }
@@ -32,3 +32,5 @@ public class ProfileController : Controller
         return RedirectToAction("Index");
     }
 }
+
+

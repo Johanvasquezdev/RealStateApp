@@ -1,5 +1,5 @@
 using AutoMapper;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Properties;
 using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Core.Domain.Entities;
@@ -125,3 +125,6 @@ public class ClientPropertyService : IClientPropertyService
     }
     #endregion
 }
+
+
+

@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 
 namespace RealEstateApp.Controllers;
 
 [Authorize(Roles = "Agente")]
 public class OfferController : Controller
 {
-    private readonly OfferService _ofertaService;
+    private readonly IOfferService _ofertaService;
 
-    public OfferController(OfferService ofertaService)
+    public OfferController(IOfferService ofertaService)
     {
         _ofertaService = ofertaService;
     }
@@ -45,3 +45,5 @@ public class OfferController : Controller
         return RedirectToAction("Index", new { propertyId });
     }
 }
+
+

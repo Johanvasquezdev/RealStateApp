@@ -1,6 +1,6 @@
 using RealEstateApp.Core.Application.DTOs;
 
-namespace RealEstateApp.Core.Application.Interfaces.Services;
+namespace RealEstateApp.Core.Application.Interfaces;
 
 public interface IUserService
 {
@@ -22,3 +22,5 @@ public interface IUserService
     Task<(bool Succeeded, string Error)> PasswordSignInAsync(string userNameOrEmail, string password);
     Task SignOutAsync();
 }
+
+

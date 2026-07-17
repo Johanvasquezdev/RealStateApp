@@ -8,7 +8,9 @@ using RealEstateApp.Core.Domain.Interfaces;
 namespace RealEstateApp.Core.Application.Services
 {
     public class PropertyTypeService(IGenericRepository<PropertyType> repository, IMapper mapper)
-    : GenericService<SavePropertyTypeViewModel, PropertyTypeViewModel, PropertyType>(repository, mapper), Interfaces.PropertyTypeService
+    : GenericService<SavePropertyTypeViewModel, PropertyTypeViewModel, PropertyType>(repository, mapper), IPropertyTypeService
     {
     }
 }
+
+

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using RealEstateApp.Core.Application.Interfaces;
-using RealEstateApp.Core.Application.Interfaces.Services;
+
 using RealEstateApp.Core.Application.Services;
 
 namespace RealEstateApp.Core.Application.IoC;
@@ -11,17 +11,17 @@ public static class ServiceRegistration
     {
         services.AddAutoMapper(typeof(ServiceRegistration).Assembly);
 
-        services.AddTransient(typeof(Interfaces.GenericService<,,>), typeof(Services.GenericService<,,>));
-        services.AddTransient<Interfaces.ImprovementService, Services.ImprovementService>();
-        services.AddTransient<Interfaces.PropertyTypeService, Services.PropertyTypeService>();
-        services.AddTransient<Interfaces.SaleTypeService, Services.SaleTypeService>();
+        services.AddTransient(typeof(IGenericService<,,>), typeof(Services.GenericService<,,>));
+        services.AddTransient<IImprovementService, Services.ImprovementService>();
+        services.AddTransient<IPropertyTypeService, Services.PropertyTypeService>();
+        services.AddTransient<ISaleTypeService, Services.SaleTypeService>();
 
-        services.AddTransient<Interfaces.Services.AgentService, Services.AgentService>();
-        services.AddTransient<Interfaces.Services.AuthService, Services.AuthService>();
+        services.AddTransient<IAgentService, Services.AgentService>();
+        services.AddTransient<IAuthService, Services.AuthService>();
         services.AddTransient<IPropertyService, PropertyService>();
-        services.AddTransient<Interfaces.Services.ProfileService, Services.ProfileService>();
-        services.AddTransient<Interfaces.Services.OfferService, Services.OfferService>();
-        services.AddTransient<Interfaces.Services.ChatService, Services.ChatService>();
+        services.AddTransient<IProfileService, Services.ProfileService>();
+        services.AddTransient<IOfferService, Services.OfferService>();
+        services.AddTransient<IChatService, Services.ChatService>();
 
         // Persona 2: Cliente Services
         services.AddTransient<IClientAgentService, ClientAgentService>();
@@ -36,3 +36,4 @@ public static class ServiceRegistration
         return services;
     }
 }
+

@@ -1,5 +1,5 @@
 using AutoMapper;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Messages;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Interfaces;
@@ -114,3 +114,6 @@ public class ClientChatService : IClientChatService
     }
     #endregion
 }
+
+
+

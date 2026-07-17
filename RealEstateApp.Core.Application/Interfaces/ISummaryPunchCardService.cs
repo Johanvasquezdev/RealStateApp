@@ -1,6 +1,6 @@
 using RealEstateApp.Core.Application.DTOs.PunchCard;
 
-namespace RealEstateApp.Core.Application.Interfaces.Services;
+namespace RealEstateApp.Core.Application.Interfaces;
 
 public interface ISummaryPunchCardService
 {
@@ -11,3 +11,5 @@ public interface ISummaryPunchCardService
     Task<RegistrationPunchCardDto?> GetByIdAsync(int id);
     Task<RegistrationPunchCardDto?> EditRecordAsync(EditPunchCardDto dto, string? editedBy);
 }
+
+
