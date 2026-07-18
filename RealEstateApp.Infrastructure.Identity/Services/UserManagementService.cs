@@ -110,6 +110,7 @@ public class UserManagementService: IUserManagementService
         {
             await _propertyRepository.DeleteAsync(property);
         }
+        await _propertyRepository.SaveChangesAsync();
 
         var result = await _userManager.DeleteAsync(user);
         return result.Succeeded ? new ResultResponse { Succeeded = true } : new ResultResponse { Succeeded = false, Errors = result.Errors.Select(e => e.Description).ToArray() };

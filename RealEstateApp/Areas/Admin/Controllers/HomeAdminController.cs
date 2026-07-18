@@ -4,6 +4,7 @@ using RealEstateApp.Core.Application.Interfaces;
 
 namespace RealEstateApp.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Authorize(Roles = "Administrador")]
     public class HomeAdminController(IUserManagementService userManagementService) : Controller
     {

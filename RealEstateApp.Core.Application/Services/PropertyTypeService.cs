@@ -20,10 +20,10 @@ namespace RealEstateApp.Core.Application.Services
             {
                 await _propertyRepository.DeleteAsync(property);
             }
+            await _propertyRepository.SaveChangesAsync();
 
             await _repository.DeleteAsync(propertyType);
+            await _repository.SaveChangesAsync();
         }
     }
 }
-
-

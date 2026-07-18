@@ -17,6 +17,7 @@ namespace RealEstateApp.Core.Application.Services
         {
             TEntity entity = _mapper.Map<TEntity>(vm);
             entity = await _repository.AddAsync(entity);
+            await _repository.SaveChangesAsync();
             return _mapper.Map<TSaveViewModel>(entity);
         }
 
@@ -24,6 +25,7 @@ namespace RealEstateApp.Core.Application.Services
         {
             TEntity? entity = await _repository.GetByIdAsync(id) ?? throw new KeyNotFoundException($"El registro con el ID {id} no fue encontrado.");
             await _repository.DeleteAsync(entity);
+            await _repository.SaveChangesAsync();
         }
 
         public virtual async Task<List<TViewModel>> GetAllViewModel()
@@ -44,7 +46,9 @@ namespace RealEstateApp.Core.Application.Services
         {
             TEntity entity = _mapper.Map<TEntity>(vm);
             await _repository.UpdateAsync(entity);
+            await _repository.SaveChangesAsync();
         }
+
         public virtual async Task<List<TViewModel>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
             var entityList = await _repository.FindAsync(predicate);
