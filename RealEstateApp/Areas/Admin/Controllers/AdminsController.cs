@@ -62,7 +62,7 @@ namespace RealEstateApp.Areas.Admin.Controllers
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (vm.Id == currentUserId)
             {
-                ModelState.AddModelError(string.Empty, "No puede editar su propio usuario desde este mantenimiento.");
+                ModelState.AddModelError(string.Empty, "No se puede editar su propio usuario desde este mantenimiento.");
                 return View(vm);
             }
 
