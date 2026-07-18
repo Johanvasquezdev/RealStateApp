@@ -1,7 +1,6 @@
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Agents;
 using RealEstateApp.Core.Application.ViewModels.AgentProperties;
-using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Core.Domain.Entities;
 
@@ -85,6 +84,3 @@ public class AgentService : IAgentService
         }).ToList();
     }
 }
-
-
-

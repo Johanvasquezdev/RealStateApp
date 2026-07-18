@@ -1,5 +1,4 @@
 using RealEstateApp.Core.Domain.Common;
-using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Core.Domain.Enums;
 
 namespace RealEstateApp.Core.Domain.Entities;

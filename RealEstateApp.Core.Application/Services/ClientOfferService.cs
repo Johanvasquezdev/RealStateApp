@@ -1,8 +1,6 @@
-using AutoMapper;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Offers;
 using RealEstateApp.Core.Domain.Entities;
-using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Core.Domain.Common;
 
 namespace RealEstateApp.Core.Application.Services;

@@ -2,17 +2,12 @@ using AutoMapper;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.SaleType;
 using RealEstateApp.Core.Domain.Entities;
-using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
 
 namespace RealEstateApp.Core.Application.Services
 {
-    public class SaleTypeService(IGenericRepository<SaleType> repository, IMapper mapper)
-<<<<<<< HEAD
-    : GenericService<SaveSaleTypeViewModel, SaleTypeViewModel, SaleType>(repository, mapper), Interfaces.ISaleTypeService
-=======
+    public class SaleTypeService(IGenericRepository<SaleType> repository, IGenericRepository<Property> propertyRepository, IMapper mapper)
     : GenericService<SaveSaleTypeViewModel, SaleTypeViewModel, SaleType>(repository, mapper), ISaleTypeService
->>>>>>> 7066142a1bf1513e7928d18cd381eb409d7b6bf2
     {
         private readonly IGenericRepository<Property> _propertyRepository = propertyRepository;
         public override async Task Delete(int id)
@@ -29,10 +24,4 @@ namespace RealEstateApp.Core.Application.Services
             await _repository.DeleteAsync(saleType);
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
-
-
->>>>>>> 7066142a1bf1513e7928d18cd381eb409d7b6bf2

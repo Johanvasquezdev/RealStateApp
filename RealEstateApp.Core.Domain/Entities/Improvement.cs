@@ -1,5 +1,4 @@
 using RealEstateApp.Core.Domain.Common;
-using RealEstateApp.Core.Domain.Interfaces;
 
 namespace RealEstateApp.Core.Domain.Entities;
 

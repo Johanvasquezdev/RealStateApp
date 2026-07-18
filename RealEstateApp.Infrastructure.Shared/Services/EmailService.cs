@@ -5,7 +5,6 @@ using MimeKit;
 using RealEstateApp.Core.Application.DTOs.Email;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Domain.Settings;
-using System.Threading.Tasks;
 
 namespace RealEstateApp.Infrastructure.Shared.Services;
 

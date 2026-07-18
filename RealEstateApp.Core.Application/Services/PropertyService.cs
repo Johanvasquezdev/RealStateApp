@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 using RealEstateApp.Core.Domain.Common;
-using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
 

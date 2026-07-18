@@ -11,24 +11,17 @@ public static class ServiceRegistration
     {
         services.AddAutoMapper(typeof(ServiceRegistration).Assembly);
 
-<<<<<<< HEAD
-        services.AddTransient(typeof(Interfaces.IGenericService<,,>), typeof(Services.GenericService<,,>));
-        services.AddTransient<Interfaces.IImprovementService, Services.ImprovementService>();
-        services.AddTransient<Interfaces.IPropertyTypeService, Services.PropertyTypeService>();
-        services.AddTransient<Interfaces.ISaleTypeService, Services.SaleTypeService>();
-=======
-        services.AddTransient(typeof(IGenericService<,,>), typeof(Services.GenericService<,,>));
-        services.AddTransient<IImprovementService, Services.ImprovementService>();
-        services.AddTransient<IPropertyTypeService, Services.PropertyTypeService>();
-        services.AddTransient<ISaleTypeService, Services.SaleTypeService>();
->>>>>>> 7066142a1bf1513e7928d18cd381eb409d7b6bf2
+        services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
+        services.AddTransient<IImprovementService, ImprovementService>();
+        services.AddTransient<IPropertyTypeService, PropertyTypeService>();
+        services.AddTransient<ISaleTypeService, SaleTypeService>();
 
-        services.AddTransient<IAgentService, Services.AgentService>();
-        services.AddTransient<IAuthService, Services.AuthService>();
+        services.AddTransient<IAgentService, AgentService>();
+        services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IPropertyService, PropertyService>();
-        services.AddTransient<IProfileService, Services.ProfileService>();
-        services.AddTransient<IOfferService, Services.OfferService>();
-        services.AddTransient<IChatService, Services.ChatService>();
+        services.AddTransient<IProfileService, ProfileService>();
+        services.AddTransient<IOfferService, OfferService>();
+        services.AddTransient<IChatService, ChatService>();
 
         // Persona 2: Cliente Services
         services.AddTransient<IClientAgentService, ClientAgentService>();

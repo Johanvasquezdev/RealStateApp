@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using RealEstateApp.Core.Application.IoC;
-using RealEstateApp.Infrastructure.Identity;
-using RealEstateApp.Infrastructure.Persistence;
+using RealEstateApp.Infrastructure.Identity.IoC;
+using RealEstateApp.Infrastructure.Persistence.IoC;
 using RealEstateApp.Infrastructure.Shared.IoC;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -2,7 +2,7 @@ namespace RealEstateApp.Core.Domain.Enums;
 
 public enum PunchCardStatus
 {
-    Normal = 1,
-    OnLeave = 2,
-    Absent = 3
+    Normal = 0,
+    OnLeave = 1,
+    Absent = 2
 }

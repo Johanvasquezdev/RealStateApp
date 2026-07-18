@@ -4,13 +4,12 @@ using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Users;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
-using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Infrastructure.Identity.Entities;
 
 namespace RealEstateApp.Infrastructure.Identity.Services;
 
-public class UserManagementService: Core.Application.Interfaces.IUserManagementService
+public class UserManagementService: IUserManagementService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IGenericRepository<Property> _propertyRepository;

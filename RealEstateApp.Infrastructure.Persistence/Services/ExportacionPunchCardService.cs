@@ -2,16 +2,14 @@ using RealEstateApp.Core.Application.DTOs.PunchCard;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Entities;
-using RealEstateApp.Core.Domain.Enums;
 using Microsoft.Extensions.Logging;
 using ClosedXML.Excel;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
 
 namespace RealEstateApp.Infrastructure.Persistence.Services;
 
-public class ExportacionPunchCardService : Core.Application.Interfaces.IExportPunchCardService
+public class ExportacionPunchCardService : IExportPunchCardService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<ExportacionPunchCardService> _logger;

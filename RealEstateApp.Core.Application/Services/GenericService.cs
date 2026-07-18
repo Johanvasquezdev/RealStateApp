@@ -1,17 +1,11 @@
 using AutoMapper;
 using RealEstateApp.Core.Application.Interfaces;
-using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
 using System.Linq.Expressions;
 
 namespace RealEstateApp.Core.Application.Services
 {
-    public class GenericService<TSaveViewModel, TViewModel, TEntity>(IGenericRepository<TEntity> repository, IMapper mapper) 
-<<<<<<< HEAD
-        : Interfaces.IGenericService<TSaveViewModel, TViewModel, TEntity>
-=======
-        : IGenericService<TSaveViewModel, TViewModel, TEntity>
->>>>>>> 7066142a1bf1513e7928d18cd381eb409d7b6bf2
+    public class GenericService<TSaveViewModel, TViewModel, TEntity>(IGenericRepository<TEntity> repository, IMapper mapper) : IGenericService<TSaveViewModel, TViewModel, TEntity>
         where TSaveViewModel : class
         where TViewModel : class
         where TEntity : class
@@ -58,5 +52,3 @@ namespace RealEstateApp.Core.Application.Services
         }
     }
 }
-
-
