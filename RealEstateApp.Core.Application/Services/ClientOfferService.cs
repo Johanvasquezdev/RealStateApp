@@ -64,7 +64,7 @@ public class ClientOfferService : IClientOfferService
                 PropertyCode = prop.Code,
                 PropertyImageUrl = prop.Images.FirstOrDefault()?.ImageUrl ?? "",
                 Amount = (decimal)offer.Amount,
-                Status = offer.Status.ToString(),
+                Status = offer.Status,
                 CreatedAt = offer.Created,
                 AgentName = agentUser != null ? $"{agentUser.FirstName} {agentUser.LastName}" : "",
                 AgentEmail = agentUser?.Email ?? "",
