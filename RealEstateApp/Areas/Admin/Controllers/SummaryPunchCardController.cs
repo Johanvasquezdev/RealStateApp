@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RealEstateApp.Areas.Admin.Controllers;
 
+[Area("Admin")]
 [Authorize(Roles = "Administrador")]
 public class SummaryPunchCardController : Controller
 {

@@ -6,6 +6,7 @@ using System.Security.Claims;
 
 namespace RealEstateApp.Areas.Client.Controllers;
 
+[Area("Client")]
 [Authorize(Roles = "Cliente")]
 public class ClientOfferController : Controller
 {

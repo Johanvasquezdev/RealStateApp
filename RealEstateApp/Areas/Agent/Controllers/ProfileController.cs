@@ -5,6 +5,7 @@ using RealEstateApp.Core.Application.ViewModels.AgentProfile;
 
 namespace RealEstateApp.Areas.Agent.Controllers;
 
+[Area("Agent")]
 [Authorize(Roles = "Agente")]
 public class ProfileController : Controller
 {

@@ -4,6 +4,7 @@ using RealEstateApp.Core.Application.Interfaces;
 
 namespace RealEstateApp.Areas.Client.Controllers;
 
+[Area("Client")]
 [Authorize(Roles = "Cliente")]
 public class ClientAgentController : Controller
 {

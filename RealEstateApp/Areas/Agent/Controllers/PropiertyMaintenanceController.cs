@@ -5,6 +5,7 @@ using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 
 namespace RealEstateApp.Areas.Agent.Controllers;
 
+[Area("Agent")]
 [Authorize(Roles = "Agente")]
 public class PropiertyMaintenanceController : Controller
 {

@@ -5,6 +5,7 @@ using RealEstateApp.Core.Application.ViewModels.AgentChats;
 
 namespace RealEstateApp.Areas.Agent.Controllers;
 
+[Area("Agent")]
 [Authorize(Roles = "Agente")]
 public class ChatController : Controller
 {
