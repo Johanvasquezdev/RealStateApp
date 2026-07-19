@@ -4,7 +4,7 @@ using RealEstateApp.Core.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace RealEstateApp.Controllers;
+namespace RealEstateApp.Areas.Admin.Controllers;
 
 [Authorize(Roles = "Administrador")]
 public class SummaryPunchCardController : Controller

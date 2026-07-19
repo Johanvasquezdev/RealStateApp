@@ -26,8 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Agent\" />
-    <Folder Include="Areas\Client\" />
+    <Folder Include="Areas\Admin\Views\Improvements\" />
+    <Folder Include="Areas\Admin\Views\SaleTypes\" />
+    <Folder Include="Areas\Admin\Views\PropertyTypes\" />
   </ItemGroup>
 
 </Project>

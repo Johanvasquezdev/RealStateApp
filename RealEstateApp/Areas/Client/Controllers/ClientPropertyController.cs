@@ -4,7 +4,7 @@ using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Properties;
 using System.Security.Claims;
 
-namespace RealEstateApp.Controllers;
+namespace RealEstateApp.Areas.Client.Controllers;
 
 [Authorize(Roles = "Cliente")]
 public class ClientPropertyController : Controller

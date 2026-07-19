@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.AgentChats;
 
-namespace RealEstateApp.Controllers;
+namespace RealEstateApp.Areas.Agent.Controllers;
 
 [Authorize(Roles = "Agente")]
 public class ChatController : Controller
