@@ -52,27 +52,27 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientProperty" ? "active" : "")" asp-controller="ClientProperty" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientProperty" ? "active" : "")" asp-area="Client" asp-controller="ClientProperty" asp-action="Index">
                                         <i class="bi bi-building"></i> Propiedades
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientFavorite" ? "active" : "")" asp-controller="ClientFavorite" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientFavorite" ? "active" : "")"  asp-area="Client" asp-controller="ClientFavorite" asp-action="Index">
                                         <i class="bi bi-heart"></i> Favoritos
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientOffer" ? "active" : "")" asp-controller="ClientOffer" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientOffer" ? "active" : "")" asp-area="Client" asp-controller="ClientOffer" asp-action="Index">
                                         <i class="bi bi-tags"></i> Mis Ofertas
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientChat" ? "active" : "")" asp-controller="ClientChat" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientChat" ? "active" : "")"  asp-area="Client" asp-controller="ClientChat" asp-action="Index">
                                         <i class="bi bi-chat"></i> Chat
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientProfile" ? "active" : "")" asp-controller="ClientProfile" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientProfile" ? "active" : "")"  asp-area="Client" asp-controller="ClientProfile" asp-action="Index">
                                         <i class="bi bi-person"></i> Mi Perfil
                                     </a>
                                 </li>
@@ -80,19 +80,66 @@
                             else if (User.IsInRole("Agente"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "AgentHome" ? "active" : "")" asp-controller="AgentHome" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "AgentHome" ? "active" : "")" asp-area="Agent" asp-controller="AgentHome" asp-action="Index">
                                         <i class="bi bi-house"></i> Home
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PropertyMaintenance" ? "active" : "")" asp-controller="PropertyMaintenance" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PropertyMaintenance" ? "active" : "")" asp-area="Agent" asp-controller="PropertyMaintenance" asp-action="Index">
                                         <i class="bi bi-building"></i> Mis Propiedades
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Profile" ? "active" : "")" asp-controller="Profile" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Profile" ? "active" : "")" asp-area="Agent"asp-controller="Profile" asp-action="Index">
                                         <i class="bi bi-person"></i> Mi Perfil
                                     </a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Administrador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "HomeAdmin" ? "active" : "")"
+                                       asp-area="Admin" asp-controller="HomeAdmin" asp-action="Index">
+                                        <i class="bi bi-speedometer2"></i> Panel
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link px-3 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-gear"></i> Administración
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="AgentAdmin" asp-action="Index">
+                                                <i class="bi bi-people me-2"></i> Agentes
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Admins" asp-action="Index">
+                                                <i class="bi bi-person-badge me-2"></i> Administradores
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Developers" asp-action="Index">
+                                                <i class="bi bi-code-slash me-2"></i> Desarrolladores
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="PropertyTypes" asp-action="Index">
+                                                <i class="bi bi-house-gear me-2"></i> Tipos de propiedad
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="SaleTypes" asp-action="Index">
+                                                <i class="bi bi-tag me-2"></i> Tipos de venta
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Improvements" asp-action="Index">
+                                                <i class="bi bi-stars me-2"></i> Mejoras
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                             }
                             else
@@ -167,8 +214,8 @@
     }
 
     <footer class="border-top footer text-muted bg-white">
-        <div class="container">
-            &copy; 2026 - RealEstateApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container-fluid px-4">
+            &copy; @DateTime.Now.Year - Real Estate App
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
