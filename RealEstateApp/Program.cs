@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using RealEstateApp.Core.Application.IoC;
+using RealEstateApp.Infrastructure.Identity.Entities;
 using RealEstateApp.Infrastructure.Identity.IoC;
+using RealEstateApp.Infrastructure.Identity.Seeds;
 using RealEstateApp.Infrastructure.Persistence.IoC;
 using RealEstateApp.Infrastructure.Shared.IoC;
 

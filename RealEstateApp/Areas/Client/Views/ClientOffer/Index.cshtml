@@ -1,4 +1,4 @@
-@model List<RealEstateApp.Core.Application.ViewModels.Offers.ClientOfferListViewModel>
+@model List<ClientOfferListViewModel>
 @{
     ViewData["Title"] = "Mis Ofertas";
 }
@@ -32,14 +32,14 @@
         <div class="d-flex flex-column gap-4">
             @foreach (var offer in Model)
             {
-                var statusColor = offer.Status switch
+                var statusColor = offer.Status.ToString() switch
                 {
                     "Pendiente" => "warning",
                     "Aceptada" => "success",
                     "Rechazada" => "danger",
                     _ => "secondary"
                 };
-                var statusIcon = offer.Status switch
+                var statusIcon = offer.Status.ToString() switch
                 {
                     "Pendiente" => "bi-clock-history",
                     "Aceptada" => "bi-check-circle-fill",
@@ -61,7 +61,7 @@
                                 <div>
                                     <div class="d-flex align-items-center gap-3 mb-2">
                                         <span class="badge bg-@(statusColor)-subtle text-@statusColor rounded-pill px-3 py-2 fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
-                                            <i class="bi @statusIcon me-1"></i> @offer.Status.ToUpper()
+                                            <i class="bi @statusIcon me-1"></i> @offer.Status.ToString().ToUpper()
                                         </span>
                                     </div>
                                     <h4 class="fw-bolder mb-1">@offer.PropertyName</h4>
@@ -83,7 +83,7 @@
                                 </div>
                                 
                                 <div>
-                                    @if (offer.Status == "Pendiente")
+                                    @if (offer.Status.ToString() == "Pendiente")
                                     {
                                         <form asp-action="WithdrawOffer" method="post" class="d-inline">
                                             <input type="hidden" name="offerId" value="@offer.OfferId" />
@@ -92,13 +92,13 @@
                                             </button>
                                         </form>
                                     }
-                                    else if (offer.Status == "Aceptada")
+                                    else if (offer.Status.ToString() == "Aceptada")
                                     {
                                         <button class="btn btn-dark rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
                                             Siguientes pasos
                                         </button>
                                     }
-                                    else if (offer.Status == "Rechazada")
+                                    else if (offer.Status.ToString() == "Rechazada")
                                     {
                                         <button class="btn btn-outline-dark rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
                                             Nueva oferta
