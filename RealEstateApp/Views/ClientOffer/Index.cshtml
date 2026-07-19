@@ -35,16 +35,16 @@
             {
                 var statusColor = offer.Status switch
                 {
-                    OfferStatus.Pending => "warning",
-                    OfferStatus.Accepted => "success",
-                    OfferStatus.Rejected => "danger",
+                    "Pendiente" => "warning",
+                    "Aceptada" => "success",
+                    "Rechazada" => "danger",
                     _ => "secondary"
                 };
                 var statusIcon = offer.Status switch
                 {
-                    OfferStatus.Pending => "bi-clock-history",
-                    OfferStatus.Accepted => "bi-check-circle-fill",
-                    OfferStatus.Rejected => "bi-x-circle-fill",
+                    "Pendiente" => "bi-clock-history",
+                    "Aceptada" => "bi-check-circle-fill",
+                    "Rechazada" => "bi-x-circle-fill",
                     _ => "bi-info-circle"
                 };
 
@@ -62,7 +62,7 @@
                                 <div>
                                     <div class="d-flex align-items-center gap-3 mb-2">
                                         <span class="badge bg-@(statusColor)-subtle text-@statusColor rounded-pill px-3 py-2 fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
-                                            <i class="bi @statusIcon me-1"></i> @offer.Status.ToString().ToUpper()
+                                            <i class="bi @statusIcon me-1"></i> @offer.Status.ToUpper()
                                         </span>
                                     </div>
                                     <h4 class="fw-bolder mb-1">@offer.PropertyName</h4>
@@ -84,7 +84,7 @@
                                 </div>
                                 
                                 <div>
-                                    @if (offer.Status == OfferStatus.Pending)
+                                    @if (offer.Status == "Pendiente")
                                     {
                                         <form asp-action="WithdrawOffer" method="post" class="d-inline">
                                             <input type="hidden" name="offerId" value="@offer.OfferId" />
@@ -93,13 +93,13 @@
                                             </button>
                                         </form>
                                     }
-                                    else if (offer.Status == OfferStatus.Accepted)
+                                    else if (offer.Status == "Aceptada")
                                     {
                                         <button class="btn btn-dark rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
                                             Siguientes pasos
                                         </button>
                                     }
-                                    else if (offer.Status == OfferStatus.Rejected)
+                                    else if (offer.Status == "Rechazada")
                                     {
                                         <button class="btn btn-outline-dark rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
                                             Nueva oferta

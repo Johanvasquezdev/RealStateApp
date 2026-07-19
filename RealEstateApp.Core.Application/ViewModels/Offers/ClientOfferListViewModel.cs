@@ -10,7 +10,7 @@ public class ClientOfferListViewModel
     public string PropertyCode { get; set; } = null!;
     public string PropertyImageUrl { get; set; } = null!;
     public decimal Amount { get; set; }
-    public OfferStatus Status { get; set; } // "Pendiente", "Aceptada", "Rechazada"
+    public string Status { get; set; } = null!; // "Pendiente", "Aceptada", "Rechazada"
     public DateTime CreatedAt { get; set; }
     public string AgentName { get; set; } = null!;
     public string AgentEmail { get; set; } = null!;
