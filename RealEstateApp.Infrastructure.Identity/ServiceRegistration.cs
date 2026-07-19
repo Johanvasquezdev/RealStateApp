@@ -14,7 +14,7 @@ public static class ServiceRegistration
 {
     public static IServiceCollection AddIdentityInfrastructure(this IServiceCollection services, IConfiguration config)
     {
-        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        services.Configure<IdentityOptions>(options =>
         {
             options.Password.RequireDigit = true;
             options.Password.RequiredLength = 6;
@@ -24,12 +24,11 @@ public static class ServiceRegistration
             options.User.RequireUniqueEmail = true;
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             options.Lockout.MaxFailedAccessAttempts = 5;
-        })
-        .AddDefaultTokenProviders();
+        });
 
         services.ConfigureApplicationCookie(options =>
         {
-            options.LoginPath = "/Cuenta/Login";
+            options.LoginPath = "/Account/Login";
             options.AccessDeniedPath = "/Home/AccessDenied";
             options.ExpireTimeSpan = TimeSpan.FromHours(8);
         });

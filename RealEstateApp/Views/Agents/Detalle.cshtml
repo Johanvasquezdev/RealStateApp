@@ -1,0 +1,54 @@
+@model AgenteListViewModel
+@{ ViewData["Title"] = "Detalle del Agente"; }
+
+<h2>@Model.NombreCompleto</h2>
+
+<div class="row mt-3">
+    <div class="col-md-4">
+        <img src="@(string.IsNullOrEmpty(Model.ProfilePictureUrl) ? "~/images/profiles/default-profile.png" : "~/images/profiles/" + Model.ProfilePictureUrl)" class="img-fluid rounded-circle" style="max-width: 200px;" alt="@Model.NombreCompleto" asp-append-version="true" />
+    </div>
+    <div class="col-md-8">
+        <dl class="row">
+            <dt class="col-sm-4">Nombre</dt>
+            <dd class="col-sm-8">@Model.NombreCompleto</dd>
+            <dt class="col-sm-4">Propiedades</dt>
+            <dd class="col-sm-8">@Model.CantidadPropiedades</dd>
+        </dl>
+    </div>
+</div>
+
+@if (ViewBag.Propiedades != null)
+{
+    var propiedades = (List<RealEstateApp.Core.Application.ViewModels.AgentProperties.AgentPropertyViewModel>)ViewBag.Propiedades;
+    if (propiedades.Any())
+    {
+        <h4 class="mt-4">Propiedades</h4>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Precio</th>
+                        <th>Tipo</th>
+                        <th>Venta</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in propiedades)
+                    {
+                        <tr>
+                            <td>@p.Code</td>
+                            <td>RD$ @p.Price.ToString("N2")</td>
+                            <td>@p.PropertyType</td>
+                            <td>@p.SaleType</td>
+                            <td><span class="badge @(p.Status == "Disponible" ? "bg-success" : "bg-secondary")">@p.Status</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Volver</a>

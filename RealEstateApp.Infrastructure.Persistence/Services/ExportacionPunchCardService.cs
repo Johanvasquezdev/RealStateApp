@@ -58,6 +58,7 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
 
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);
+        stream.Position = 0;
         return stream.ToArray();
     }
 
@@ -181,8 +182,9 @@ public class ExportacionPunchCardService : Core.Application.Interfaces.Services.
     private async Task<List<RegistrationPunchCardDto>> GetRegistrosAsync(int sesionId)
     {
         var repo = _unitOfWork.Repository<RegistroPunchCard>();
-        var all = await repo.FindAsync(r => r.SesionPunchCardId == sesionId);
-        return all.OrderBy(r => r.NombreEmpleado).ThenBy(r => r.Fecha).Select(r => new RegistrationPunchCardDto
+        var all = await repo.GetAllAsync();
+        var filtered = all.Where(r => r.SesionPunchCardId == sesionId);
+        return filtered.OrderBy(r => r.NombreEmpleado).ThenBy(r => r.Fecha).Select(r => new RegistrationPunchCardDto
         {
             Id = r.Id,
             NombreEmpleado = r.NombreEmpleado,

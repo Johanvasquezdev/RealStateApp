@@ -1,5 +1,6 @@
 using RealEstateApp.Core.Application.IoC;
 using RealEstateApp.Infrastructure.Identity;
+using RealEstateApp.Infrastructure.Identity.Seeds;
 using RealEstateApp.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,14 @@ builder.Services.AddIdentityInfrastructure(builder.Configuration);
 builder.Services.AddApplicationLayer();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<RealEstateApp.Infrastructure.Identity.Entities.ApplicationUser>>();
+    await DefaultRoles.SeedAsync(roleManager);
+    await DefaultUsers.SeedAsync(userManager);
+}
 
 if (!app.Environment.IsDevelopment())
 {

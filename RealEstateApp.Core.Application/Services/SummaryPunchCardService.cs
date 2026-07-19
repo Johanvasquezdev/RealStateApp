@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class SummaryPunchCardService : SummaryPunchCardService
+public class SummaryPunchCardService : Interfaces.Services.SummaryPunchCardService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<SummaryPunchCardService> _logger;

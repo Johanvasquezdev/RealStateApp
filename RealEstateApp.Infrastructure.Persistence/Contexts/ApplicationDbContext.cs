@@ -1,11 +1,14 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Entities;
+using RealEstateApp.Infrastructure.Identity.Entities;
 using System.Reflection;
 
 namespace RealEstateApp.Infrastructure.Persistence.Contexts;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
     public DbSet<Property> Properties { get; set; }
     public DbSet<PropertyType> PropertyTypes { get; set; }
@@ -40,7 +43,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        modelBuilder.Entity<ApplicationUser>().ToTable(name: "Users");
+        modelBuilder.Entity<IdentityRole>().ToTable(name: "Roles");
+        modelBuilder.Entity<IdentityUserRole<string>>().ToTable(name: "UserRoles");
+        modelBuilder.Entity<IdentityUserLogin<string>>().ToTable(name: "UserLogins");
+        modelBuilder.Entity<IdentityUserToken<string>>().ToTable(name: "UserTokens");
+        modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable(name: "RoleClaims");
+        modelBuilder.Entity<IdentityUserClaim<string>>().ToTable(name: "UserClaims");
 
         modelBuilder.Entity<SesionPunchCard>(entity =>
         {

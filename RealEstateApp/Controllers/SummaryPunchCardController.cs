@@ -127,6 +127,7 @@ public class SummaryPunchCardController : Controller
             TieneLicencia = registro.Estado == EstadoPunchCard.Licencia,
             Observacion = registro.Observacion
         };
+        ViewBag.SesionId = registro.SesionPunchCardId;
         return View(dto);
     }
 
