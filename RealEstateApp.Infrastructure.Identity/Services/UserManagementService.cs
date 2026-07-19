@@ -146,9 +146,9 @@ public class UserManagementService: IUserManagementService
             Id = u.Id,
             FirstName = u.FirstName,
             LastName = u.LastName,
+            IdCard = u.IdCard,
             Email = u.Email!,
             UserName = u.UserName!,
-            IdCard = u.IdCard,
             IsActive = u.IsActive
         }).ToList();
     }

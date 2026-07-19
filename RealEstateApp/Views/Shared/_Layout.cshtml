@@ -47,18 +47,23 @@
                             if (User.IsInRole("Cliente"))
                             {
                                 <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                                        <i class="bi bi-house"></i> Inicio
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientProperty" ? "active" : "")" asp-controller="ClientProperty" asp-action="Index">
-                                        <i class="bi bi-house"></i> Home
+                                        <i class="bi bi-building"></i> Propiedades
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Action"]?.ToString() == "Details" ? "active" : "")" href="#">
-                                        <i class="bi bi-building"></i> Detalle
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientFavorite" ? "active" : "")" asp-controller="ClientProperty" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientFavorite" ? "active" : "")" asp-controller="ClientFavorite" asp-action="Index">
                                         <i class="bi bi-heart"></i> Favoritos
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientOffer" ? "active" : "")" asp-controller="ClientOffer" asp-action="Index">
+                                        <i class="bi bi-tags"></i> Mis Ofertas
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -67,13 +72,26 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientOffer" ? "active" : "")" asp-controller="ClientOffer" asp-action="Index">
-                                        <i class="bi bi-tags"></i> Ofertas
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientProfile" ? "active" : "")" asp-controller="ClientProfile" asp-action="Index">
+                                        <i class="bi bi-person"></i> Mi Perfil
+                                    </a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Agente"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "AgentHome" ? "active" : "")" asp-controller="AgentHome" asp-action="Index">
+                                        <i class="bi bi-house"></i> Home
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientAgent" ? "active" : "")" asp-controller="ClientAgent" asp-action="Index">
-                                        <i class="bi bi-people"></i> Agentes
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PropertyMaintenance" ? "active" : "")" asp-controller="PropertyMaintenance" asp-action="Index">
+                                        <i class="bi bi-building"></i> Mis Propiedades
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Profile" ? "active" : "")" asp-controller="Profile" asp-action="Index">
+                                        <i class="bi bi-person"></i> Mi Perfil
                                     </a>
                                 </li>
                             }
@@ -85,7 +103,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link px-3" asp-controller="Agentes" asp-action="Index">
+                                    <a class="nav-link px-3" asp-controller="Agents" asp-action="Index">
                                         <i class="bi bi-people"></i> Agentes
                                     </a>
                                 </li>
@@ -99,7 +117,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Agentes" ? "active" : "")" asp-controller="Agentes" asp-action="Index">
+                                <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Agents" ? "active" : "")" asp-controller="Agents" asp-action="Index">
                                     <i class="bi bi-people"></i> Agentes
                                 </a>
                             </li>
@@ -114,28 +132,41 @@
                                 <i class="bi bi-person-circle text-gray"></i>
                                 <span class="fw-bold text-dark fs-7">@User.Identity.Name</span>
                             </div>
-                            <a class="btn btn-primary" asp-controller="Cuenta" asp-action="Logout">Cerrar sesión</a>
+                            <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">Cerrar sesión</a>
                         }
                         else
                         {
-                            <div class="bg-light rounded-pill px-3 py-2 d-flex align-items-center gap-2">
-                                <i class="bi bi-globe text-gray"></i>
-                                <span class="fw-bold text-dark fs-7">Nature</span>
-                            </div>
-                            <a class="btn btn-primary" asp-controller="Cuenta" asp-action="Login">Iniciar sesión</a>
+                            <a class="btn btn-primary fw-bold px-4" asp-controller="Account" asp-action="Login">Únete a la app</a>
                         }
                     </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid px-0">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    @if (User.Identity == null || !User.Identity.IsAuthenticated)
+    {
+        <div style="background-color: #f5f5f0;" class="py-5 mt-5 border-top">
+            <div class="container py-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h6 class="text-uppercase fw-bold mb-2" style="letter-spacing: 2px; color: #0d4d3a; font-size: 0.85rem;">REALSTATEAPP</h6>
+                    <h2 class="fw-bolder m-0" style="font-size: 2.2rem; color: #0a261c; letter-spacing: -0.5px;">Una experiencia inmobiliaria<br />pensada para ti.</h2>
+                </div>
+                <div>
+                    <a asp-controller="Account" asp-action="Login" class="btn text-white rounded-3 px-4 py-3 fw-bold fs-6 shadow-sm" style="background-color: #12402d;">
+                        Crea tu cuenta o inicia sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <footer class="border-top footer text-muted bg-white">
         <div class="container">
             &copy; 2026 - RealEstateApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

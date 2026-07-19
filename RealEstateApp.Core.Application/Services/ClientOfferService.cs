@@ -51,7 +51,7 @@ public class ClientOfferService : IClientOfferService
 
         foreach (var offer in offers.OrderByDescending(o => o.Created))
         {
-            var prop = await propertyRepo.FirstOrDefaultWithIncludesAsync(p => p.Id == offer.PropertyId, "Images");
+            var prop = await propertyRepo.FirstOrDefaultWithIncludesAsync(p => p.Id == offer.PropertyId, "Images", "PropertyType");
             if (prop == null) continue;
 
             var agentUser = await _userService.FindByIdAsync(prop.AgentId);

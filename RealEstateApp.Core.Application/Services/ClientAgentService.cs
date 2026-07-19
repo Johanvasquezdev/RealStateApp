@@ -10,12 +10,14 @@ public class ClientAgentService : IClientAgentService
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IClientPropertyService _clientPropertyService;
 
-    public ClientAgentService(IUserService userService, IMapper mapper, IUnitOfWork unitOfWork)
+    public ClientAgentService(IUserService userService, IMapper mapper, IUnitOfWork unitOfWork, IClientPropertyService clientPropertyService)
     {
         _userService = userService;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _clientPropertyService = clientPropertyService;
     }
 
     public async Task<List<ClientAgentViewModel>> GetAgentsAsync()
@@ -53,6 +55,8 @@ public class ClientAgentService : IClientAgentService
         var propRepo = _unitOfWork.Repository<RealEstateApp.Core.Domain.Entities.Property>();
         var propCount = await propRepo.CountAsync(p => p.AgentId == id);
 
+        var properties = await _clientPropertyService.GetPropertiesWithFiltersAsync(new RealEstateApp.Core.Application.ViewModels.Properties.ClientFilterPropertyViewModel { AgentId = id });
+
         return new ClientAgentViewModel
         {
             Id = user.Id,
@@ -61,7 +65,8 @@ public class ClientAgentService : IClientAgentService
             Email = user.Email,
             PhoneNumber = user.PhoneNumber,
             ProfilePictureUrl = user.ProfilePictureUrl,
-            PropertyCount = propCount
+            PropertyCount = properties.Count,
+            Properties = properties
         };
     }
 }

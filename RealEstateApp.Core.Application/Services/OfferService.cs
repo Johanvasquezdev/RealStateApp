@@ -45,6 +45,33 @@ public class OfferService : IOfferService
         return result;
     }
 
+    public async Task<List<AgentOfferDetailViewModel>> GetAllOffersByPropertyAsync(int propertyId, string agentId)
+    {
+        var propertyRepo = _unitOfWork.Repository<Property>();
+        var property = await propertyRepo.GetByIdAsync(propertyId);
+        if (property is null || property.AgentId != agentId)
+            return new();
+
+        var offerRepo = _unitOfWork.Repository<Offer>();
+        var offers = await offerRepo.FindAsync(o => o.PropertyId == propertyId);
+        offers = offers.OrderByDescending(o => o.Created).ToList();
+
+        var result = new List<AgentOfferDetailViewModel>();
+        foreach(var o in offers)
+        {
+            var client = await _userService.FindByIdAsync(o.ClientId);
+            result.Add(new AgentOfferDetailViewModel
+            {
+                Id = o.Id,
+                ClientName = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
+                Amount = o.Amount,
+                Status = o.Status.ToString(),
+                Created = o.Created
+            });
+        }
+        return result;
+    }
+
     public async Task<List<AgentOfferDetailViewModel>> GetOffersByClientPropertyAsync(int propertyId, string clientId, string agentId)
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
@@ -83,14 +110,6 @@ public class OfferService : IOfferService
 
             offer.Status = OfferStatus.Accepted;
             await offerRepo.UpdateAsync(offer);
-
-            var otherPending = await offerRepo.FindAsync(
-                o => o.PropertyId == offer.PropertyId && o.Id != offerId && o.Status == OfferStatus.Pending);
-            foreach (var o in otherPending)
-            {
-                o.Status = OfferStatus.Rejected;
-                await offerRepo.UpdateAsync(o);
-            }
 
             offer.Property.Status = PropertyStatus.Sold;
             await propertyRepo.UpdateAsync(offer.Property);

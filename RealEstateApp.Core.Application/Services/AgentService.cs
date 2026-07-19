@@ -41,7 +41,8 @@ public class AgentService : IAgentService
                 LastName = user.LastName,
                 Email = user.Email,
                 ProfilePictureUrl = user.ProfilePictureUrl,
-                PropertyCount = properties.Count
+                PropertyCount = properties.Count,
+                Activate = user.IsActive
             });
         }
 
@@ -62,7 +63,8 @@ public class AgentService : IAgentService
             LastName = user.LastName,
             Email = user.Email,
             ProfilePictureUrl = user.ProfilePictureUrl,
-            PropertyCount = properties.Count
+            PropertyCount = properties.Count,
+            Activate = user.IsActive
         };
     }
 

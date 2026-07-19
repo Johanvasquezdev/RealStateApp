@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using RealEstateApp.Core.Domain.Enums;
 using RealEstateApp.Infrastructure.Identity.Entities;
 
@@ -24,7 +24,7 @@ public static class DefaultUsers
         {
             FirstName = "Admin",
             LastName = "Sistema",
-            IdCard = "00000000000",
+            IdCard = "000-0000000-1",
             UserName = "admin",
             Email = "admin@realestateapp.com",
             EmailConfirmed = true,
@@ -36,7 +36,7 @@ public static class DefaultUsers
         {
             FirstName = "Cliente",
             LastName = "Demo",
-            IdCard = "00000000001",
+            IdCard = "000-0000000-2",
             UserName = "cliente",
             Email = "cliente@realestateapp.com",
             EmailConfirmed = true,
@@ -48,7 +48,7 @@ public static class DefaultUsers
         {
             FirstName = "Agente",
             LastName = "Demo",
-            IdCard = "00000000002",
+            IdCard = "000-0000000-3",
             UserName = "agente",
             Email = "agente@realestateapp.com",
             EmailConfirmed = true,
@@ -60,7 +60,7 @@ public static class DefaultUsers
         {
             FirstName = "Developer",
             LastName = "Demo",
-            IdCard = "00000000003",
+            IdCard = "000-0000000-4",
             UserName = "developer",
             Email = "developer@realestateapp.com",
             EmailConfirmed = true,

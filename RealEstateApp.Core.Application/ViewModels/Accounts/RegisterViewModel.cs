@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
 namespace RealEstateApp.Core.Application.ViewModels.Accounts;
@@ -25,6 +25,7 @@ public class RegisterViewModel
     [DataType(DataType.Password)]
     public string Password { get; set; } = null!;
 
+    [Required(ErrorMessage = "Debe confirmar la contraseña")]
     [Compare("Password", ErrorMessage = "Las contraseñas no coinciden")]
     [DataType(DataType.Password)]
     public string ConfirmPassword { get; set; } = null!;

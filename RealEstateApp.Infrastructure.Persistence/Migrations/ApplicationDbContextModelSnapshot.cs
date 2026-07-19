@@ -290,75 +290,6 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                     b.ToTable("PropertyTypes", (string)null);
                 });
 
-            modelBuilder.Entity("RealEstateApp.Core.Domain.Entities.RegistroPunchCard", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Departamento")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("Estado")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("HoraEntrada")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
-
-                    b.Property<string>("HoraSalida")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
-
-                    b.Property<decimal?>("HorasTrabajadas")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("NombreEditado")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("NombreEmpleado")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("NombreOriginal")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<string>("Observacion")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<int>("SesionPunchCardId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SesionPunchCardId");
-
-                    b.HasIndex("SesionPunchCardId", "NombreEmpleado", "Fecha");
-
-                    b.ToTable("RegistrosPunchCard");
-                });
-
             modelBuilder.Entity("RealEstateApp.Core.Domain.Entities.SaleType", b =>
                 {
                     b.Property<int>("Id")
@@ -391,56 +322,6 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SaleTypes", (string)null);
-                });
-
-            modelBuilder.Entity("RealEstateApp.Core.Domain.Entities.SesionPunchCard", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("FechaSubida")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NombreArchivo")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
-
-                    b.Property<int>("RegistrosConError")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RegistrosProcesados")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TotalRegistros")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UsuarioId")
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)");
-
-                    b.Property<string>("UsuarioNombre")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SesionesPunchCard");
                 });
 
             modelBuilder.Entity("RealEstateApp.Core.Domain.Entities.FavoriteProperty", b =>
@@ -525,17 +406,6 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
                     b.Navigation("Property");
                 });
 
-            modelBuilder.Entity("RealEstateApp.Core.Domain.Entities.RegistroPunchCard", b =>
-                {
-                    b.HasOne("RealEstateApp.Core.Domain.Entities.SesionPunchCard", "SesionPunchCard")
-                        .WithMany("Registros")
-                        .HasForeignKey("SesionPunchCardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SesionPunchCard");
-                });
-
             modelBuilder.Entity("RealEstateApp.Core.Domain.Entities.Improvement", b =>
                 {
                     b.Navigation("PropertyImprovements");
@@ -562,11 +432,6 @@ namespace RealEstateApp.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("RealEstateApp.Core.Domain.Entities.SaleType", b =>
                 {
                     b.Navigation("Properties");
-                });
-
-            modelBuilder.Entity("RealEstateApp.Core.Domain.Entities.SesionPunchCard", b =>
-                {
-                    b.Navigation("Registros");
                 });
 #pragma warning restore 612, 618
         }

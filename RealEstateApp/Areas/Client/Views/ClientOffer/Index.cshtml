@@ -1,4 +1,5 @@
-@model List<ClientOfferListViewModel>
+@model List<RealEstateApp.Core.Application.ViewModels.Offers.ClientOfferListViewModel>
+@using RealEstateApp.Core.Domain.Enums
 @{
     ViewData["Title"] = "Mis Ofertas";
 }
@@ -32,18 +33,18 @@
         <div class="d-flex flex-column gap-4">
             @foreach (var offer in Model)
             {
-                var statusColor = offer.Status.ToString() switch
+                var statusColor = offer.Status switch
                 {
-                    "Pendiente" => "warning",
-                    "Aceptada" => "success",
-                    "Rechazada" => "danger",
+                    OfferStatus.Pending => "warning",
+                    OfferStatus.Accepted => "success",
+                    OfferStatus.Rejected => "danger",
                     _ => "secondary"
                 };
-                var statusIcon = offer.Status.ToString() switch
+                var statusIcon = offer.Status switch
                 {
-                    "Pendiente" => "bi-clock-history",
-                    "Aceptada" => "bi-check-circle-fill",
-                    "Rechazada" => "bi-x-circle-fill",
+                    OfferStatus.Pending => "bi-clock-history",
+                    OfferStatus.Accepted => "bi-check-circle-fill",
+                    OfferStatus.Rejected => "bi-x-circle-fill",
                     _ => "bi-info-circle"
                 };
 
@@ -51,7 +52,7 @@
                     <div class="row g-0">
                         <!-- Left Image -->
                         <div class="col-md-4 col-lg-3">
-                            <img src="@(string.IsNullOrEmpty(offer.PropertyImageUrl) ? "/img/default-property.jpg" : offer.PropertyImageUrl)" class="img-fluid w-100 h-100" alt="Propiedad" style="object-fit: cover; min-height: 200px;">
+                            <img src="@(string.IsNullOrEmpty(offer.PropertyImageUrl) ? "/img/default-property.jpg" : $"/images/properties/{offer.PropertyImageUrl}")" class="img-fluid w-100 h-100" alt="Propiedad" style="object-fit: cover; min-height: 200px;">
                         </div>
                         
                         <!-- Right Details -->
@@ -83,7 +84,7 @@
                                 </div>
                                 
                                 <div>
-                                    @if (offer.Status.ToString() == "Pendiente")
+                                    @if (offer.Status == OfferStatus.Pending)
                                     {
                                         <form asp-action="WithdrawOffer" method="post" class="d-inline">
                                             <input type="hidden" name="offerId" value="@offer.OfferId" />
@@ -92,13 +93,13 @@
                                             </button>
                                         </form>
                                     }
-                                    else if (offer.Status.ToString() == "Aceptada")
+                                    else if (offer.Status == OfferStatus.Accepted)
                                     {
                                         <button class="btn btn-dark rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
                                             Siguientes pasos
                                         </button>
                                     }
-                                    else if (offer.Status.ToString() == "Rechazada")
+                                    else if (offer.Status == OfferStatus.Rejected)
                                     {
                                         <button class="btn btn-outline-dark rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
                                             Nueva oferta

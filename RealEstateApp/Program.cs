@@ -5,7 +5,6 @@ using RealEstateApp.Infrastructure.Identity.IoC;
 using RealEstateApp.Infrastructure.Identity.Seeds;
 using RealEstateApp.Infrastructure.Persistence.IoC;
 using RealEstateApp.Infrastructure.Shared.IoC;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();

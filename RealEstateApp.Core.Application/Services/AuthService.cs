@@ -1,3 +1,4 @@
+using RealEstateApp.Core.Application.DTOs.Email;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Accounts;
 
@@ -6,26 +7,28 @@ namespace RealEstateApp.Core.Application.Services;
 public class AuthService : IAuthService
 {
     private readonly IUserService _userService;
+    private readonly IEmailService _emailService;
 
-    public AuthService(IUserService userService)
+    public AuthService(IUserService userService, IEmailService emailService)
     {
         _userService = userService;
+        _emailService = emailService;
     }
 
     #region RegisterResult
-    public async Task<RegisterResult> RegisterAsync(RegisterViewModel vm)
+    public async Task<RegisterResult> RegisterAsync(RegisterViewModel vm, string origin)
     {
         var existingUser = await _userService.FindByNameAsync(vm.Username);
         if (existingUser is not null)
-            return new RegisterResult { Exito = false, Mensaje = "El nombre de usuario ya está en uso." };
+            return new RegisterResult { Exito = false, Mensaje = "El nombre de usuario ya estï¿½ en uso." };
 
         var existingEmail = await _userService.FindByEmailAsync(vm.Email);
         if (existingEmail is not null)
-            return new RegisterResult { Exito = false, Mensaje = "El correo electrónico ya está registrado." };
+            return new RegisterResult { Exito = false, Mensaje = "El correo electrï¿½nico ya estï¿½ registrado." };
 
         var (succeeded, error, userId) = await _userService.CreateUserAsync(
             vm.Username, vm.Email, vm.Password, vm.FirstName, vm.LastName,
-            vm.PhoneNumber, false, null);
+            vm.PhoneNumber, false, null, vm.IdCard);
 
         if (!succeeded)
             return new RegisterResult { Exito = false, Mensaje = error };
@@ -35,13 +38,59 @@ public class AuthService : IAuthService
 
         await _userService.AddToRoleAsync(userId!, vm.TipoUsuario);
 
-        var mensaje = vm.TipoUsuario == "Cliente"
-            ? "Registro exitoso. Revise su correo para activar su cuenta."
-            : "Registro exitoso. Un administrador debe activar su cuenta antes de iniciar sesión.";
+        var mensaje = "";
+        
+        if (vm.TipoUsuario == "Cliente")
+        {
+            var token = await _userService.GenerateEmailConfirmationTokenAsync(userId!);
+            token = Uri.EscapeDataString(token);
+            var verificationUri = $"{origin}/Account/ConfirmEmail?userId={userId}&token={token}";
+            
+            var emailRequest = new EmailRequest
+            {
+                To = vm.Email,
+                Subject = "Activa tu cuenta en RealEstateApp",
+                Body = $"<h2>Â¡Bienvenido a RealEstateApp!</h2><p>Por favor confirma tu correo electrÃ³nico y activa tu cuenta haciendo clic en el siguiente enlace: <a href='{verificationUri}'>Activar Cuenta</a></p>"
+            };
+            await _emailService.SendAsync(emailRequest);
+            mensaje = "Registro exitoso. Revise su correo para activar su cuenta.";
+        }
+        else
+        {
+            mensaje = "Registro exitoso. Un administrador debe activar su cuenta antes de iniciar sesiÃ³n.";
+        }
 
         return new RegisterResult { Exito = true, Mensaje = mensaje, TipoUsuario = vm.TipoUsuario };
     }
     #endregion
+
+    public async Task<string> ResendActivationEmailAsync(string email, string origin)
+    {
+        var user = await _userService.FindByEmailAsync(email);
+        if (user is null)
+            return "No existe una cuenta con ese correo.";
+
+        if (user.IsActive)
+            return "Esta cuenta ya se encuentra activa.";
+
+        var roles = await _userService.GetRolesAsync(user.Id);
+        if (!roles.Contains("Cliente"))
+            return "El reenvÃ­o de correo solo aplica para cuentas de Cliente. Las demÃ¡s cuentas deben ser activadas por un administrador.";
+
+        var token = await _userService.GenerateEmailConfirmationTokenAsync(user.Id);
+        token = Uri.EscapeDataString(token);
+        var verificationUri = $"{origin}/Account/ConfirmEmail?userId={user.Id}&token={token}";
+
+        var emailRequest = new EmailRequest
+        {
+            To = user.Email,
+            Subject = "Activa tu cuenta en RealEstateApp",
+            Body = $"<h2>Â¡Bienvenido a RealEstateApp!</h2><p>Por favor confirma tu correo electrÃ³nico y activa tu cuenta haciendo clic en el siguiente enlace: <a href='{verificationUri}'>Activar Cuenta</a></p>"
+        };
+        await _emailService.SendAsync(emailRequest);
+
+        return "El correo de activaciÃ³n ha sido reenviado exitosamente.";
+    }
 
     #region LoginResult
     public async Task<LoginResult> LoginAsync(LoginViewModel vm)
@@ -50,21 +99,21 @@ public class AuthService : IAuthService
                    ?? await _userService.FindByNameAsync(vm.UsuarioOCorreo);
 
         if (user is null)
-            return new LoginResult { Exito = false, Mensaje = "Los datos de acceso son inválidos." };
+            return new LoginResult { Exito = false, Mensaje = "Los datos de acceso son invÃ¡lidos." };
 
         if (!user.IsActive)
-            return new LoginResult { Exito = false, Mensaje = "El usuario se encuentra inactivo y no puede iniciar sesión." };
+            return new LoginResult { Exito = false, Mensaje = "El usuario se encuentra inactivo y no puede iniciar sesiÃ³n." };
 
         var roles = await _userService.GetRolesAsync(user.Id);
         if (!roles.Any())
-            return new LoginResult { Exito = false, Mensaje = "El usuario no tiene un rol válido asignado. Póngase en contacto con un administrador." };
+            return new LoginResult { Exito = false, Mensaje = "El usuario no tiene un rol vÃ¡lido asignado. PÃ³ngase en contacto con un administrador." };
 
         if (roles.Contains("Desarrollador"))
-            return new LoginResult { Exito = false, Mensaje = "No tiene permisos para acceder a esta aplicación." };
+            return new LoginResult { Exito = false, Mensaje = "No tiene permisos para acceder a esta aplicaciÃ³n." };
 
         var signIn = await _userService.PasswordSignInAsync(vm.UsuarioOCorreo, vm.Password);
         if (!signIn.Succeeded)
-            return new LoginResult { Exito = false, Mensaje = "Los datos de acceso son inválidos." };
+            return new LoginResult { Exito = false, Mensaje = "Los datos de acceso son invÃ¡lidos." };
 
         return new LoginResult { Exito = true, Mensaje = "", Rol = roles.First(), UserId = user.Id };
     } 
