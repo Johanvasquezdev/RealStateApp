@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.AgentProfile;
 
-namespace RealEstateApp.Controllers;
+namespace RealEstateApp.Areas.Agent.Controllers;
 
+[Area("Agent")]
 [Authorize(Roles = "Agente")]
 public class ProfileController : Controller
 {

@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces;
 using System.Security.Claims;
 
-namespace RealEstateApp.Controllers;
+namespace RealEstateApp.Areas.Client.Controllers;
 
+[Area("Client")]
 [Authorize(Roles = "Cliente")]
 public class ClientFavoriteController : Controller
 {

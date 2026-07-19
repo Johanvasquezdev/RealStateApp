@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces;
 
-namespace RealEstateApp.Controllers;
+namespace RealEstateApp.Areas.Agent.Controllers;
 
+[Area("Agent")]
 [Authorize(Roles = "Agente")]
 public class OfferController : Controller
 {

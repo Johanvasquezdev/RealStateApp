@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Views\Agents\Detailscshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RealEstateApp.Core.Application\RealEstateApp.Core.Application.csproj" />
     <ProjectReference Include="..\RealEstateApp.Core.Domain\RealEstateApp.Core.Domain.csproj" />
     <ProjectReference Include="..\RealEstateApp.Infrastructure.Identity\RealEstateApp.Infrastructure.Identity.csproj" />
@@ -26,8 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Agent\" />
-    <Folder Include="Areas\Client\" />
+    <Folder Include="Areas\Admin\Views\Improvements\" />
+    <Folder Include="Areas\Admin\Views\SaleTypes\" />
+    <Folder Include="Areas\Admin\Views\PropertyTypes\" />
   </ItemGroup>
 
 </Project>

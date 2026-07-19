@@ -1,0 +1,48 @@
+﻿@model SaveAdminViewModel
+@{
+    ViewData["Title"] = "Editar administrador";
+}
+
+<h2 class="mb-4">Editar administrador</h2>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Edit" method="post">
+    <input asp-for="Id" type="hidden" />
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Apellido</label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Cédula</label>
+        <input asp-for="IdCard" class="form-control" />
+        <span asp-validation-for="IdCard" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Correo electrónico</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Nombre de usuario</label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Nueva contraseña (opcional)</label>
+        <input asp-for="Password" type="password" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Confirmar nueva contraseña</label>
+        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <a asp-action="Index" class="btn btn-secondary">Volver atrás</a>
+</form>

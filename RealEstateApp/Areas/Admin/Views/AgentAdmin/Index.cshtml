@@ -1,0 +1,77 @@
+﻿@model List<UserListItemViewModel>
+@{
+    ViewData["Title"] = "Listado de los agentes";
+}
+
+<h2 class="mb-4">Listado de los agentes</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+@if (!Model.Any())
+{
+    <p>No tiene agentes registrados en este momento.</p>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo electrónico</th>
+                <th>Cantidad de propiedades</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var agent in Model)
+            {
+                <tr>
+                    <td>@agent.FirstName</td>
+                    <td>@agent.LastName</td>
+                    <td>@agent.Email</td>
+                    <td>@agent.PropertiesCount</td>
+                    <td>
+                        @if (agent.IsActive)
+                        {
+                            <span class="badge text-bg-success">Activo</span>
+                        }
+                        else
+                        {
+                            <span class="badge text-bg-secondary">Inactivo</span>
+                        }
+                    </td>
+                    <td>
+                        <form asp-action="ToggleStatus" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@agent.Id" />
+                            <input type="hidden" name="activate" value="@(!agent.IsActive)" />
+                            @if (agent.IsActive)
+                            {
+                                <button type="submit" class="btn btn-sm btn-warning"
+                                        onclick="return confirm('¿Está seguro que desea inactivar este agente?');">
+                                    Inactivar
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-sm btn-success"
+                                        onclick="return confirm('¿Está seguro que desea activar este agente?');">
+                                    Activar
+                                </button>
+                            }
+                        </form>
+                        <a asp-action="Delete" asp-route-id="@agent.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
