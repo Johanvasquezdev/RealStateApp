@@ -23,7 +23,14 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="fw-bolder mb-1">@Model.PropertyTypeName</h1>
+            <h1 class="fw-bolder mb-1">
+                @Model.PropertyTypeName
+                <form method="post" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@Model.Id" class="d-inline ms-3 favorite-form">
+                    <button type="submit" class="btn btn-light text-danger rounded-pill shadow-sm px-3 py-2 fw-bold" title="Agregar a favoritos">
+                        <i class="bi bi-heart-fill me-1"></i> Guardar
+                    </button>
+                </form>
+            </h1>
             <p class="text-muted fs-5 mb-0"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Tipo de Venta: @Model.SaleTypeName | Código: @Model.Code</p>
         </div>
         <div class="text-end">
@@ -43,7 +50,7 @@
                             @for (int i = 0; i < Model.ImageUrls.Count; i++)
                             {
                                 <div class="carousel-item @(i == 0 ? "active" : "")">
-                                    <img src="@Model.ImageUrls[i]" class="d-block w-100" alt="Imagen @i" style="height: 500px; object-fit: cover;">
+                                    <img src="/images/properties/@Model.ImageUrls[i]" class="d-block w-100" alt="Imagen @i" style="height: 500px; object-fit: cover;">
                                 </div>
                             }
                         </div>

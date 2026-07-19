@@ -1,0 +1,116 @@
+@model RealEstateApp.Core.Application.ViewModels.AgentChats.AgentChatDetailViewModel
+@{ ViewData["Title"] = "Chat con " + Model.ClientName; }
+
+<div class="container py-4" style="max-width: 900px;">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <!-- Chat Header -->
+        <div class="p-4 d-flex align-items-center justify-content-between border-bottom" style="background-color: #f8f9fa;">
+            <div class="d-flex align-items-center">
+                <a asp-controller="PropertyMaintenance" asp-action="Detail" asp-route-id="@Model.PropertyId" class="btn btn-sm btn-outline-secondary rounded-circle me-3" style="width: 35px; height: 35px; padding: 0; line-height: 33px;">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-5 fw-bold" style="width: 45px; height: 45px; background-color: #12402d;">
+                    @(Model.ClientName.Substring(0, 1))
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-bold" style="color: #0a261c;">@Model.ClientName</h5>
+                    <small class="text-muted"><i class="bi bi-building me-1"></i> Propiedad: @Model.PropertyCode</small>
+                </div>
+            </div>
+            <div>
+                <span class="badge rounded-pill bg-success px-3 py-2">Cliente</span>
+            </div>
+        </div>
+
+        <!-- Chat Messages Container -->
+        <div class="chat-box p-4" style="height: 500px; overflow-y: auto; background-color: #fff;" id="chatBox">
+            @if (!Model.Messages.Any())
+            {
+                <div class="h-100 d-flex flex-column justify-content-center align-items-center text-muted">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: #e8f5e9; color: #12402d;">
+                        <i class="bi bi-chat-dots fs-1"></i>
+                    </div>
+                    <h5 class="fw-bold">Comienza la conversación</h5>
+                    <p>Envía el primer mensaje a @Model.ClientName</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var m in Model.Messages)
+                {
+                    bool isMe = m.SenderName == "Tú";
+                    <div class="d-flex @(isMe ? "justify-content-end" : "justify-content-start") mb-3">
+                        <div class="d-flex flex-column @(isMe ? "align-items-end" : "align-items-start")" style="max-width: 75%;">
+                            <div class="p-3 rounded-4 shadow-sm @(isMe ? "text-white" : "text-dark")" 
+                                 style="@(isMe ? "background-color: #12402d; border-bottom-right-radius: 4px !important;" : "background-color: #f8f9fa; border-bottom-left-radius: 4px !important;")">
+                                @m.Content
+                            </div>
+                            <small class="text-muted mt-1" style="font-size: 0.75rem;">
+                                @m.Created.ToString("dd MMM yyyy, hh:mm tt")
+                            </small>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <!-- Chat Input Form -->
+        <div class="p-3 border-top" style="background-color: #f8f9fa;">
+            <form asp-action="EnviarMensaje" method="post" id="chatForm">
+                <input type="hidden" name="ReceiverId" value="@Model.ClientId" />
+                <input type="hidden" name="PropertyId" value="@Model.PropertyId" />
+                
+                <div class="input-group align-items-end shadow-sm rounded-4 p-1" style="background-color: #fff; border: 1px solid #dee2e6;">
+                    <textarea name="Content" id="messageInput" class="form-control border-0 shadow-none px-3 py-3" 
+                              rows="1" style="resize: none; max-height: 120px; overflow-y: auto;" 
+                              required placeholder="Escribe un mensaje..."></textarea>
+                    
+                    <button class="btn rounded-circle m-2 d-flex align-items-center justify-content-center" 
+                            type="submit" style="width: 45px; height: 45px; background-color: #12402d; color: white;">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const chatBox = document.getElementById("chatBox");
+            if (chatBox) {
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            const messageInput = document.getElementById("messageInput");
+            
+            // Auto-resize textarea
+            messageInput.addEventListener("input", function() {
+                this.style.height = "auto";
+                this.style.height = (this.scrollHeight) + "px";
+                if(this.value === "") {
+                    this.style.height = "auto";
+                }
+            });
+
+            // Handle Enter key (Shift+Enter for new line)
+            messageInput.addEventListener("keydown", function(e) {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    document.getElementById("chatForm").dispatchEvent(new Event("submit", {cancelable: true, bubbles: true}));
+                }
+            });
+
+            // Prevent submitting empty messages
+            document.getElementById("chatForm").addEventListener("submit", function(e) {
+                if (messageInput.value.trim() === "") {
+                    e.preventDefault();
+                } else {
+                    messageInput.value = messageInput.value.trim();
+                }
+            });
+        });
+    </script>
+}

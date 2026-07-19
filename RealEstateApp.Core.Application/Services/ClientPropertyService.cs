@@ -29,9 +29,12 @@ public class ClientPropertyService : IClientPropertyService
         var repo = _unitOfWork.Repository<Property>();
         var properties = await repo.FindWithIncludesAsync(
             p => p.Status == PropertyStatus.Available,
-            "PropertyType", "SaleType", "Images", "Agent");
+            "PropertyType", "SaleType", "Images");
 
         // Apply filters
+        if (!string.IsNullOrEmpty(filters.AgentId))
+            properties = properties.Where(p => p.AgentId == filters.AgentId).ToList();
+
         if (filters.PropertyTypeId.HasValue)
             properties = properties.Where(p => p.PropertyTypeId == filters.PropertyTypeId.Value).ToList();
             

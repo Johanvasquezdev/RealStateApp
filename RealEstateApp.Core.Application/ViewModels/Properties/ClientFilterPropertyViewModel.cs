@@ -23,4 +23,6 @@ public class ClientFilterPropertyViewModel
 
     [Display(Name = "Código")]
     public string? Code { get; set; }
+
+    public string? AgentId { get; set; }
 }

@@ -10,7 +10,7 @@ namespace RealEstateApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin,Developer")]
+[Authorize(Roles = "Administrador,Desarrollador")]
 public class PropertiesController : ControllerBase
 {
     private readonly IGenericRepository<Property> _propertyRepository;
@@ -41,6 +41,9 @@ public class PropertiesController : ControllerBase
             Bathrooms = p.Bathrooms,
             MainImageUrl = p.Images.FirstOrDefault()?.ImageUrl ?? string.Empty
         }).ToList();
+
+        if (result.Count == 0)
+            return NoContent();
 
         return Ok(result);
     }

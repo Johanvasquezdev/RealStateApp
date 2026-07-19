@@ -6,7 +6,7 @@ using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Infrastructure.Persistence.Contexts;
 using RealEstateApp.Infrastructure.Persistence.Repositories;
-using RealEstateApp.Infrastructure.Persistence.Services;
+
 
 namespace RealEstateApp.Infrastructure.Persistence.IoC;
 
@@ -27,10 +27,6 @@ public static class ServiceRegistration
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         #endregion
 
-        #region Services
-        services.AddTransient<RealEstateApp.Core.Application.Interfaces.IImporterPunchCardService, ImportadorPunchCardCsv>();
-        services.AddTransient<RealEstateApp.Core.Application.Interfaces.IExportPunchCardService, ExportacionPunchCardService>();
-        #endregion
     }
 }
 

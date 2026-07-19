@@ -25,7 +25,8 @@ public class PropertyService : IPropertyService
         var properties = await repo.FindWithIncludesAsync(
             p => p.Status == PropertyStatus.Available,
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
-        return MapWithImages(properties);
+        var sorted = properties.OrderByDescending(p => p.Created).ToList();
+        return MapWithImages(sorted);
     }
 
     public async Task<List<AgentPropertyViewModel>> GetPropertiesByAgentAsync(string agentId)
@@ -77,6 +78,8 @@ public class PropertyService : IPropertyService
         if (prop is null) return null;
         var vm = _mapper.Map<AgentPropertyViewModel>(prop);
         vm.MainImage = prop.Images.FirstOrDefault()?.ImageUrl;
+        vm.Images = prop.Images.Select(i => $"/images/properties/{i.ImageUrl}").ToList();
+        vm.Improvements = prop.PropertyImprovements.Select(pi => pi.Improvement.Name).ToList();
         return vm;
     }
 

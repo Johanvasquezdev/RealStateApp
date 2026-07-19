@@ -46,7 +46,7 @@ public static class ServiceRegistration
 
         services.ConfigureApplicationCookie(options =>
         {
-            options.LoginPath = "/Cuenta/Login";
+            options.LoginPath = "/Account/Login";
             options.AccessDeniedPath = "/Home/AccessDenied";
             options.ExpireTimeSpan = TimeSpan.FromHours(8);
         });
@@ -55,11 +55,7 @@ public static class ServiceRegistration
         var key = jwtSettings["Key"];
         if (!string.IsNullOrEmpty(key))
         {
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+            services.AddAuthentication()
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
@@ -78,7 +74,10 @@ public static class ServiceRegistration
             });
         }
 
+        services.Configure<RealEstateApp.Core.Domain.Settings.JwtSettings>(config.GetSection("JwtSettings"));
+        services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IUserManagementService, UserManagementService>();
 
         return services;
     }

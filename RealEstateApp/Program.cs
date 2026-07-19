@@ -3,7 +3,8 @@ using RealEstateApp.Core.Application.IoC;
 using RealEstateApp.Infrastructure.Identity.IoC;
 using RealEstateApp.Infrastructure.Persistence.IoC;
 using RealEstateApp.Infrastructure.Shared.IoC;
-
+using RealEstateApp.Infrastructure.Identity.Entities;
+using RealEstateApp.Infrastructure.Identity.Seeds;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();

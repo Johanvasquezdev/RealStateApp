@@ -1,49 +1,156 @@
+@model List<RealEstateApp.Core.Application.ViewModels.Properties.ClientPropertyViewModel>
 @{
     ViewData["Title"] = "Inicio";
+    var filter = ViewBag.Filter as RealEstateApp.Core.Application.ViewModels.Properties.ClientFilterPropertyViewModel;
 }
 
 <div class="container-fluid px-0">
     <!-- Hero Section -->
-    <div class="position-relative overflow-hidden text-center rounded-4 shadow-lg mb-5" style="background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover; min-height: 500px; display: flex; align-items: center; justify-content: center;">
-        <div class="p-5 fade-in-up">
-            <h1 class="display-3 fw-bolder text-white mb-4" style="letter-spacing: -1px;">Encuentra el Hogar de tus Sueños</h1>
-            <p class="lead text-white-50 mb-5 fw-light mx-auto" style="max-width: 600px;">Descubre las mejores propiedades con la tecnología más avanzada del mercado. Tu futuro comienza aquí.</p>
-            <a asp-controller="ClientProperty" asp-action="Index" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fs-5 shadow-lg hover-lift">
-                Explorar Propiedades <i class="bi bi-arrow-right ms-2"></i>
-            </a>
+    <div class="position-relative overflow-hidden text-start shadow-lg mb-5 hero-section" style="background: linear-gradient(to right, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.4) 100%), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover; min-height: 600px; display: flex; align-items: center; border-radius: 0 0 3rem 3rem;">
+        <div class="container p-5 fade-in-up position-relative z-1">
+            <div style="max-width: 600px;">
+                <p class="text-white-50 fw-bold mb-3" style="letter-spacing: 2px; font-size: 0.85rem;">UNA MEJOR FORMA DE VIVIR</p>
+                <h1 class="display-3 fw-bolder text-white mb-4" style="letter-spacing: -1px; line-height: 1.1;">Tu próximo lugar se siente como hogar.</h1>
+                <p class="lead text-white-50 mb-5 fw-light">Descubre las mejores propiedades con la tecnología más avanzada del mercado. Tu futuro comienza aquí.</p>
+            </div>
         </div>
     </div>
 
-    <!-- Features Section -->
-    <div class="container py-5 mt-4">
-        <div class="row g-5 text-center fade-in-up delay-1">
-            <div class="col-md-4">
-                <div class="card-premium p-4 h-100">
-                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-                        <i class="bi bi-house-door fs-1"></i>
-                    </div>
-                    <h3 class="fw-bold mb-3">Propiedades Exclusivas</h3>
-                    <p class="text-muted">Accede a un catálogo de viviendas seleccionadas rigurosamente para garantizar tu confort.</p>
-                </div>
-            </div>
-            <div class="col-md-4 fade-in-up delay-2">
-                <div class="card-premium p-4 h-100">
-                    <div class="bg-secondary bg-opacity-10 text-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-                        <i class="bi bi-shield-check fs-1"></i>
-                    </div>
-                    <h3 class="fw-bold mb-3">Transacciones Seguras</h3>
-                    <p class="text-muted">Garantizamos la seguridad y transparencia en cada paso del proceso de compra o alquiler.</p>
-                </div>
-            </div>
-            <div class="col-md-4 fade-in-up delay-3">
-                <div class="card-premium p-4 h-100">
-                    <div class="bg-info bg-opacity-10 text-info rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-                        <i class="bi bi-person-badge fs-1"></i>
-                    </div>
-                    <h3 class="fw-bold mb-3">Agentes Expertos</h3>
-                    <p class="text-muted">Nuestro equipo de agentes inmobiliarios certificados te guiará en todo momento.</p>
+    <!-- Search Bar Float -->
+    <div class="container position-relative" style="z-index: 10;">
+        <div class="row justify-content-center">
+            <div class="col-12" style="max-width: 900px; margin-top: -35px; margin-bottom: 3rem;">
+                <div class="search-bar-modern mx-3">
+                    <form method="get" class="d-flex align-items-center w-100">
+                        <div class="search-input-group flex-grow-1">
+                            <label>Código</label>
+                            <input type="text" name="Code" placeholder="Ej. 123456" value="@filter?.Code">
+                        </div>
+                        
+                        <div class="search-divider"></div>
+                        
+                        <div class="search-input-group flex-grow-1">
+                            <label>Precio Mín.</label>
+                            <input type="number" name="MinPrice" placeholder="$0" value="@filter?.MinPrice">
+                        </div>
+
+                        <div class="search-divider"></div>
+
+                        <div class="search-input-group flex-grow-1" style="max-width: 120px;">
+                            <label>Habitaciones</label>
+                            <input type="number" name="Rooms" placeholder="Camas" value="@filter?.Rooms">
+                        </div>
+
+                        <div class="search-divider"></div>
+
+                        <div class="search-input-group flex-grow-1" style="max-width: 120px;">
+                            <label>Baños</label>
+                            <input type="number" name="Bathrooms" placeholder="Baños" value="@filter?.Bathrooms">
+                        </div>
+
+                        <div class="ms-auto pe-2 ps-3">
+                            <button type="submit" class="btn btn-primary rounded-pill py-3 px-4 fw-bold hover-lift d-flex align-items-center gap-2">
+                                <i class="bi bi-search"></i> Buscar
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Features / Properties Section -->
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-end mb-5 fade-in-up">
+            <div>
+                <p class="text-primary fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 1px;">SELECCIÓN CURADA</p>
+                <h2 class="fw-bolder text-dark mb-0" style="font-size: 2.5rem; letter-spacing: -1px;">Propiedades disponibles</h2>
+            </div>
+            <a asp-controller="Agents" asp-action="Index" class="btn btn-outline-primary rounded-pill px-4 fw-bold">
+                Conoce a nuestros agentes <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="alert alert-info rounded-4 border-0 shadow-sm text-center p-5">
+                <h4 class="alert-heading fw-bold mb-3">No hay propiedades</h4>
+                <p class="mb-0">No encontramos ninguna propiedad disponible en este momento con los filtros seleccionados.</p>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var property in Model)
+                {
+                    <div class="col fade-in-up">
+                        <div class="card property-card h-100 border-0 rounded-4">
+                            <!-- Image Wrapper -->
+                            <div class="property-img-wrapper position-relative">
+                                <img src="@(string.IsNullOrEmpty(property.MainImageUrl) ? "/img/default-property.jpg" : $"/images/properties/{property.MainImageUrl}")" class="property-img" alt="@property.Code">
+                                
+                                <span class="tag-badge">
+                                    <i class="bi bi-circle-fill me-1" style="font-size: 8px; color: @(property.SaleTypeName == "Venta" ? "var(--bs-primary)" : "var(--bs-info)");"></i>
+                                    @property.SaleTypeName
+                                </span>
+
+                                <form method="post" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@property.Id" class="d-inline position-absolute top-0 end-0 m-3 favorite-form" style="z-index: 2;">
+                                    <button type="submit" class="btn btn-light rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" title="Agregar a favoritos">
+                                        <i class="bi bi-heart fs-5 text-danger"></i>
+                                    </button>
+                                </form>
+                                
+                                <div class="position-absolute bottom-0 start-0 w-100 p-3 bg-gradient-dark">
+                                    <div class="text-white d-flex justify-content-between align-items-end">
+                                        <div>
+                                            <h5 class="fw-bolder mb-0">RD$ @property.Price.ToString("N2")</h5>
+                                            <small class="opacity-75"><i class="bi bi-geo-alt me-1"></i>Código: @property.Code</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Content -->
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="badge bg-light text-dark border px-2 py-1">@property.PropertyTypeName</span>
+                                </div>
+
+                                <div class="row g-0 text-gray small fw-medium mt-3 border-top pt-3">
+                                    <div class="col-4 d-flex align-items-center justify-content-center border-end">
+                                        <i class="bi bi-door-open fs-5 me-2"></i> @property.Rooms Hab
+                                    </div>
+                                    <div class="col-4 d-flex align-items-center justify-content-center border-end">
+                                        <i class="bi bi-droplet fs-5 me-2"></i> @property.Bathrooms Baños
+                                    </div>
+                                    <div class="col-4 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-arrows-fullscreen fs-5 me-2"></i> @property.LandSize m²
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Agent footer -->
+                            <div class="card-footer bg-white border-top-0 p-4 pt-0 d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="@(string.IsNullOrEmpty(property.AgentPhotoUrl) ? "/img/default-user.png" : property.AgentPhotoUrl)" 
+                                         class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;" alt="@property.AgentName">
+                                    <span class="fw-bold fs-7 text-dark">@property.AgentName</span>
+                                </div>
+                                <a asp-controller="ClientProperty" asp-action="Details" asp-route-id="@property.Id" class="btn btn-sm btn-outline-primary rounded-pill fw-bold">Ver detalle</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
 </div>
+
+<style>
+    .bg-gradient-dark {
+        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    }
+    .fs-7 {
+        font-size: 0.85rem;
+    }
+</style>

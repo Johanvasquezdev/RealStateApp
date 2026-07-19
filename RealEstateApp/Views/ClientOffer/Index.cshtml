@@ -1,4 +1,5 @@
 @model List<RealEstateApp.Core.Application.ViewModels.Offers.ClientOfferListViewModel>
+@using RealEstateApp.Core.Domain.Enums
 @{
     ViewData["Title"] = "Mis Ofertas";
 }
@@ -34,16 +35,16 @@
             {
                 var statusColor = offer.Status switch
                 {
-                    "Pendiente" => "warning",
-                    "Aceptada" => "success",
-                    "Rechazada" => "danger",
+                    OfferStatus.Pending => "warning",
+                    OfferStatus.Accepted => "success",
+                    OfferStatus.Rejected => "danger",
                     _ => "secondary"
                 };
                 var statusIcon = offer.Status switch
                 {
-                    "Pendiente" => "bi-clock-history",
-                    "Aceptada" => "bi-check-circle-fill",
-                    "Rechazada" => "bi-x-circle-fill",
+                    OfferStatus.Pending => "bi-clock-history",
+                    OfferStatus.Accepted => "bi-check-circle-fill",
+                    OfferStatus.Rejected => "bi-x-circle-fill",
                     _ => "bi-info-circle"
                 };
 
@@ -51,7 +52,7 @@
                     <div class="row g-0">
                         <!-- Left Image -->
                         <div class="col-md-4 col-lg-3">
-                            <img src="@(string.IsNullOrEmpty(offer.PropertyImageUrl) ? "/img/default-property.jpg" : offer.PropertyImageUrl)" class="img-fluid w-100 h-100" alt="Propiedad" style="object-fit: cover; min-height: 200px;">
+                            <img src="@(string.IsNullOrEmpty(offer.PropertyImageUrl) ? "/img/default-property.jpg" : $"/images/properties/{offer.PropertyImageUrl}")" class="img-fluid w-100 h-100" alt="Propiedad" style="object-fit: cover; min-height: 200px;">
                         </div>
                         
                         <!-- Right Details -->
@@ -61,7 +62,7 @@
                                 <div>
                                     <div class="d-flex align-items-center gap-3 mb-2">
                                         <span class="badge bg-@(statusColor)-subtle text-@statusColor rounded-pill px-3 py-2 fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
-                                            <i class="bi @statusIcon me-1"></i> @offer.Status.ToUpper()
+                                            <i class="bi @statusIcon me-1"></i> @offer.Status.ToString().ToUpper()
                                         </span>
                                     </div>
                                     <h4 class="fw-bolder mb-1">@offer.PropertyName</h4>
@@ -83,7 +84,7 @@
                                 </div>
                                 
                                 <div>
-                                    @if (offer.Status == "Pendiente")
+                                    @if (offer.Status == OfferStatus.Pending)
                                     {
                                         <form asp-action="WithdrawOffer" method="post" class="d-inline">
                                             <input type="hidden" name="offerId" value="@offer.OfferId" />
@@ -92,13 +93,13 @@
                                             </button>
                                         </form>
                                     }
-                                    else if (offer.Status == "Aceptada")
+                                    else if (offer.Status == OfferStatus.Accepted)
                                     {
                                         <button class="btn btn-dark rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
                                             Siguientes pasos
                                         </button>
                                     }
-                                    else if (offer.Status == "Rechazada")
+                                    else if (offer.Status == OfferStatus.Rejected)
                                     {
                                         <button class="btn btn-outline-dark rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
                                             Nueva oferta

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Agents;
+using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 
 namespace RealEstateApi.Controllers;
 
@@ -20,13 +21,21 @@ public class AgentsController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AgentListViewModel>))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAll()
     {
         var agentes = await _agenteService.GetActiveAgentsAsync(null);
+        if (agentes.Count == 0) return NoContent();
         return Ok(agentes);
     }
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AgentListViewModel))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetById(string id)
     {
         var agente = await _agenteService.GetAgentByIdAsync(id);
@@ -35,15 +44,27 @@ public class AgentsController : ControllerBase
     }
 
     [HttpGet("{id}/properties")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AgentPropertyViewModel>))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetProperties(string id)
     {
+        var agente = await _agenteService.GetAgentByIdAsync(id);
+        if (agente is null) return NotFound();
+
         var propiedades = await _agenteService.GetPropertiesByAgentAsync(id);
+        if (propiedades.Count == 0) return NoContent();
+
         return Ok(propiedades);
     }
 
 
     [HttpPatch("{id}/status")]
     [Authorize(Roles = "Administrador")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> ChangeStatus(string id, AgentListViewModel request)
     {
         var result = await _userManagementService.ToggleAgentStatus(id, request.Activate);

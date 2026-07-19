@@ -30,8 +30,6 @@ public static class ServiceRegistration
         services.AddTransient<IClientChatService, ClientChatService>();
         services.AddTransient<IClientPropertyService, ClientPropertyService>();
 
-        // Punch Card Services
-        services.AddTransient<ISummaryPunchCardService, SummaryPunchCardService>();
 
         return services;
     }
