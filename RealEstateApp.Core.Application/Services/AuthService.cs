@@ -34,7 +34,7 @@ public class AuthService : IAuthService
 
         var (succeeded, error, userId) = await _userService.CreateUserAsync(
             vm.Username, vm.Email, vm.Password, vm.FirstName, vm.LastName,
-            vm.PhoneNumber, false, profilePictureUrl, vm.IdCard);
+            vm.PhoneNumber, false, profilePictureUrl, vm.IdCard?.Replace("-", "") ?? string.Empty);
 
         if (!succeeded)
             return new RegisterResult { Exito = false, Mensaje = error };

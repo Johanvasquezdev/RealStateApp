@@ -61,7 +61,7 @@ public class AccountController : ControllerBase
         {
             FirstName = vm.FirstName,
             LastName = vm.LastName,
-            IdCard = vm.IdCard,
+            IdCard = vm.IdCard?.Replace("-", "") ?? string.Empty,
             Email = vm.Email,
             UserName = vm.UserName,
             IsActive = true,
@@ -99,7 +99,7 @@ public class AccountController : ControllerBase
         {
             FirstName = vm.FirstName,
             LastName = vm.LastName,
-            IdCard = vm.IdCard,
+            IdCard = vm.IdCard?.Replace("-", "") ?? string.Empty,
             Email = vm.Email,
             UserName = vm.UserName,
             IsActive = true,
