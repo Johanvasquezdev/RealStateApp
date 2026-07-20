@@ -5,7 +5,27 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-dark mb-0">Detalle de Ofertas</h2>
+        <div class="d-flex align-items-center">
+            @if (Model != null && Model.Any())
+            {
+                var firstOffer = Model.First();
+                @if (!string.IsNullOrEmpty(firstOffer.ClientPhoto) && firstOffer.ClientPhoto != "default-user.png" && firstOffer.ClientPhoto != "default-profile.png")
+                {
+                    <img src="@firstOffer.ClientPhoto" alt="Profile" class="rounded-circle me-3 object-fit-cover shadow-sm" style="width: 60px; height: 60px;" onerror="this.onerror=null;this.src='/img/default-user.png';" />
+                }
+                else
+                {
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-4 fw-bold shadow-sm" style="width: 60px; height: 60px; background-color: #12402d;">
+                        @(firstOffer.ClientName.Substring(0, 1))
+                    </div>
+                }
+                <h2 class="fw-bold text-dark mb-0">Ofertas de @firstOffer.ClientName</h2>
+            }
+            else
+            {
+                <h2 class="fw-bold text-dark mb-0">Detalle de Ofertas</h2>
+            }
+        </div>
         <a asp-action="Index" asp-route-propertyId="@ViewBag.PropertyId" class="btn btn-outline-secondary rounded-pill px-4">
             <i class="bi bi-arrow-left me-2"></i> Volver a Ofertas
         </a>
