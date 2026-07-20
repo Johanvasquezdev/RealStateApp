@@ -4,7 +4,7 @@ using RealEstateApp.Core.Application.ViewModels.Property;
 using RealEstateApp.Core.Application.ViewModels.AgentProperties;
 using RealEstateApp.Core.Application.ViewModels.SaleType;
 using RealEstateApp.Core.Application.ViewModels.Properties;
-using RealEstateApp.Core.Application.DTOs.PunchCard;
+
 using RealEstateApp.Core.Domain.Entities;
 
 namespace RealEstateApp.Core.Application.Mapping;
@@ -13,9 +13,7 @@ public class GeneralProfile : Profile
 {
     public GeneralProfile()
     {
-        CreateMap<RegistroPunchCard, RegistrationPunchCardDto>().ReverseMap();
-        CreateMap<SesionPunchCard, SessionPunchCardDto>();
-        CreateMap<RowPunchCardImportada, RegistroPunchCard>();
+
         CreateMap<Improvement, ImprovementViewModel>().ReverseMap();
         CreateMap<Improvement, SaveImprovementViewModel>().ReverseMap();
 
@@ -29,9 +27,9 @@ public class GeneralProfile : Profile
             .ForMember(d => d.PropertyType, o => o.MapFrom(s => s.PropertyType!.Name))
             .ForMember(d => d.SaleType, o => o.MapFrom(s => s.SaleType!.Name))
             .ForMember(d => d.Status, o => o.MapFrom(s => s.Status.ToString()))
-            .ForMember(d => d.ImagenPrincipal, o => o.Ignore())
-            .ForMember(d => d.Imagenes, o => o.Ignore())
-            .ForMember(d => d.Mejoras, o => o.Ignore());
+            .ForMember(d => d.MainImage, o => o.Ignore())
+            .ForMember(d => d.Images, o => o.Ignore())
+            .ForMember(d => d.Improvements, o => o.Ignore());
 
         // Client ViewModels (Persona 2)
         CreateMap<Property, ClientPropertyViewModel>()

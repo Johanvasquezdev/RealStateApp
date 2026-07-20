@@ -4,13 +4,12 @@ using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Users;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
-using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Infrastructure.Identity.Entities;
 
 namespace RealEstateApp.Infrastructure.Identity.Services;
 
-public class UserManagementService: Core.Application.Interfaces.UserManagementService
+public class UserManagementService: IUserManagementService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IGenericRepository<Property> _propertyRepository;
@@ -111,6 +110,7 @@ public class UserManagementService: Core.Application.Interfaces.UserManagementSe
         {
             await _propertyRepository.DeleteAsync(property);
         }
+        await _propertyRepository.SaveChangesAsync();
 
         var result = await _userManager.DeleteAsync(user);
         return result.Succeeded ? new ResultResponse { Succeeded = true } : new ResultResponse { Succeeded = false, Errors = result.Errors.Select(e => e.Description).ToArray() };
@@ -125,8 +125,8 @@ public class UserManagementService: Core.Application.Interfaces.UserManagementSe
 
         return new AdminDashboardViewModel
         {
-            AvailableProperties = allProperties.Count(p => p.Status == PropertyStatus.Disponible),
-            SoldProperties = allProperties.Count(p => p.Status == PropertyStatus.Vendida),
+            AvailableProperties = allProperties.Count(p => p.Status == PropertyStatus.Available),
+            SoldProperties = allProperties.Count(p => p.Status == PropertyStatus.Sold),
             ActiveAgents = agents.Count(a => a.IsActive),
             InactiveAgents = agents.Count(a => !a.IsActive),
             ActiveClients = clients.Count(c => c.IsActive),
@@ -146,9 +146,9 @@ public class UserManagementService: Core.Application.Interfaces.UserManagementSe
             Id = u.Id,
             FirstName = u.FirstName,
             LastName = u.LastName,
+            IdCard = u.IdCard,
             Email = u.Email!,
             UserName = u.UserName!,
-            IdCard = u.IdCard,
             IsActive = u.IsActive
         }).ToList();
     }

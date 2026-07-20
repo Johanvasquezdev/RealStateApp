@@ -1,0 +1,94 @@
+@model RealEstateApp.Core.Application.ViewModels.AgentProfile.AgentProfileViewModel
+@{ ViewData["Title"] = "Mi Perfil"; }
+
+<div class="container py-5">
+    <div class="mb-5">
+        <h2 class="fw-bolder" style="color: #0a261c; font-size: 2.5rem; letter-spacing: -1px;">Mi Perfil</h2>
+        <p class="text-muted fs-5">Administra tu información personal y foto de perfil.</p>
+    </div>
+
+    @if (TempData["Exito"] is not null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm border-0 mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["Exito"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row g-5">
+        <!-- Avatar Column -->
+        <div class="col-md-5 col-lg-4 text-center">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background-color: #f8f9fa;">
+                <div class="position-relative d-inline-block mx-auto mb-4" style="width: 200px; height: 200px;">
+                    <img src="@(string.IsNullOrEmpty(Model.ExistingProfilePictureUrl) ? "/images/default-profile.png" : Model.ExistingProfilePictureUrl)" 
+                         class="img-fluid rounded-circle shadow object-fit-cover w-100 h-100 border border-4 border-white" alt="Foto de perfil" />
+                </div>
+                <h5 class="fw-bold mb-1" style="color: #0a261c;">@Model.FirstName @Model.LastName</h5>
+                <p class="text-muted small">Cliente</p>
+                
+                <div class="mt-auto pt-3">
+                    <label for="ProfilePicture" class="btn w-100 rounded-pill fw-bold" style="background-color: #e8f5e9; color: #12402d; cursor: pointer;">
+                        <i class="bi bi-camera me-2"></i> Cambiar Foto
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Column -->
+        <div class="col-md-7 col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                <form asp-controller="ClientProfile" asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="All" class="text-danger mb-4"></div>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label asp-for="FirstName" class="form-label text-muted fw-semibold small text-uppercase">Nombre</label>
+                            <input asp-for="FirstName" class="form-control form-control-lg bg-light border-0 rounded-3 px-3 py-3" placeholder="Ej. Juan" />
+                            <span asp-validation-for="FirstName" class="text-danger small mt-1"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="LastName" class="form-label text-muted fw-semibold small text-uppercase">Apellido</label>
+                            <input asp-for="LastName" class="form-control form-control-lg bg-light border-0 rounded-3 px-3 py-3" placeholder="Ej. Pérez" />
+                            <span asp-validation-for="LastName" class="text-danger small mt-1"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="PhoneNumber" class="form-label text-muted fw-semibold small text-uppercase">Número de Teléfono</label>
+                        <input asp-for="PhoneNumber" class="form-control form-control-lg bg-light border-0 rounded-3 px-3 py-3" placeholder="Ej. 809-555-5555" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger small mt-1"></span>
+                    </div>
+
+                    <!-- Hidden file input triggered by the button in the left column -->
+                    <input asp-for="ProfilePicture" class="d-none" type="file" accept="image/*" id="ProfilePicture" onchange="previewImage(this);" />
+                    
+                    <input type="hidden" asp-for="ExistingProfilePictureUrl" />
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Email" />
+                    <input type="hidden" asp-for="UserName" />
+                    
+                    <div class="d-flex justify-content-end mt-5">
+                        <button type="submit" class="btn text-white rounded-pill px-5 py-3 fw-bold fs-6 shadow-sm" style="background-color: #12402d;">
+                            Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('.img-fluid.rounded-circle').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

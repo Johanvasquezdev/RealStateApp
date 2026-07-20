@@ -1,0 +1,40 @@
+@model AgentChatDetailViewModel
+@{ ViewData["Title"] = "Chat con " + Model.ClientName; }
+
+<h2>Chat con @Model.ClientName</h2>
+<p><strong>Propiedad:</strong> @Model.PropertyCode</p>
+
+<div class="chat-box border rounded p-3 mb-3" style="height: 400px; overflow-y: scroll;" id="chatBox">
+    @if (!Model.Messages.Any())
+    {
+        <p class="text-muted text-center mt-5">No hay mensajes. Envía el primer mensaje.</p>
+    }
+    else
+    {
+        @foreach (var m in Model.Messages)
+        {
+            <div class="d-flex @(m.SenderName == "Tú" ? "justify-content-end" : "justify-content-start") mb-3">
+                <div class="p-3 rounded-3 @(m.SenderName == "Tú" ? "bg-primary text-white" : "bg-light")" style="max-width: 70%;">
+                    <small class="d-block @(m.SenderName == "Tú" ? "text-white-50" : "text-muted")">@(m.SenderName == "Tú" ? "Tú" : Model.ClientName)</small>
+                    @m.Content
+                    <small class="d-block @(m.SenderName == "Tú" ? "text-white-50" : "text-muted") text-end">@m.Created.ToString("dd/MM/yyyy HH:mm")</small>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<form asp-action="EnviarMensaje" method="post" class="d-flex gap-2">
+    <input type="hidden" name="ReceiverId" value="@Model.ClientId" />
+    <input type="hidden" name="PropertyId" value="@Model.PropertyId" />
+    <div class="input-group">
+        <textarea name="Content" class="form-control" rows="2" required placeholder="Escriba su mensaje..."></textarea>
+        <button class="btn btn-primary" type="submit">Enviar</button>
+    </div>
+</form>
+
+<a asp-action="Index" asp-route-propertyId="@Model.PropertyId" class="btn btn-secondary mt-2">Volver</a>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

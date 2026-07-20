@@ -1,14 +1,13 @@
 using AutoMapper;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Properties;
 using RealEstateApp.Core.Domain.Common;
-using RealEstateApp.Core.Domain.Interfaces;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class ClientFavoriteService : Interfaces.Services.ClientFavoriteService
+public class ClientFavoriteService : IClientFavoriteService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -49,7 +48,7 @@ public class ClientFavoriteService : Interfaces.Services.ClientFavoriteService
         // Filtrar solo las disponibles o las que quiera ver
         var availableProperties = favorites
             .Select(f => f.Property)
-            .Where(p => p.Status == PropertyStatus.Disponible)
+            .Where(p => p.Status == PropertyStatus.Available)
             .ToList();
 
         var vms = _mapper.Map<List<ClientPropertyViewModel>>(availableProperties);
@@ -63,3 +62,6 @@ public class ClientFavoriteService : Interfaces.Services.ClientFavoriteService
         return vms;
     }
 }
+
+
+

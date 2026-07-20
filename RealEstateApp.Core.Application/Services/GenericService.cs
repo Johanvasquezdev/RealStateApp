@@ -1,24 +1,23 @@
 using AutoMapper;
 using RealEstateApp.Core.Application.Interfaces;
-using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
 using System.Linq.Expressions;
 
 namespace RealEstateApp.Core.Application.Services
 {
-    public class GenericService<TSaveViewModel, TViewModel, TEntity>(IGenericRepository<TEntity> repository, IMapper mapper) 
-        : Interfaces.GenericService<TSaveViewModel, TViewModel, TEntity>
+    public class GenericService<TSaveViewModel, TViewModel, TEntity>(IGenericRepository<TEntity> repository, IMapper mapper) : IGenericService<TSaveViewModel, TViewModel, TEntity>
         where TSaveViewModel : class
         where TViewModel : class
         where TEntity : class
     {
-        private readonly IGenericRepository<TEntity> _repository = repository;
-        private readonly IMapper _mapper = mapper;
+        protected readonly IGenericRepository<TEntity> _repository = repository;
+        protected readonly IMapper _mapper = mapper;
 
         public virtual async Task<TSaveViewModel> Add(TSaveViewModel vm)
         {
             TEntity entity = _mapper.Map<TEntity>(vm);
             entity = await _repository.AddAsync(entity);
+            await _repository.SaveChangesAsync();
             return _mapper.Map<TSaveViewModel>(entity);
         }
 
@@ -26,6 +25,7 @@ namespace RealEstateApp.Core.Application.Services
         {
             TEntity? entity = await _repository.GetByIdAsync(id) ?? throw new KeyNotFoundException($"El registro con el ID {id} no fue encontrado.");
             await _repository.DeleteAsync(entity);
+            await _repository.SaveChangesAsync();
         }
 
         public virtual async Task<List<TViewModel>> GetAllViewModel()
@@ -46,8 +46,10 @@ namespace RealEstateApp.Core.Application.Services
         {
             TEntity entity = _mapper.Map<TEntity>(vm);
             await _repository.UpdateAsync(entity);
+            await _repository.SaveChangesAsync();
         }
-        public virtual async Task<List<TViewModel>> Find(Expression<Func<TEntity, bool>> predicate)
+
+        public virtual async Task<List<TViewModel>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
             var entityList = await _repository.FindAsync(predicate);
             return _mapper.Map<List<TViewModel>>(entityList);

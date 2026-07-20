@@ -1,0 +1,25 @@
+﻿@model UserListItemViewModel
+@{
+    ViewData["Title"] = "Eliminar agente";
+}
+
+<h2 class="mb-4">Eliminar agente</h2>
+
+<div class="alert alert-warning">
+    ¿Está seguro que desea eliminar este agente y todas sus propiedades?
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Nombre</dt>
+    <dd class="col-sm-9">@Model.FirstName @Model.LastName</dd>
+    <dt class="col-sm-3">Correo</dt>
+    <dd class="col-sm-9">@Model.Email</dd>
+    <dt class="col-sm-3">Propiedades</dt>
+    <dd class="col-sm-9">@Model.PropertiesCount</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Aceptar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

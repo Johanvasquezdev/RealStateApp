@@ -1,31 +1,34 @@
-﻿using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.DTOs.Email;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Accounts;
 
 namespace RealEstateApp.Core.Application.Services;
 
-public class AuthService : Interfaces.Services.AuthService
+public class AuthService : IAuthService
 {
     private readonly IUserService _userService;
+    private readonly IEmailService _emailService;
 
-    public AuthService(IUserService userService)
+    public AuthService(IUserService userService, IEmailService emailService)
     {
         _userService = userService;
+        _emailService = emailService;
     }
 
     #region RegisterResult
-    public async Task<RegisterResult> RegisterAsync(RegisterViewModel vm)
+    public async Task<RegisterResult> RegisterAsync(RegisterViewModel vm, string origin)
     {
         var existingUser = await _userService.FindByNameAsync(vm.Username);
         if (existingUser is not null)
-            return new RegisterResult { Exito = false, Mensaje = "El nombre de usuario ya está en uso." };
+            return new RegisterResult { Exito = false, Mensaje = "El nombre de usuario ya est� en uso." };
 
         var existingEmail = await _userService.FindByEmailAsync(vm.Email);
         if (existingEmail is not null)
-            return new RegisterResult { Exito = false, Mensaje = "El correo electrónico ya está registrado." };
+            return new RegisterResult { Exito = false, Mensaje = "El correo electr�nico ya est� registrado." };
 
         var (succeeded, error, userId) = await _userService.CreateUserAsync(
             vm.Username, vm.Email, vm.Password, vm.FirstName, vm.LastName,
-            vm.PhoneNumber, false, null);
+            vm.PhoneNumber, false, null, vm.IdCard);
 
         if (!succeeded)
             return new RegisterResult { Exito = false, Mensaje = error };
@@ -35,13 +38,59 @@ public class AuthService : Interfaces.Services.AuthService
 
         await _userService.AddToRoleAsync(userId!, vm.TipoUsuario);
 
-        var mensaje = vm.TipoUsuario == "Cliente"
-            ? "Registro exitoso. Revise su correo para activar su cuenta."
-            : "Registro exitoso. Un administrador debe activar su cuenta antes de iniciar sesión.";
+        var mensaje = "";
+        
+        if (vm.TipoUsuario == "Cliente")
+        {
+            var token = await _userService.GenerateEmailConfirmationTokenAsync(userId!);
+            token = Uri.EscapeDataString(token);
+            var verificationUri = $"{origin}/Account/ConfirmEmail?userId={userId}&token={token}";
+            
+            var emailRequest = new EmailRequest
+            {
+                To = vm.Email,
+                Subject = "Activa tu cuenta en RealEstateApp",
+                Body = $"<h2>¡Bienvenido a RealEstateApp!</h2><p>Por favor confirma tu correo electrónico y activa tu cuenta haciendo clic en el siguiente enlace: <a href='{verificationUri}'>Activar Cuenta</a></p>"
+            };
+            await _emailService.SendAsync(emailRequest);
+            mensaje = "Registro exitoso. Revise su correo para activar su cuenta.";
+        }
+        else
+        {
+            mensaje = "Registro exitoso. Un administrador debe activar su cuenta antes de iniciar sesión.";
+        }
 
         return new RegisterResult { Exito = true, Mensaje = mensaje, TipoUsuario = vm.TipoUsuario };
     }
     #endregion
+
+    public async Task<string> ResendActivationEmailAsync(string email, string origin)
+    {
+        var user = await _userService.FindByEmailAsync(email);
+        if (user is null)
+            return "No existe una cuenta con ese correo.";
+
+        if (user.IsActive)
+            return "Esta cuenta ya se encuentra activa.";
+
+        var roles = await _userService.GetRolesAsync(user.Id);
+        if (!roles.Contains("Cliente"))
+            return "El reenvío de correo solo aplica para cuentas de Cliente. Las demás cuentas deben ser activadas por un administrador.";
+
+        var token = await _userService.GenerateEmailConfirmationTokenAsync(user.Id);
+        token = Uri.EscapeDataString(token);
+        var verificationUri = $"{origin}/Account/ConfirmEmail?userId={user.Id}&token={token}";
+
+        var emailRequest = new EmailRequest
+        {
+            To = user.Email,
+            Subject = "Activa tu cuenta en RealEstateApp",
+            Body = $"<h2>¡Bienvenido a RealEstateApp!</h2><p>Por favor confirma tu correo electrónico y activa tu cuenta haciendo clic en el siguiente enlace: <a href='{verificationUri}'>Activar Cuenta</a></p>"
+        };
+        await _emailService.SendAsync(emailRequest);
+
+        return "El correo de activación ha sido reenviado exitosamente.";
+    }
 
     #region LoginResult
     public async Task<LoginResult> LoginAsync(LoginViewModel vm)
@@ -75,3 +124,6 @@ public class AuthService : Interfaces.Services.AuthService
         await _userService.SignOutAsync();
     }
 }
+
+
+

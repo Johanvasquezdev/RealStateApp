@@ -1,34 +1,73 @@
-﻿@model List<AgenteListViewModel>
-@{ ViewData["Title"] = "Agentes Inmobiliarios"; }
+@model List<RealEstateApp.Core.Application.ViewModels.Agents.AgentListViewModel>
+@{
+    ViewData["Title"] = "Agentes Inmobiliarios";
+    var nombreFilter = ViewBag.NombreFilter as string;
+}
 
-<h2>Agentes Inmobiliarios</h2>
-
-<form method="get" class="mb-4">
-    <div class="input-group">
-        <input type="text" name="nombreFilter" class="form-control" placeholder="Buscar por nombre..." value="@ViewBag.NombreFilter" />
-        <button class="btn btn-primary" type="submit">Buscar</button>
+<div class="container py-5">
+    <!-- Header -->
+    <div class="mb-5">
+        <p class="text-gray fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 1px;">EQUIPO ACTIVO</p>
+        <h1 class="fw-bolder text-dark mb-2" style="font-size: 2.5rem; letter-spacing: -1px;">Nuestros Agentes</h1>
+        <p class="text-gray fs-6" style="max-width: 600px;">Profesionales verificados para acompañarte desde la primera visita hasta la firma.</p>
     </div>
-</form>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    @foreach (var agente in Model)
+    <form method="get" class="mb-5">
+        <div class="input-group" style="max-width: 500px;">
+            <input type="text" name="nombreFilter" class="form-control rounded-start-pill py-2 px-4" placeholder="Buscar por nombre..." value="@nombreFilter" />
+            <button class="btn btn-primary rounded-end-pill px-4" type="submit">Buscar</button>
+        </div>
+    </form>
+
+    @if (!Model.Any())
     {
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img src="@(string.IsNullOrEmpty(agente.ProfilePictureUrl) ? "~/images/profiles/default-profile.png" : "~/images/profiles/" + agente.ProfilePictureUrl)" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@agente.NombreCompleto" asp-append-version="true" />
-                <div class="card-body">
-                    <h5 class="card-title">@agente.NombreCompleto</h5>
-                    <p class="card-text">
-                        <span class="badge bg-info">@agente.CantidadPropiedades propiedades</span>
-                    </p>
-                    <a asp-action="Detalle" asp-route-id="@agente.Id" class="btn btn-outline-primary">Ver Detalle</a>
+        <div class="alert alert-info rounded-4 border-0 shadow-sm text-center p-5">
+            <h4 class="alert-heading fw-bold mb-3">No hay agentes</h4>
+            <p class="mb-0">No encontramos ningún agente activo en este momento.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+            @foreach (var agent in Model)
+            {
+                <div class="col fade-in-up">
+                    <div class="card h-100 border-0 rounded-4 shadow-sm text-center p-4 agent-card" style="border: 1px solid #dee2e6 !important;">
+                        
+                        <div class="mx-auto position-relative mb-4 mt-2">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center p-1" style="width: 130px; height: 130px; border: 3px solid var(--bs-primary); margin: 0 auto;">
+                                <img src="@(string.IsNullOrEmpty(agent.ProfilePictureUrl) ? "/img/default-user.png" : agent.ProfilePictureUrl)" 
+                                     class="rounded-circle w-100 h-100" 
+                                     alt="@agent.FirstName" 
+                                     style="object-fit: cover;">
+                            </div>
+                        </div>
+                        
+                        <h5 class="fw-bolder text-dark mb-3">@agent.FirstName @agent.LastName</h5>
+                        
+                        <div class="text-gray small mb-4 d-flex flex-column gap-2">
+                            <div><i class="bi bi-telephone text-muted me-2"></i>N/A</div>
+                            <div><i class="bi bi-envelope text-muted me-2"></i>@agent.Email</div>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            <a asp-action="Detalle" asp-route-id="@agent.Id" class="btn btn-dark rounded-pill px-4 py-2 fw-bold w-100" style="font-size: 0.85rem;">
+                                @agent.PropertyCount propiedades
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     }
 </div>
 
-@if (!Model.Any())
-{
-    <div class="alert alert-info">No hay agentes activos disponibles.</div>
-}
+<style>
+    .agent-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .agent-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important;
+    }
+</style>

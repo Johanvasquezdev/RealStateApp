@@ -14,4 +14,5 @@ public class MessageSaveViewModel
     public int PropertyId { get; set; }
     
     public string? SenderId { get; set; }
+    public string? ReceiverId { get; set; }
 }

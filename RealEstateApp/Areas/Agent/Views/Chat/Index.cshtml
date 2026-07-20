@@ -1,0 +1,24 @@
+@model List<AgentChatSummaryViewModel>
+@{ ViewData["Title"] = "Conversaciones"; }
+
+<h2>Conversaciones</h2>
+@if (Model.Any())
+{
+    <div class="list-group">
+        @foreach (var chat in Model)
+        {
+            <a asp-action="Conversacion" asp-route-clientId="@chat.ClientId" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@chat.ClientName</h5>
+                    <small>@chat.LastMessageDate.ToString("dd/MM/yyyy HH:mm")</small>
+                </div>
+                <p class="mb-1">@(chat.LastMessage ?? "Sin mensajes")</p>
+            </a>
+        }
+    </div>
+}
+else
+{
+    <p>No hay conversaciones para esta propiedad.</p>
+}
+<a asp-controller="PropiedadMantenimiento" asp-action="Index" class="btn btn-secondary mt-3">Volver</a>

@@ -1,0 +1,46 @@
+﻿
+@model List<PropertyTypeViewModel>
+@{
+    ViewData["Title"] = "Mantenimiento de tipo de propiedades";
+}
+
+<h2 class="mb-4">Mantenimiento de tipo de propiedades</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<a asp-action="Create" class="btn btn-primary mb-3">Crear tipo de propiedad</a>
+
+@if (!Model.Any())
+{
+    <p>No existen tipos de propiedades registrados.</p>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Cantidad de propiedades</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>@item.PropertiesCount</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

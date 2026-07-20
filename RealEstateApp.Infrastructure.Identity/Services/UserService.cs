@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using RealEstateApp.Core.Application.DTOs;
-using RealEstateApp.Core.Application.Interfaces.Services;
+using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Infrastructure.Identity.Entities;
 
 namespace RealEstateApp.Infrastructure.Identity.Services;
@@ -42,7 +42,7 @@ public class UserService : IUserService
         return users.Select(ToDto).ToList();
     }
 
-    public async Task<(bool Succeeded, string Error, string? UserId)> CreateUserAsync(string userName, string email, string password, string firstName, string lastName, string? phoneNumber, bool isActive, string? profilePictureUrl)
+    public async Task<(bool Succeeded, string Error, string? UserId)> CreateUserAsync(string userName, string email, string password, string firstName, string lastName, string? phoneNumber, bool isActive, string? profilePictureUrl, string idCard)
     {
         var user = new ApplicationUser
         {
@@ -50,6 +50,7 @@ public class UserService : IUserService
             Email = email,
             FirstName = firstName,
             LastName = lastName,
+            IdCard = idCard,
             PhoneNumber = phoneNumber,
             IsActive = isActive,
             ProfilePictureUrl = profilePictureUrl ?? "default-profile.png"
@@ -107,6 +108,25 @@ public class UserService : IUserService
         await _userManager.UpdateAsync(user);
     }
 
+    public async Task<string> GenerateEmailConfirmationTokenAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null) return string.Empty;
+
+        return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+    }
+
+    public async Task<(bool Succeeded, string Error)> ConfirmEmailAsync(string userId, string token)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null) return (false, "User not found");
+
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        return result.Succeeded
+            ? (true, string.Empty)
+            : (false, string.Join(" ", result.Errors.Select(e => e.Description)));
+    }
+
     public async Task<bool> RoleExistsAsync(string role)
     {
         return await _roleManager.RoleExistsAsync(role);
@@ -148,9 +168,11 @@ public class UserService : IUserService
             Email = user.Email!,
             FirstName = user.FirstName,
             LastName = user.LastName,
+            IdCard = user.IdCard,
             PhoneNumber = user.PhoneNumber,
             IsActive = user.IsActive,
             ProfilePictureUrl = user.ProfilePictureUrl
         };
     }
 }
+

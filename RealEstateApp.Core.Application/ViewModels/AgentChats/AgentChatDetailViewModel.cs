@@ -1,18 +1,18 @@
-﻿namespace RealEstateApp.Core.Application.ViewModels.AgentChats;
+namespace RealEstateApp.Core.Application.ViewModels.AgentChats;
 
 public class AgentChatDetailViewModel
 {
-    public string ClienteId { get; set; } = null!;
-    public string ClienteNombre { get; set; } = null!;
+    public string ClientId { get; set; } = null!;
+    public string ClientName { get; set; } = null!;
     public int PropertyId { get; set; }
     public string PropertyCode { get; set; } = null!;
-    public List<MensajeViewModel> Mensajes { get; set; } = new();
+    public List<MessageViewModel> Messages { get; set; } = new();
 }
 
-public class MensajeViewModel
+public class MessageViewModel
 {
     public string Content { get; set; } = null!;
     public string SenderId { get; set; } = null!;
-    public string SenderNombre { get; set; } = null!;
+    public string SenderName { get; set; } = null!;
     public DateTime Created { get; set; }
 }

@@ -8,7 +8,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     public ApplicationDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=RealEstateDb;Trusted_Connection=True;TrustServerCertificate=True;");
+        optionsBuilder.UseNpgsql("Host=aws-1-us-west-2.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.rmfvuyafgwutazgbbihz;Password=BXermrRlqfhLILAn");
         return new ApplicationDbContext(optionsBuilder.Options);
     }
 }

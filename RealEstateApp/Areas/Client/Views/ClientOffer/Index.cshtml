@@ -1,0 +1,127 @@
+@model List<RealEstateApp.Core.Application.ViewModels.Offers.ClientOfferListViewModel>
+@using RealEstateApp.Core.Domain.Enums
+@{
+    ViewData["Title"] = "Mis Ofertas";
+}
+
+<div class="container py-5">
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-4 border-0 shadow-sm mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="mb-5">
+        <h1 class="fw-bolder mb-2">Mis Ofertas</h1>
+        <p class="text-gray fs-6">Historial de ofertas enviadas y su estado actual.</p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-light border rounded-4 text-center p-5">
+            <i class="bi bi-file-earmark-x text-muted fs-1 mb-3 d-block"></i>
+            <h4 class="text-muted fw-bold">Aún no has hecho ninguna oferta.</h4>
+            <p class="mb-4">Explora nuestras propiedades y encuentra el hogar de tus sueños.</p>
+            <a asp-controller="ClientProperty" asp-action="Index" class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm">Explorar Propiedades</a>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-column gap-4">
+            @foreach (var offer in Model)
+            {
+                var statusColor = offer.Status switch
+                {
+                    OfferStatus.Pending => "warning",
+                    OfferStatus.Accepted => "success",
+                    OfferStatus.Rejected => "danger",
+                    _ => "secondary"
+                };
+                var statusIcon = offer.Status switch
+                {
+                    OfferStatus.Pending => "bi-clock-history",
+                    OfferStatus.Accepted => "bi-check-circle-fill",
+                    OfferStatus.Rejected => "bi-x-circle-fill",
+                    _ => "bi-info-circle"
+                };
+
+                <div class="card border-0 rounded-4 shadow-sm overflow-hidden" style="border: 1px solid #dee2e6 !important;">
+                    <div class="row g-0">
+                        <!-- Left Image -->
+                        <div class="col-md-4 col-lg-3">
+                            <img src="@(string.IsNullOrEmpty(offer.PropertyImageUrl) ? "/img/default-property.jpg" : $"/images/properties/{offer.PropertyImageUrl}")" class="img-fluid w-100 h-100" alt="Propiedad" style="object-fit: cover; min-height: 200px;">
+                        </div>
+                        
+                        <!-- Right Details -->
+                        <div class="col-md-8 col-lg-9 p-4 d-flex flex-column justify-content-center">
+                            
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <div class="d-flex align-items-center gap-3 mb-2">
+                                        <span class="badge bg-@(statusColor)-subtle text-@statusColor rounded-pill px-3 py-2 fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+                                            <i class="bi @statusIcon me-1"></i> @offer.Status.ToString().ToUpper()
+                                        </span>
+                                    </div>
+                                    <h4 class="fw-bolder mb-1">@offer.PropertyName</h4>
+                                    <p class="text-gray small mb-4"><i class="bi bi-geo-alt me-1"></i> Código @offer.PropertyCode</p>
+                                </div>
+                                <div class="text-end">
+                                    <p class="text-gray fw-bold" style="font-size: 0.7rem; letter-spacing: 1px;">MONTO OFERTADO</p>
+                                    <h3 class="fw-bolder text-dark mb-0">$@offer.Amount.ToString("N0")</h3>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <div class="d-flex align-items-center">
+                                    <img src="@(string.IsNullOrEmpty(offer.AgentPhotoUrl) ? "/img/default-user.png" : offer.AgentPhotoUrl)" alt="@offer.AgentName" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                                    <div>
+                                        <p class="mb-0 fw-bold fs-7">@offer.AgentName</p>
+                                        <p class="mb-0 text-gray" style="font-size: 0.7rem;">@offer.AgentEmail</p>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    @if (offer.Status == OfferStatus.Pending)
+                                    {
+                                        <form asp-action="WithdrawOffer" method="post" class="d-inline">
+                                            <input type="hidden" name="offerId" value="@offer.OfferId" />
+                                            <button type="submit" class="btn btn-outline-secondary rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
+                                                Retirar
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (offer.Status == OfferStatus.Accepted)
+                                    {
+                                        <button class="btn btn-dark rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
+                                            Siguientes pasos
+                                        </button>
+                                    }
+                                    else if (offer.Status == OfferStatus.Rejected)
+                                    {
+                                        <button class="btn btn-outline-dark rounded-pill px-4 fw-bold" style="font-size: 0.85rem;">
+                                            Nueva oferta
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.15)!important;
+    }
+</style>

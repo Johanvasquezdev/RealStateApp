@@ -1,0 +1,82 @@
+﻿@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Panel de Administracion";
+}
+
+<h2 class="mb-4">Panel de Administracion</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="row g-3">
+    <div class="col-md-3">
+        <div class="card text-bg-success">
+            <div class="card-body">
+                <h6>Propiedades disponibles</h6>
+                <h2>@Model.AvailableProperties</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-secondary">
+            <div class="card-body">
+                <h6>Propiedades vendidas</h6>
+                <h2>@Model.SoldProperties</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-primary">
+            <div class="card-body">
+                <h6>Agentes activos</h6>
+                <h2>@Model.ActiveAgents</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-warning">
+            <div class="card-body">
+                <h6>Agentes inactivos</h6>
+                <h2>@Model.InactiveAgents</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-primary">
+            <div class="card-body">
+                <h6>Clientes activos</h6>
+                <h2>@Model.ActiveClients</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-warning">
+            <div class="card-body">
+                <h6>Clientes inactivos</h6>
+                <h2>@Model.InactiveClients</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-primary">
+            <div class="card-body">
+                <h6>Desarrolladores activos</h6>
+                <h2>@Model.ActiveDevelopers</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-bg-warning">
+            <div class="card-body">
+                <h6>Desarrolladores inactivos</h6>
+                <h2>@Model.InactiveDevelopers</h2>
+            </div>
+        </div>
+    </div>
+</div>

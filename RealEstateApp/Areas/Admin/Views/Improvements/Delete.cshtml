@@ -1,0 +1,25 @@
+﻿@model ImprovementViewModel
+@{
+    ViewData["Title"] = "Eliminar mejora";
+}
+
+<h2 class="mb-4">Eliminar mejora</h2>
+
+<div class="alert alert-warning">
+    ¿Está seguro que desea eliminar esta mejora?
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Nombre</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">Descripción</dt>
+    <dd class="col-sm-9">@Model.Description</dd>
+    <dt class="col-sm-3">Propiedades asociadas</dt>
+    <dd class="col-sm-9">@Model.PropertiesCount</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Aceptar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

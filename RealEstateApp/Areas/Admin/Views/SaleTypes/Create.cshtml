@@ -1,0 +1,24 @@
+﻿@model SaveSaleTypeViewModel
+@{
+    ViewData["Title"] = "Crear tipo de venta";
+}
+
+<h2 class="mb-4">Crear tipo de venta</h2>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Crear tipo de venta</button>
+    <a asp-action="Index" class="btn btn-secondary">Volver atrás</a>
+</form>

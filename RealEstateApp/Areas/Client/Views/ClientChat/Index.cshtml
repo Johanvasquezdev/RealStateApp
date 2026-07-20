@@ -1,0 +1,64 @@
+@model List<RealEstateApp.Core.Application.ViewModels.Messages.ClientChatListViewModel>
+@{
+    ViewData["Title"] = "Mis Chats";
+}
+
+<div class="container py-5 max-w-4xl">
+    <div class="mb-5 text-center text-md-start">
+        <h1 class="fw-bolder mb-2">Bandeja de Mensajes</h1>
+        <p class="text-muted fs-5">Comunícate con los agentes inmobiliarios y resuelve tus dudas al instante.</p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-light border rounded-4 text-center p-5 shadow-sm">
+            <i class="bi bi-chat-square-dots text-muted fs-1 mb-3 d-block"></i>
+            <h4 class="text-muted fw-bold">Aún no tienes conversaciones.</h4>
+            <p class="mb-4">Visita las propiedades y contacta a un agente para iniciar un chat.</p>
+            <a asp-controller="ClientProperty" asp-action="Index" class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm">Explorar Propiedades</a>
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 rounded-4 shadow-sm overflow-hidden">
+            <div class="list-group list-group-flush">
+                @foreach (var chat in Model.OrderByDescending(c => c.LastMessageDate))
+                {
+                    <a asp-action="Conversation" asp-route-propertyId="@chat.PropertyId" asp-route-agentId="@chat.AgentId" 
+                       class="list-group-item list-group-item-action p-4 border-bottom chat-item transition-all">
+                        <div class="d-flex align-items-center">
+                            <div class="position-relative">
+                                <img src="@(string.IsNullOrEmpty(chat.AgentPhotoUrl) ? "/img/default-user.png" : chat.AgentPhotoUrl)" 
+                                     alt="@chat.AgentName" 
+                                     class="rounded-circle border border-2 border-white shadow-sm" 
+                                     style="width: 60px; height: 60px; object-fit: cover;">
+                                <!-- Indicator bubble optional -->
+                                <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                            </div>
+                            <div class="ms-4 flex-grow-1 min-w-0">
+                                <div class="d-flex justify-content-between align-items-baseline mb-1">
+                                    <h5 class="fw-bold mb-0 text-truncate">@chat.AgentName</h5>
+                                    <small class="text-muted fw-medium text-nowrap ms-2">@chat.LastMessageDate.ToString("g")</small>
+                                </div>
+                                <p class="text-muted mb-0 text-truncate pe-md-5">@chat.LastMessage</p>
+                            </div>
+                            <div class="ms-3 d-none d-md-block text-primary">
+                                <i class="bi bi-chevron-right fs-4"></i>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .max-w-4xl { max-width: 900px; }
+    .chat-item:hover {
+        background-color: #f8f9fa;
+    }
+    .transition-all {
+        transition: all 0.2s ease;
+    }
+</style>
