@@ -45,5 +45,18 @@ namespace RealEstateApp.Core.Application.Services
                 PropertiesCount = pt.PropertyImprovements?.Count ?? 0
             }).ToList();
         }
+
+        public override async Task<ImprovementViewModel> GetByIdViewModel(int id)
+        {
+            var entity = await _repository.FirstOrDefaultWithIncludesAsync(x => x.Id == id, "PropertyImprovements");
+
+            if (entity is null)
+                throw new KeyNotFoundException($"El registro con el ID {id} no fue encontrado.");
+
+            var vm = _mapper.Map<ImprovementViewModel>(entity);
+            vm.PropertiesCount = entity.PropertyImprovements?.Count ?? 0;
+
+            return vm;
+        }
     }
 }
