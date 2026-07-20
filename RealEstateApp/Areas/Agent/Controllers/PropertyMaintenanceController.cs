@@ -11,16 +11,16 @@ namespace RealEstateApp.Areas.Agent.Controllers;
 [Authorize(Roles = "Agente")]
 public class PropertyMaintenanceController : Controller
 {
-    private readonly IPropertyService _propiedadService;
+    private readonly IPropertyService _propertyService;
     private readonly IPropertyTypeService _propertyTypeService;
     private readonly ISaleTypeService _saleTypeService;
     private readonly IImprovementService _improvementService;
     private readonly IChatService _chatService;
     private readonly IOfferService _offerService;
 
-    public PropertyMaintenanceController(IPropertyService propiedadService, IPropertyTypeService propertyTypeService, ISaleTypeService saleTypeService, IImprovementService improvementService, IChatService chatService, IOfferService offerService)
+    public PropertyMaintenanceController(IPropertyService propertyService, IPropertyTypeService propertyTypeService, ISaleTypeService saleTypeService, IImprovementService improvementService, IChatService chatService, IOfferService offerService)
     {
-        _propiedadService = propiedadService;
+        _propertyService = propertyService;
         _propertyTypeService = propertyTypeService;
         _saleTypeService = saleTypeService;
         _improvementService = improvementService;
@@ -100,7 +100,7 @@ public class PropertyMaintenanceController : Controller
 
     public async Task<IActionResult> Delete(int id)
     {
-        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        var property = await _propertyService.GetPropertyDetailAsync(id);
         if (property != null && property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold.ToString())
         {
             TempData["Error"] = "No puede eliminar una propiedad que ya ha sido vendida.";
@@ -130,7 +130,7 @@ public class PropertyMaintenanceController : Controller
 
     public async Task<IActionResult> Detail(int id)
     {
-        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        var property = await _propertyService.GetPropertyDetailAsync(id);
         if (property == null) return NotFound();
         
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;

@@ -8,18 +8,18 @@ namespace RealEstateApp.Areas.Agent.Controllers;
 [Authorize(Roles = "Agente")]
 public class AgentHomeController : Controller
 {
-    private readonly IPropertyService _propiedadService;
+    private readonly IPropertyService _propertyService;
 
-    public AgentHomeController(IPropertyService propiedadService)
+    public AgentHomeController(IPropertyService propertyService)
     {
-        _propiedadService = propiedadService;
+        _propertyService = propertyService;
     }
 
     public async Task<IActionResult> Index()
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var propiedades = await _propiedadService.GetPropertiesByAgentAsync(userId);
-        return View(propiedades);
+        var properties = await _propertyService.GetPropertiesByAgentAsync(userId);
+        return View(properties);
     }
 }
 

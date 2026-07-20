@@ -90,7 +90,7 @@
                                     @property.SaleTypeName
                                 </span>
 
-                                <form method="post" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@property.Id" class="d-inline position-absolute top-0 end-0 m-3 favorite-form" style="z-index: 2;">
+                                <form method="post" asp-area="Client" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@property.Id" class="d-inline position-absolute top-0 end-0 m-3 favorite-form" style="z-index: 2;">
                                     <button type="submit" class="btn btn-light rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" title="Agregar a favoritos">
                                         <i class="bi bi-heart fs-5 text-danger"></i>
                                     </button>
@@ -130,7 +130,7 @@
                                          class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;" alt="@property.AgentName">
                                     <span class="fw-bold fs-7 text-dark">@property.AgentName</span>
                                 </div>
-                                <a asp-controller="ClientProperty" asp-action="Details" asp-route-id="@property.Id" class="btn btn-sm btn-outline-primary rounded-pill fw-bold">Ver detalle</a>
+                                <a asp-area="Client" asp-controller="ClientProperty" asp-action="Details" asp-route-id="@property.Id" class="btn btn-sm btn-outline-primary rounded-pill fw-bold">Ver detalle</a>
                             </div>
                         </div>
                     </div>
