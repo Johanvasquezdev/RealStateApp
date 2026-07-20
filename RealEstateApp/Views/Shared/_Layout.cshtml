@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    @using Microsoft.AspNetCore.Identity
+    @using RealEstateApp.Infrastructure.Identity.Entities
+    @inject UserManager<ApplicationUser> UserManager
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - RealEstateApp</title>
@@ -176,8 +179,15 @@
                     <div class="d-flex align-items-center gap-3">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
+                            var currentUser = await UserManager.GetUserAsync(User);
+                            var profilePic = currentUser?.ProfilePictureUrl;
+                            if (string.IsNullOrEmpty(profilePic) || profilePic == "default-profile.png" || profilePic == "default-user.png")
+                            {
+                                profilePic = "/img/default-user.png";
+                            }
+
                             <div class="bg-light rounded-pill px-3 py-2 d-flex align-items-center gap-2">
-                                <i class="bi bi-person-circle text-gray"></i>
+                                <img src="@profilePic" alt="Profile" class="rounded-circle shadow-sm" style="width: 28px; height: 28px; object-fit: cover;" onerror="this.onerror=null;this.src='/img/default-user.png';" />
                                 <span class="fw-bold text-dark fs-7">@User.Identity.Name</span>
                             </div>
                             <a class="btn btn-primary" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar sesión</a>
