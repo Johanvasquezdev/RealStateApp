@@ -8,10 +8,12 @@ public static class DefaultRoles
 {
     public static async Task SeedAsync(RoleManager<IdentityRole> roleManager)
     {
+        if (roleManager.Roles.Any()) return;
+
         string[] roles = Enum.GetNames<Roles>();
         foreach (var role in roles)
         {
-            if (!await roleManager.RoleExistsAsync(role)) await roleManager.CreateAsync(new IdentityRole(role));
+            await roleManager.CreateAsync(new IdentityRole(role));
         }
     }
 }
@@ -20,6 +22,8 @@ public static class DefaultUsers
 {
     public static async Task SeedAsync(UserManager<ApplicationUser> userManager)
     {
+        if (userManager.Users.Any()) return;
+
         var admin = new ApplicationUser
         {
             FirstName = "Admin",

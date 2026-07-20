@@ -8,11 +8,13 @@ public class AuthService : IAuthService
 {
     private readonly IUserService _userService;
     private readonly IEmailService _emailService;
+    private readonly IFileStorageService _fileStorageService;
 
-    public AuthService(IUserService userService, IEmailService emailService)
+    public AuthService(IUserService userService, IEmailService emailService, IFileStorageService fileStorageService)
     {
         _userService = userService;
         _emailService = emailService;
+        _fileStorageService = fileStorageService;
     }
 
     #region RegisterResult
@@ -26,9 +28,13 @@ public class AuthService : IAuthService
         if (existingEmail is not null)
             return new RegisterResult { Exito = false, Mensaje = "El correo electr�nico ya est� registrado." };
 
+        string? profilePictureUrl = null;
+        if (vm.ProfilePicture is not null)
+            profilePictureUrl = _fileStorageService.UploadFile(vm.ProfilePicture, "profile-pictures");
+
         var (succeeded, error, userId) = await _userService.CreateUserAsync(
             vm.Username, vm.Email, vm.Password, vm.FirstName, vm.LastName,
-            vm.PhoneNumber, false, null, vm.IdCard);
+            vm.PhoneNumber, false, profilePictureUrl, vm.IdCard);
 
         if (!succeeded)
             return new RegisterResult { Exito = false, Mensaje = error };

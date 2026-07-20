@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Interfaces;
-using RealEstateApp.Infrastructure.Identity.Entities;
 using RealEstateApp.Infrastructure.Persistence.Contexts;
 using RealEstateApp.Infrastructure.Persistence.Repositories;
 
@@ -20,10 +18,6 @@ public static class ServiceRegistration
             options.UseNpgsql(
                 configuration.GetConnectionString("DefaultConnection"),
                 m => m.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-
-        services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
 
         #region Repositories
         services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
