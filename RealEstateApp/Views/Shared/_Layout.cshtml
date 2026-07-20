@@ -47,7 +47,7 @@
                             if (User.IsInRole("Cliente"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
                                         <i class="bi bi-house"></i> Inicio
                                     </a>
                                 </li>
@@ -179,7 +179,7 @@
                                 <i class="bi bi-person-circle text-gray"></i>
                                 <span class="fw-bold text-dark fs-7">@User.Identity.Name</span>
                             </div>
-                            <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">Cerrar sesión</a>
+                            <a class="btn btn-primary" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar sesión</a>
                         }
                         else
                         {

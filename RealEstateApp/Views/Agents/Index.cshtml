@@ -1,11 +1,10 @@
-@model List<RealEstateApp.Core.Application.ViewModels.Agents.AgentListViewModel>
+@model List<AgentListViewModel>
 @{
     ViewData["Title"] = "Agentes Inmobiliarios";
     var nombreFilter = ViewBag.NombreFilter as string;
 }
 
 <div class="container py-5">
-    <!-- Header -->
     <div class="mb-5">
         <p class="text-gray fw-bold mb-1" style="font-size: 0.85rem; letter-spacing: 1px;">EQUIPO ACTIVO</p>
         <h1 class="fw-bolder text-dark mb-2" style="font-size: 2.5rem; letter-spacing: -1px;">Nuestros Agentes</h1>
