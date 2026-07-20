@@ -66,6 +66,7 @@ public class ChatService : IChatService
         {
             ClientId = clientId,
             ClientName = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
+            ClientPhoto = client?.ProfilePictureUrl,
             PropertyId = propertyId,
             PropertyCode = property?.Code ?? "",
             Messages = messages.Select(m => new MessageViewModel

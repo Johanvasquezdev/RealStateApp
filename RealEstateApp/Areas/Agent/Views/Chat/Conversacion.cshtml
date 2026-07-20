@@ -9,9 +9,16 @@
                 <a asp-controller="PropertyMaintenance" asp-action="Detail" asp-route-id="@Model.PropertyId" class="btn btn-sm btn-outline-secondary rounded-circle me-3" style="width: 35px; height: 35px; padding: 0; line-height: 33px;">
                     <i class="bi bi-arrow-left"></i>
                 </a>
-                <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-5 fw-bold" style="width: 45px; height: 45px; background-color: #12402d;">
-                    @(Model.ClientName.Substring(0, 1))
-                </div>
+                @if (!string.IsNullOrEmpty(Model.ClientPhoto) && Model.ClientPhoto != "default-user.png" && Model.ClientPhoto != "default-profile.png")
+                {
+                    <img src="@Model.ClientPhoto" alt="Profile" class="rounded-circle me-3 object-fit-cover shadow-sm" style="width: 45px; height: 45px;" onerror="this.onerror=null;this.src='/img/default-user.png';" />
+                }
+                else
+                {
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-5 fw-bold shadow-sm" style="width: 45px; height: 45px; background-color: #12402d;">
+                        @(Model.ClientName.Substring(0, 1))
+                    </div>
+                }
                 <div>
                     <h5 class="mb-0 fw-bold" style="color: #0a261c;">@Model.ClientName</h5>
                     <small class="text-muted"><i class="bi bi-building me-1"></i> Propiedad: @Model.PropertyCode</small>
