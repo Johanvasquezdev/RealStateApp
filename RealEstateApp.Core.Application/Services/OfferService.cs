@@ -37,6 +37,7 @@ public class OfferService : IOfferService
             {
                 ClientId = group.Key,
                 ClientName = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
+                ClientPhoto = client?.ProfilePictureUrl,
                 OfferCount = group.Count(),
                 LatestOfferAmount = last.Amount,
                 Status = last.Status.ToString()

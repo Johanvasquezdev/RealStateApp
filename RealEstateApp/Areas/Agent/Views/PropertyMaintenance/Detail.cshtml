@@ -175,9 +175,16 @@
                                 <a asp-controller="Chat" asp-action="Conversacion" asp-route-propertyId="@Model.Id" asp-route-clientId="@conv.ClientId" class="list-group-item list-group-item-action p-4 border-0 border-bottom" style="transition: all 0.2s;">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-4" style="width: 50px; height: 50px; background-color: #12402d;">
-                                                @(conv.ClientName.Substring(0, 1))
-                                            </div>
+                                            @if (!string.IsNullOrEmpty(conv.ClientPhoto) && conv.ClientPhoto != "default-user.png" && conv.ClientPhoto != "default-profile.png")
+                                            {
+                                                <img src="@conv.ClientPhoto" alt="Profile" class="rounded-circle me-3 object-fit-cover shadow-sm" style="width: 50px; height: 50px;" onerror="this.onerror=null;this.src='/img/default-user.png';" />
+                                            }
+                                            else
+                                            {
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-4 shadow-sm" style="width: 50px; height: 50px; background-color: #12402d;">
+                                                    @(conv.ClientName.Substring(0, 1))
+                                                </div>
+                                            }
                                             <div>
                                                 <h6 class="mb-1 fw-bold">@conv.ClientName</h6>
                                                 <p class="mb-0 text-muted small text-truncate" style="max-width: 300px;">
@@ -245,9 +252,16 @@
                                         <tr>
                                             <td class="px-4 py-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-6 fw-bold" style="width: 40px; height: 40px; background-color: #12402d;">
-                                                        @(offer.ClientName.Substring(0, 1))
-                                                    </div>
+                                                    @if (!string.IsNullOrEmpty(offer.ClientPhoto) && offer.ClientPhoto != "default-user.png" && offer.ClientPhoto != "default-profile.png")
+                                                    {
+                                                        <img src="@offer.ClientPhoto" alt="Profile" class="rounded-circle me-3 object-fit-cover shadow-sm" style="width: 40px; height: 40px;" onerror="this.onerror=null;this.src='/img/default-user.png';" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-6 fw-bold shadow-sm" style="width: 40px; height: 40px; background-color: #12402d;">
+                                                            @(offer.ClientName.Substring(0, 1))
+                                                        </div>
+                                                    }
                                                     <div class="fw-bold" style="color: #0a261c;">@offer.ClientName</div>
                                                 </div>
                                             </td>
