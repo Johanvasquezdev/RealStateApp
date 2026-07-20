@@ -21,6 +21,14 @@
             opacity: 1 !important;
             transform: translateY(0) !important;
         }
+        @media (min-width: 992px) {
+            .navbar-center-absolute {
+                position: absolute !important;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 1000;
+            }
+        }
     </style>
 </head>
 <body>
@@ -44,7 +52,7 @@
 
                 <div class="collapse navbar-collapse" id="mainNav">
                     <!-- Nav Pills (Center) -->
-                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 nav-pills bg-light rounded-pill p-1">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 nav-pills bg-light rounded-pill p-1 navbar-center-absolute">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             if (User.IsInRole("Cliente"))
@@ -176,7 +184,7 @@
                     </ul>
 
                     <!-- User Actions (Right) -->
-                    <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-3 ms-auto mt-3 mt-lg-0">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             var currentUser = await UserManager.GetUserAsync(User);
