@@ -17,10 +17,10 @@ public class ClientPropertyController : Controller
         _clientPropertyService = clientPropertyService;
     }
 
-    // Default home page for clients
     public async Task<IActionResult> Index(ClientFilterPropertyViewModel filter)
     {
-        var properties = await _clientPropertyService.GetPropertiesWithFiltersAsync(filter);
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var properties = await _clientPropertyService.GetPropertiesWithFiltersAsync(filter, userId);
         ViewBag.Filter = filter;
         return View(properties);
     }

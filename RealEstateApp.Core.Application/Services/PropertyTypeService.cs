@@ -10,6 +10,13 @@ namespace RealEstateApp.Core.Application.Services
     : GenericService<SavePropertyTypeViewModel, PropertyTypeViewModel, PropertyType>(repository, mapper), IPropertyTypeService
     {
         private readonly IGenericRepository<Property> _propertyRepository = propertyRepository;
+
+        public override async Task<SavePropertyTypeViewModel> Add(SavePropertyTypeViewModel vm)
+        {
+            if (await _repository.AnyAsync(x => x.Name == vm.Name))
+                throw new InvalidOperationException("Ya existe un tipo de propiedad con este nombre.");
+            return await base.Add(vm);
+        }
         public override async Task Delete(int id)
         {
             var propertyType = await _repository.GetByIdAsync(id)

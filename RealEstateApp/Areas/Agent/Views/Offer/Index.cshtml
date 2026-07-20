@@ -17,7 +17,21 @@
             @foreach (var o in Model)
             {
                 <tr>
-                    <td>@o.ClientName</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            @if (!string.IsNullOrEmpty(o.ClientPhoto) && o.ClientPhoto != "default-user.png" && o.ClientPhoto != "default-profile.png")
+                            {
+                                <img src="@o.ClientPhoto" alt="Profile" class="rounded-circle me-2 object-fit-cover shadow-sm" style="width: 32px; height: 32px;" onerror="this.onerror=null;this.src='/img/default-user.png';" />
+                            }
+                            else
+                            {
+                                <div class="rounded-circle d-flex align-items-center justify-content-center me-2 text-white fw-bold shadow-sm" style="width: 32px; height: 32px; background-color: #12402d; font-size: 0.85rem;">
+                                    @(o.ClientName.Substring(0, 1))
+                                </div>
+                            }
+                            <span>@o.ClientName</span>
+                        </div>
+                    </td>
                     <td>@o.OfferCount</td>
                     <td>RD$ @o.LatestOfferAmount.ToString("N2")</td>
                     <td>
@@ -25,7 +39,7 @@
                     </td>
                     <td>
                         <a asp-action="Detalle" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-info">Ver Detalle</a>
-                        <a asp-controller="Chat" asp-action="Conversacion" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-outline-primary">Chat</a>
+                        <a asp-controller="Chat" asp-action="Conversacion" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-outline-primary">Chat</a>
                     </td>
                 </tr>
             }
@@ -36,4 +50,4 @@
 {
     <p>No hay ofertas para esta propiedad.</p>
 }
-<a asp-controller="PropiedadMantenimiento" asp-action="Index" class="btn btn-secondary">Volver</a>
+<a asp-controller="PropertyMaintenance" asp-action="Detail" asp-route-id="@ViewBag.PropertyId" class="btn btn-secondary">Volver</a>

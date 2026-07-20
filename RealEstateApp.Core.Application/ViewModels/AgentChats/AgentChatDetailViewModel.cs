@@ -4,6 +4,7 @@ public class AgentChatDetailViewModel
 {
     public string ClientId { get; set; } = null!;
     public string ClientName { get; set; } = null!;
+    public string? ClientPhoto { get; set; }
     public int PropertyId { get; set; }
     public string PropertyCode { get; set; } = null!;
     public List<MessageViewModel> Messages { get; set; } = new();

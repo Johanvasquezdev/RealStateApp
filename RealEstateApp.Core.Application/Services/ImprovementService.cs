@@ -10,6 +10,13 @@ namespace RealEstateApp.Core.Application.Services
     : GenericService<SaveImprovementViewModel, ImprovementViewModel, Improvement>(repository, mapper), IImprovementService
     {
         private readonly IGenericRepository<PropertyImprovement> _linkRepository = linkRepository;
+
+        public override async Task<SaveImprovementViewModel> Add(SaveImprovementViewModel vm)
+        {
+            if (await _repository.AnyAsync(x => x.Name == vm.Name))
+                throw new InvalidOperationException("Ya existe una mejora con este nombre.");
+            return await base.Add(vm);
+        }
         public override async Task Delete(int id)
         {
             var improvement = await _repository.GetByIdAsync(id)

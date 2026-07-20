@@ -25,7 +25,7 @@ public class AccountController : ControllerBase
         _accountService = accountService;
     }
 
-    [HttpPost("authenticate")]
+    [HttpPost("login")]
     public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request)
     {
         try
@@ -39,7 +39,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpPost("register-developer")]
+    [HttpPost("register-dev")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> RegisterDeveloper([FromBody] SaveDeveloperViewModel vm)
     {
@@ -61,7 +61,7 @@ public class AccountController : ControllerBase
         {
             FirstName = vm.FirstName,
             LastName = vm.LastName,
-            IdCard = vm.IdCard,
+            IdCard = vm.IdCard?.Replace("-", "") ?? string.Empty,
             Email = vm.Email,
             UserName = vm.UserName,
             IsActive = true,
@@ -99,7 +99,7 @@ public class AccountController : ControllerBase
         {
             FirstName = vm.FirstName,
             LastName = vm.LastName,
-            IdCard = vm.IdCard,
+            IdCard = vm.IdCard?.Replace("-", "") ?? string.Empty,
             Email = vm.Email,
             UserName = vm.UserName,
             IsActive = true,

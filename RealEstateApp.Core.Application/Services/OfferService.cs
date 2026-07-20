@@ -37,6 +37,7 @@ public class OfferService : IOfferService
             {
                 ClientId = group.Key,
                 ClientName = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
+                ClientPhoto = client?.ProfilePictureUrl,
                 OfferCount = group.Count(),
                 LatestOfferAmount = last.Amount,
                 Status = last.Status.ToString()
@@ -64,6 +65,7 @@ public class OfferService : IOfferService
             {
                 Id = o.Id,
                 ClientName = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
+                ClientPhoto = client?.ProfilePictureUrl,
                 Amount = o.Amount,
                 Status = o.Status.ToString(),
                 Created = o.Created
@@ -88,6 +90,7 @@ public class OfferService : IOfferService
         {
             Id = o.Id,
             ClientName = client is not null ? $"{client.FirstName} {client.LastName}" : "Desconocido",
+            ClientPhoto = client?.ProfilePictureUrl,
             Amount = o.Amount,
             Status = o.Status.ToString(),
             Created = o.Created

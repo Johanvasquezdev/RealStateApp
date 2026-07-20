@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.SaleType;
@@ -11,7 +11,7 @@ public class SaleTypesController(ISaleTypeService service) : ControllerBase
 {
     private readonly ISaleTypeService _service = service;
 
-    [HttpGet]
+    [HttpGet("list")]
     [Authorize(Roles = "Administrador,Desarrollador")]
     public async Task<IActionResult> List()
     {
@@ -20,7 +20,7 @@ public class SaleTypesController(ISaleTypeService service) : ControllerBase
         return Ok(list);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("getbyid/{id}")]
     [Authorize(Roles = "Administrador,Desarrollador")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -35,7 +35,7 @@ public class SaleTypesController(ISaleTypeService service) : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Create([FromBody] SaveSaleTypeViewModel vm)
     {
@@ -46,7 +46,7 @@ public class SaleTypesController(ISaleTypeService service) : ControllerBase
         return StatusCode(201, created);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("update")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Update(int id, [FromBody] SaveSaleTypeViewModel vm)
     {
@@ -65,7 +65,7 @@ public class SaleTypesController(ISaleTypeService service) : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Delete(int id)
     {

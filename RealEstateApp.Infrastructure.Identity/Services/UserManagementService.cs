@@ -161,9 +161,8 @@ public class UserManagementService: IUserManagementService
 
         user.FirstName = vm.FirstName;
         user.LastName = vm.LastName;
-        user.IdCard = vm.IdCard;
+        user.IdCard = vm.IdCard?.Replace("-", "") ?? string.Empty;
         user.Email = vm.Email;
-        user.UserName = vm.UserName;
 
         var result = await _userManager.UpdateAsync(user);
         if (!result.Succeeded)
@@ -199,11 +198,15 @@ public class UserManagementService: IUserManagementService
         if (vm.Password != vm.ConfirmPassword)
             return new ResultResponse { Succeeded = false, Errors = ["las claves no coinciden."] };
 
+        string cleanIdCard = vm.IdCard?.Replace("-", "") ?? string.Empty;
+        if (_userManager.Users.Any(u => u.IdCard == cleanIdCard))
+            return new ResultResponse { Succeeded = false, Errors = ["Ya existe un usuario registrado con esta cédula."] };
+
         var user = new ApplicationUser
         {
             FirstName = vm.FirstName,
             LastName = vm.LastName,
-            IdCard = vm.IdCard,
+            IdCard = cleanIdCard,
             Email = vm.Email,
             UserName = vm.UserName,
             IsActive = true,

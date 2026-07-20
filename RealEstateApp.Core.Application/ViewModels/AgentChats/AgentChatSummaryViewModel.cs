@@ -4,6 +4,7 @@ public class AgentChatSummaryViewModel
 {
     public string ClientId { get; set; } = null!;
     public string ClientName { get; set; } = null!;
+    public string? ClientPhoto { get; set; }
     public string? LastMessage { get; set; }
     public DateTime LastMessageDate { get; set; }
     public int PropertyId { get; set; }

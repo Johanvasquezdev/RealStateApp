@@ -22,7 +22,7 @@ public class PropertiesController : ControllerBase
         _userService = userService;
     }
 
-    [HttpGet]
+    [HttpGet("list")]
     public async Task<IActionResult> GetAll()
     {
         var properties = await _propertyRepository.FindWithIncludesAsync(
@@ -48,7 +48,7 @@ public class PropertiesController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("getbyid/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var property = await _propertyRepository.FirstOrDefaultWithIncludesAsync(
@@ -81,7 +81,7 @@ public class PropertiesController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("code/{code}")]
+    [HttpGet("getbycode/{code}")]
     public async Task<IActionResult> GetByCode(string code)
     {
         var property = await _propertyRepository.FirstOrDefaultWithIncludesAsync(

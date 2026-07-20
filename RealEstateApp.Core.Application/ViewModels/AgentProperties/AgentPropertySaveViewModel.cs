@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
 namespace RealEstateApp.Core.Application.ViewModels.AgentProperties;
@@ -32,6 +32,7 @@ public class AgentPropertySaveViewModel
     [Required(ErrorMessage = "El tipo de venta es requerido")]
     public int SaleTypeId { get; set; }
 
+    [MinLength(1, ErrorMessage = "Debe seleccionar al menos una mejora.")]
     public List<int> ImprovementIds { get; set; } = new();
     public List<IFormFile>? Images { get; set; }
     public List<string>? ExistingImages { get; set; }

@@ -8,11 +8,13 @@ public class AuthService : IAuthService
 {
     private readonly IUserService _userService;
     private readonly IEmailService _emailService;
+    private readonly IFileStorageService _fileStorageService;
 
-    public AuthService(IUserService userService, IEmailService emailService)
+    public AuthService(IUserService userService, IEmailService emailService, IFileStorageService fileStorageService)
     {
         _userService = userService;
         _emailService = emailService;
+        _fileStorageService = fileStorageService;
     }
 
     #region RegisterResult
@@ -26,9 +28,13 @@ public class AuthService : IAuthService
         if (existingEmail is not null)
             return new RegisterResult { Exito = false, Mensaje = "El correo electr�nico ya est� registrado." };
 
+        string? profilePictureUrl = null;
+        if (vm.ProfilePicture is not null)
+            profilePictureUrl = _fileStorageService.UploadFile(vm.ProfilePicture, "profile-pictures");
+
         var (succeeded, error, userId) = await _userService.CreateUserAsync(
             vm.Username, vm.Email, vm.Password, vm.FirstName, vm.LastName,
-            vm.PhoneNumber, false, null, vm.IdCard);
+            vm.PhoneNumber, false, profilePictureUrl, vm.IdCard?.Replace("-", "") ?? string.Empty);
 
         if (!succeeded)
             return new RegisterResult { Exito = false, Mensaje = error };
@@ -50,7 +56,7 @@ public class AuthService : IAuthService
             {
                 To = vm.Email,
                 Subject = "Activa tu cuenta en RealEstateApp",
-                Body = $"<h2>¡Bienvenido a RealEstateApp!</h2><p>Por favor confirma tu correo electrónico y activa tu cuenta haciendo clic en el siguiente enlace: <a href='{verificationUri}'>Activar Cuenta</a></p>"
+                Body = $"<h2>¡Bienvenido a RealEstateApp, {vm.FirstName} {vm.LastName}!</h2><p>Su cuenta ha sido registrada correctamente en RealEstateApp.</p><p>Por favor confirma tu correo electrónico y activa tu cuenta haciendo clic en el siguiente enlace: <a href='{verificationUri}'>Activar Cuenta</a></p><p>Si usted no realizó este registro, puede ignorar este mensaje.</p>"
             };
             await _emailService.SendAsync(emailRequest);
             mensaje = "Registro exitoso. Revise su correo para activar su cuenta.";
@@ -85,7 +91,7 @@ public class AuthService : IAuthService
         {
             To = user.Email,
             Subject = "Activa tu cuenta en RealEstateApp",
-            Body = $"<h2>¡Bienvenido a RealEstateApp!</h2><p>Por favor confirma tu correo electrónico y activa tu cuenta haciendo clic en el siguiente enlace: <a href='{verificationUri}'>Activar Cuenta</a></p>"
+            Body = $"<h2>¡Bienvenido a RealEstateApp, {user.FirstName} {user.LastName}!</h2><p>Su cuenta ha sido registrada correctamente en RealEstateApp.</p><p>Por favor confirma tu correo electrónico y activa tu cuenta haciendo clic en el siguiente enlace: <a href='{verificationUri}'>Activar Cuenta</a></p><p>Si usted no realizó este registro, puede ignorar este mensaje.</p>"
         };
         await _emailService.SendAsync(emailRequest);
 

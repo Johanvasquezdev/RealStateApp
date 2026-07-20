@@ -57,6 +57,7 @@ public class ClientFavoriteService : IClientFavoriteService
         {
             var prop = availableProperties.First(p => p.Id == vm.Id);
             vm.MainImageUrl = prop.Images?.FirstOrDefault()?.ImageUrl ?? string.Empty;
+            vm.IsFavorite = true;
         }
 
         return vms;

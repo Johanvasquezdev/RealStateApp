@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Detalle de Propiedad";
     var conversations = ViewBag.Conversations as IEnumerable<AgentChatSummaryViewModel> ?? new List<AgentChatSummaryViewModel>();
-    var offers = ViewBag.Offers as IEnumerable<AgentOfferDetailViewModel> ?? new List<AgentOfferDetailViewModel>();
+    var offers = ViewBag.Offers as IEnumerable<AgentOfferSummaryViewModel> ?? new List<AgentOfferSummaryViewModel>();
 }
 
 <div class="container py-5">
@@ -175,9 +175,16 @@
                                 <a asp-controller="Chat" asp-action="Conversacion" asp-route-propertyId="@Model.Id" asp-route-clientId="@conv.ClientId" class="list-group-item list-group-item-action p-4 border-0 border-bottom" style="transition: all 0.2s;">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-4" style="width: 50px; height: 50px; background-color: #12402d;">
-                                                @(conv.ClientName.Substring(0, 1))
-                                            </div>
+                                            @if (!string.IsNullOrEmpty(conv.ClientPhoto) && conv.ClientPhoto != "default-user.png" && conv.ClientPhoto != "default-profile.png")
+                                            {
+                                                <img src="@conv.ClientPhoto" alt="Profile" class="rounded-circle me-3 object-fit-cover shadow-sm" style="width: 50px; height: 50px;" onerror="this.onerror=null;this.src='/img/default-user.png';" />
+                                            }
+                                            else
+                                            {
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-4 shadow-sm" style="width: 50px; height: 50px; background-color: #12402d;">
+                                                    @(conv.ClientName.Substring(0, 1))
+                                                </div>
+                                            }
                                             <div>
                                                 <h6 class="mb-1 fw-bold">@conv.ClientName</h6>
                                                 <p class="mb-0 text-muted small text-truncate" style="max-width: 300px;">
@@ -223,7 +230,7 @@
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-0">
                     <div class="p-4 border-bottom">
-                        <h5 class="fw-bold mb-0" style="color: #0a261c;">Historial de Ofertas</h5>
+                        <h5 class="fw-bold mb-0" style="color: #0a261c;">Ofertas Recibidas</h5>
                     </div>
                     
                     @if (offers.Any())
@@ -233,8 +240,8 @@
                                 <thead style="background-color: #f8f9fa;">
                                     <tr>
                                         <th class="px-4 py-3 text-muted small fw-semibold text-uppercase border-0">Cliente</th>
-                                        <th class="px-4 py-3 text-muted small fw-semibold text-uppercase border-0">Monto</th>
-                                        <th class="px-4 py-3 text-muted small fw-semibold text-uppercase border-0">Fecha</th>
+                                        <th class="px-4 py-3 text-muted small fw-semibold text-uppercase border-0">Ofertas</th>
+                                        <th class="px-4 py-3 text-muted small fw-semibold text-uppercase border-0">Última Oferta</th>
                                         <th class="px-4 py-3 text-muted small fw-semibold text-uppercase border-0">Estado</th>
                                         <th class="px-4 py-3 text-end text-muted small fw-semibold text-uppercase border-0">Acciones</th>
                                     </tr>
@@ -244,14 +251,24 @@
                                     {
                                         <tr>
                                             <td class="px-4 py-3">
-                                                <div class="fw-bold" style="color: #0a261c;">@offer.ClientName</div>
+                                                <div class="d-flex align-items-center">
+                                                    @if (!string.IsNullOrEmpty(offer.ClientPhoto) && offer.ClientPhoto != "default-user.png" && offer.ClientPhoto != "default-profile.png")
+                                                    {
+                                                        <img src="@offer.ClientPhoto" alt="Profile" class="rounded-circle me-3 object-fit-cover shadow-sm" style="width: 40px; height: 40px;" onerror="this.onerror=null;this.src='/img/default-user.png';" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-6 fw-bold shadow-sm" style="width: 40px; height: 40px; background-color: #12402d;">
+                                                            @(offer.ClientName.Substring(0, 1))
+                                                        </div>
+                                                    }
+                                                    <div class="fw-bold" style="color: #0a261c;">@offer.ClientName</div>
+                                                </div>
                                             </td>
                                             <td class="px-4 py-3">
-                                                <div class="fw-bold" style="color: #12402d;">RD$ @offer.Amount.ToString("N2")</div>
+                                                <span class="badge rounded-pill px-3 py-2" style="background-color: #e8f5e9; color: #12402d;">@offer.OfferCount</span>
                                             </td>
-                                            <td class="px-4 py-3 text-muted">
-                                                @offer.Created.ToString("dd/MM/yyyy")
-                                            </td>
+                                            <td class="px-4 py-3 fw-bold" style="color: #12402d;">RD$ @offer.LatestOfferAmount.ToString("N2")</td>
                                             <td class="px-4 py-3">
                                                 @{
                                                     string badgeClass = offer.Status switch
@@ -265,25 +282,9 @@
                                                 <span class="badge rounded-pill @badgeClass px-3 py-2 fw-medium">@offer.Status</span>
                                             </td>
                                             <td class="px-4 py-3 text-end">
-                                                @if (offer.Status == "Pending")
-                                                {
-                                                    <div class="d-flex justify-content-end gap-2">
-                                                        <form method="post" asp-controller="PropertyMaintenance" asp-action="AcceptOffer">
-                                                            <input type="hidden" name="offerId" value="@offer.Id" />
-                                                            <input type="hidden" name="propertyId" value="@Model.Id" />
-                                                            <button type="submit" class="btn btn-sm btn-outline-success fw-bold">
-                                                                <i class="bi bi-check-circle me-1"></i> Aceptar
-                                                            </button>
-                                                        </form>
-                                                        <form method="post" asp-controller="PropertyMaintenance" asp-action="RejectOffer">
-                                                            <input type="hidden" name="offerId" value="@offer.Id" />
-                                                            <input type="hidden" name="propertyId" value="@Model.Id" />
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-medium">
-                                                                <i class="bi bi-x-circle me-1"></i> Rechazar
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                }
+                                                <a asp-controller="Offer" asp-action="Detalle" asp-route-propertyId="@Model.Id" asp-route-clienteId="@offer.ClientId" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-medium">
+                                                    <i class="bi bi-eye me-1"></i> Ver Ofertas
+                                                </a>
                                             </td>
                                         </tr>
                                     }

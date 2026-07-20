@@ -46,13 +46,13 @@ public class AgentService : IAgentService
             });
         }
 
-        return result;
+        return result.OrderBy(a => a.FirstName).ThenBy(a => a.LastName).ToList();
     }
 
     public async Task<AgentListViewModel?> GetAgentByIdAsync(string id)
     {
         var user = await _userService.FindByIdAsync(id);
-        if (user is null || !user.IsActive) return null;
+        if (user is null) return null;
 
         var properties = await _propertyRepository.FindAsync(p => p.AgentId == user.Id);
 
@@ -70,7 +70,7 @@ public class AgentService : IAgentService
 
     public async Task<List<AgentPropertyViewModel>> GetPropertiesByAgentAsync(string id)
     {
-        var properties = await _propertyRepository.FindAsync(p => p.AgentId == id);
+        var properties = await _propertyRepository.FindWithIncludesAsync(p => p.AgentId == id, "PropertyType", "SaleType", "Images");
         return properties.Select(p => new AgentPropertyViewModel
         {
             Id = p.Id,
@@ -82,7 +82,8 @@ public class AgentService : IAgentService
             Bathrooms = p.Bathrooms,
             PropertyType = p.PropertyType?.Name ?? "",
             SaleType = p.SaleType?.Name ?? "",
-            Status = p.Status.ToString()
+            Status = p.Status.ToString(),
+            MainImage = p.Images?.FirstOrDefault()?.ImageUrl
         }).ToList();
     }
 }

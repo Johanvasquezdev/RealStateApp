@@ -27,10 +27,7 @@ public class HomeController : Controller
                 return RedirectToAction("Index", "AgentHome", new { area = "Agent" });
             }
 
-            if (User.IsInRole("Cliente"))
-            {
-                return RedirectToAction("Index", "ClientProperty", new { area = "Client" });
-            }
+            // Si el usuario es Cliente, le permitimos ver el Home público.
         }
 
         var properties = await _clientPropertyService.GetPropertiesWithFiltersAsync(filter);
