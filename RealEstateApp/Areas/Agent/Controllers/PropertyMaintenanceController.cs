@@ -9,16 +9,16 @@ namespace RealEstateApp.Areas.Agent.Controllers;
 [Authorize(Roles = "Agente")]
 public class PropertyMaintenanceController : Controller
 {
-    private readonly IPropertyService _propiedadService;
+    private readonly IPropertyService _propertyService;
     private readonly IPropertyTypeService _propertyTypeService;
     private readonly ISaleTypeService _saleTypeService;
     private readonly IImprovementService _improvementService;
     private readonly IChatService _chatService;
     private readonly IOfferService _offerService;
 
-    public PropertyMaintenanceController(IPropertyService propiedadService, IPropertyTypeService propertyTypeService, ISaleTypeService saleTypeService, IImprovementService improvementService, IChatService chatService, IOfferService offerService)
+    public PropertyMaintenanceController(IPropertyService propertyService, IPropertyTypeService propertyTypeService, ISaleTypeService saleTypeService, IImprovementService improvementService, IChatService chatService, IOfferService offerService)
     {
-        _propiedadService = propiedadService;
+        _propertyService = propertyService;
         _propertyTypeService = propertyTypeService;
         _saleTypeService = saleTypeService;
         _improvementService = improvementService;
@@ -29,8 +29,8 @@ public class PropertyMaintenanceController : Controller
     public async Task<IActionResult> Index()
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var propiedades = await _propiedadService.GetPropertiesByAgentAsync(userId);
-        return View(propiedades);
+        var properties = await _propertyService.GetPropertiesByAgentAsync(userId);
+        return View(properties);
     }
 
     public async Task<IActionResult> Create()
@@ -52,13 +52,13 @@ public class PropertyMaintenanceController : Controller
             return View(vm);
         }
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        await _propiedadService.CreateAsync(vm, userId);
+        await _propertyService.CreateAsync(vm, userId);
         return RedirectToAction("Index");
     }
 
     public async Task<IActionResult> Edit(int id)
     {
-        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        var property = await _propertyService.GetPropertyDetailAsync(id);
         if (property != null && property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold.ToString())
         {
             TempData["Error"] = "No puede editar una propiedad que ya ha sido vendida.";
@@ -66,7 +66,7 @@ public class PropertyMaintenanceController : Controller
         }
 
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var vm = await _propiedadService.GetPropertyForEditAsync(id, userId);
+        var vm = await _propertyService.GetPropertyForEditAsync(id, userId);
         if (vm is null) return NotFound();
         ViewBag.PropertyTypes = await _propertyTypeService.GetAllViewModel();
         ViewBag.SaleTypes = await _saleTypeService.GetAllViewModel();
@@ -77,7 +77,7 @@ public class PropertyMaintenanceController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(AgentPropertySaveViewModel vm)
     {
-        var property = await _propiedadService.GetPropertyDetailAsync(vm.Id);
+        var property = await _propertyService.GetPropertyDetailAsync(vm.Id);
         if (property != null && property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold.ToString())
         {
             TempData["Error"] = "No puede editar una propiedad que ya ha sido vendida.";
@@ -92,13 +92,13 @@ public class PropertyMaintenanceController : Controller
             return View(vm);
         }
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        await _propiedadService.UpdateAsync(vm, userId);
+        await _propertyService.UpdateAsync(vm, userId);
         return RedirectToAction("Index");
     }
 
     public async Task<IActionResult> Delete(int id)
     {
-        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        var property = await _propertyService.GetPropertyDetailAsync(id);
         if (property != null && property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold.ToString())
         {
             TempData["Error"] = "No puede eliminar una propiedad que ya ha sido vendida.";
@@ -106,7 +106,7 @@ public class PropertyMaintenanceController : Controller
         }
 
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        var vm = await _propiedadService.GetPropertyForEditAsync(id, userId);
+        var vm = await _propertyService.GetPropertyForEditAsync(id, userId);
         if (vm is null) return NotFound();
         return View(vm);
     }
@@ -114,7 +114,7 @@ public class PropertyMaintenanceController : Controller
     [HttpPost, ActionName("Delete")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        var property = await _propertyService.GetPropertyDetailAsync(id);
         if (property != null && property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold.ToString())
         {
             TempData["Error"] = "No puede eliminar una propiedad que ya ha sido vendida.";
@@ -122,13 +122,13 @@ public class PropertyMaintenanceController : Controller
         }
 
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        await _propiedadService.DeleteAsync(id, userId);
+        await _propertyService.DeleteAsync(id, userId);
         return RedirectToAction("Index");
     }
 
     public async Task<IActionResult> Detail(int id)
     {
-        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        var property = await _propertyService.GetPropertyDetailAsync(id);
         if (property == null) return NotFound();
         
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;

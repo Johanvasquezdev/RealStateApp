@@ -12,6 +12,7 @@ public class RegisterViewModel
     public string LastName { get; set; } = null!;
 
     [Required(ErrorMessage = "La cédula es requerida")]
+    [RegularExpression(@"^[\d\- ]+$", ErrorMessage = "La cédula debe ser un formato numérico (ej. 001-2345678-9)")]
     public string IdCard { get; set; } = null!;
 
     [Required(ErrorMessage = "El correo es requerido")]
