@@ -49,9 +49,7 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@admin.Id" class="btn btn-sm btn-primary">Editar</a>
-                    <form asp-action="ToggleStatus" method="post" class="d-inline">
-                        <input type="hidden" name="id" value="@admin.Id" />
-                        <input type="hidden" name="activate" value="@(!admin.IsActive)" />
+                    <form asp-action="ToggleStatus" asp-route-id="@admin.Id" asp-route-activate="@(!admin.IsActive ? "true" : "false")" method="post" class="d-inline">
                         @if (admin.IsActive)
                         {
                             <button type="submit" class="btn btn-sm btn-warning"
@@ -67,6 +65,7 @@
                             </button>
                         }
                     </form>
+
                 </td>
             </tr>
         }
