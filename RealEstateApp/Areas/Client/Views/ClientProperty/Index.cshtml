@@ -97,8 +97,8 @@
                                             Cod: @prop.Code
                                         </span>
                                         <form method="post" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@prop.Id" class="favorite-form">
-                                            <button type="button" class="btn btn-light rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center toggle-favorite-btn" style="width: 40px; height: 40px;" title="Agregar a favoritos">
-                                                <i class="bi bi-heart fs-5 text-danger"></i>
+                                            <button type="submit" class="btn btn-light rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center toggle-favorite-btn" style="width: 40px; height: 40px;" title="@(prop.IsFavorite ? "Quitar de favoritos" : "Agregar a favoritos")">
+                                                <i class="bi @(prop.IsFavorite ? "bi-heart-fill" : "bi-heart") fs-5 text-danger"></i>
                                             </button>
                                         </form>
                                     </div>

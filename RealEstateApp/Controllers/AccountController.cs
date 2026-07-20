@@ -96,14 +96,14 @@ public class AccountController : Controller
         if (result.Succeeded)
         {
             await _userService.SetActiveAsync(userId, true);
-            TempData["Mensaje"] = "Su cuenta ha sido activada correctamente. Ahora puede iniciar sesión.";
+            ViewBag.Exito = true;
         }
         else
         {
-            TempData["Error"] = "Hubo un error al activar su cuenta.";
+            ViewBag.Exito = false;
         }
 
-        return RedirectToAction("Login");
+        return View();
     }
 
     public async Task<IActionResult> Logout()

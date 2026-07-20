@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "Confirmación de Cuenta";
+}
+
+<div class="row g-0 shadow-lg rounded-4 overflow-hidden" style="min-height: 75vh;">
+    <div class="col-lg-5 d-flex flex-column justify-content-center p-5 bg-white">
+        <div class="mx-auto" style="width: 100%; max-width: 400px; text-align: center;">
+
+            @if (ViewBag.Exito == true)
+            {
+                <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                <h1 class="fw-bolder mt-3 mb-2" style="font-size: 2rem; letter-spacing: -1px;">¡Cuenta Verificada!</h1>
+                <p class="text-gray mb-4 fs-6">Su cuenta ha sido activada correctamente. Ahora puede iniciar sesión y disfrutar de RealEstateApp.</p>
+                <a asp-action="Login" class="btn btn-primary w-100 py-3 mb-4 fw-bold">Ir al inicio de sesión</a>
+            }
+            else
+            {
+                <i class="bi bi-x-circle-fill text-danger" style="font-size: 5rem;"></i>
+                <h1 class="fw-bolder mt-3 mb-2" style="font-size: 2rem; letter-spacing: -1px;">Error de Activación</h1>
+                <p class="text-gray mb-4 fs-6">Hubo un problema al activar su cuenta. El enlace puede haber expirado o ser inválido.</p>
+                <a asp-action="ReenviarActivacion" class="btn btn-outline-primary w-100 py-3 mb-4 fw-bold">Reenviar correo de activación</a>
+                <a asp-action="Login" class="btn btn-light w-100 py-3 fw-bold">Ir al inicio de sesión</a>
+            }
+        </div>
+    </div>
+
+    <div class="col-lg-7 d-none d-lg-block p-4">
+        <div class="h-100 w-100 rounded-4 overflow-hidden position-relative">
+            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" 
+                 alt="Modern House" 
+                 class="position-absolute w-100 h-100" 
+                 style="object-fit: cover;" />
+        </div>
+    </div>
+</div>

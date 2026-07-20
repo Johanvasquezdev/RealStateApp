@@ -51,12 +51,15 @@
                                         <a asp-action="Detail" asp-route-id="@p.Id" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;" title="Ver Detalle">
                                             <i class="bi bi-eye text-primary"></i>
                                         </a>
-                                        <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;" title="Editar">
-                                            <i class="bi bi-pencil text-warning"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@p.Id" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;" title="Eliminar">
-                                            <i class="bi bi-trash text-danger"></i>
-                                        </a>
+                                        @if (p.Status != RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold.ToString())
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;" title="Editar">
+                                                <i class="bi bi-pencil text-warning"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@p.Id" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;" title="Eliminar">
+                                                <i class="bi bi-trash text-danger"></i>
+                                            </a>
+                                        }
                                     </div>
                                 </td>
                             </tr>

@@ -1,4 +1,4 @@
-﻿@model List<UserListItemViewModel>
+@model List<UserListItemViewModel>
 @{
     ViewData["Title"] = "Mantenimiento de administradores";
 }
@@ -52,8 +52,10 @@
                     <form asp-action="ToggleStatus" asp-route-id="@admin.Id" asp-route-activate="@(!admin.IsActive ? "true" : "false")" method="post" class="d-inline">
                         @if (admin.IsActive)
                         {
+                            bool isCurrentUser = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == admin.Id;
                             <button type="submit" class="btn btn-sm btn-warning"
-                                    onclick="return confirm('¿Está seguro que desea inactivar este Administrador?');">
+                                    onclick="return confirm('¿Está seguro que desea inactivar este Administrador?');"
+                                    @(isCurrentUser ? "disabled title=\"No puede inactivarse a sí mismo\"" : "")>
                                 Inactivar
                             </button>
                         }

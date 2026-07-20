@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Property;
@@ -25,7 +25,16 @@ namespace RealEstateApp.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            await _service.Add(vm);
+            try
+            {
+                await _service.Add(vm);
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("Name", ex.Message);
+                return View(vm);
+            }
+
             TempData["Success"] = "El tipo de propiedad fue creado correctamente.";
             return RedirectToAction(nameof(Index));
         }

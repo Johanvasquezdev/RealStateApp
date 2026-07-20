@@ -58,6 +58,13 @@ public class PropertyMaintenanceController : Controller
 
     public async Task<IActionResult> Edit(int id)
     {
+        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        if (property != null && property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold.ToString())
+        {
+            TempData["Error"] = "No puede editar una propiedad que ya ha sido vendida.";
+            return RedirectToAction("Index");
+        }
+
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
         var vm = await _propiedadService.GetPropertyForEditAsync(id, userId);
         if (vm is null) return NotFound();
@@ -70,6 +77,13 @@ public class PropertyMaintenanceController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(AgentPropertySaveViewModel vm)
     {
+        var property = await _propiedadService.GetPropertyDetailAsync(vm.Id);
+        if (property != null && property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold.ToString())
+        {
+            TempData["Error"] = "No puede editar una propiedad que ya ha sido vendida.";
+            return RedirectToAction("Index");
+        }
+
         if (!ModelState.IsValid)
         {
             ViewBag.PropertyTypes = await _propertyTypeService.GetAllViewModel();
@@ -84,6 +98,13 @@ public class PropertyMaintenanceController : Controller
 
     public async Task<IActionResult> Delete(int id)
     {
+        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        if (property != null && property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold.ToString())
+        {
+            TempData["Error"] = "No puede eliminar una propiedad que ya ha sido vendida.";
+            return RedirectToAction("Index");
+        }
+
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
         var vm = await _propiedadService.GetPropertyForEditAsync(id, userId);
         if (vm is null) return NotFound();
@@ -93,6 +114,13 @@ public class PropertyMaintenanceController : Controller
     [HttpPost, ActionName("Delete")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
+        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        if (property != null && property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold.ToString())
+        {
+            TempData["Error"] = "No puede eliminar una propiedad que ya ha sido vendida.";
+            return RedirectToAction("Index");
+        }
+
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
         await _propiedadService.DeleteAsync(id, userId);
         return RedirectToAction("Index");

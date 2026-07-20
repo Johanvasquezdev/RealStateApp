@@ -33,4 +33,5 @@ public class ClientPropertyViewModel
     public string AgentId { get; set; } = null!;
     public string AgentName { get; set; } = null!;
     public string AgentPhotoUrl { get; set; } = null!;
+    public bool IsFavorite { get; set; }
 }

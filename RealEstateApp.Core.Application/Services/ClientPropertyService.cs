@@ -24,7 +24,7 @@ public class ClientPropertyService : IClientPropertyService
     }
 
     #region List properties
-    public async Task<List<ClientPropertyViewModel>> GetPropertiesWithFiltersAsync(ClientFilterPropertyViewModel filters)
+    public async Task<List<ClientPropertyViewModel>> GetPropertiesWithFiltersAsync(ClientFilterPropertyViewModel filters, string? userId = null)
     {
         var repo = _unitOfWork.Repository<Property>();
         var properties = await repo.FindWithIncludesAsync(
@@ -45,10 +45,10 @@ public class ClientPropertyService : IClientPropertyService
             properties = properties.Where(p => p.Price <= (double)filters.MaxPrice.Value).ToList();
             
         if (filters.Rooms.HasValue)
-            properties = properties.Where(p => p.Rooms == filters.Rooms.Value).ToList();
+            properties = filters.Rooms.Value == 4 ? properties.Where(p => p.Rooms >= 4).ToList() : properties.Where(p => p.Rooms == filters.Rooms.Value).ToList();
             
         if (filters.Bathrooms.HasValue)
-            properties = properties.Where(p => p.Bathrooms == filters.Bathrooms.Value).ToList();
+            properties = filters.Bathrooms.Value == 4 ? properties.Where(p => p.Bathrooms >= 4).ToList() : properties.Where(p => p.Bathrooms == filters.Bathrooms.Value).ToList();
             
         if (!string.IsNullOrWhiteSpace(filters.Code))
             properties = properties.Where(p => p.Code == filters.Code).ToList();
@@ -57,6 +57,14 @@ public class ClientPropertyService : IClientPropertyService
         properties = properties.OrderByDescending(p => p.Created).ToList();
 
         var viewModels = _mapper.Map<List<ClientPropertyViewModel>>(properties);
+
+        List<int> userFavoritePropertyIds = new();
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var favRepo = _unitOfWork.Repository<FavoriteProperty>();
+            var userFavs = await favRepo.FindAsync(f => f.ClientId == userId);
+            userFavoritePropertyIds = userFavs.Select(f => f.PropertyId).ToList();
+        }
 
         // Map extra fields
         foreach (var vm in viewModels)
@@ -72,6 +80,7 @@ public class ClientPropertyService : IClientPropertyService
                 vm.AgentName = $"{agentUser.FirstName} {agentUser.LastName}";
                 vm.AgentPhotoUrl = agentUser.ProfilePictureUrl ?? "";
             }
+            vm.IsFavorite = userFavoritePropertyIds.Contains(vm.Id);
         }
 
         return viewModels;
