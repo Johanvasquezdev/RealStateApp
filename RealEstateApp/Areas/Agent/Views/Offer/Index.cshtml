@@ -25,7 +25,7 @@
                     </td>
                     <td>
                         <a asp-action="Detalle" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-info">Ver Detalle</a>
-                        <a asp-controller="Chat" asp-action="Conversacion" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-outline-primary">Chat</a>
+                        <a asp-controller="Chat" asp-action="Conversacion" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-outline-primary">Chat</a>
                     </td>
                 </tr>
             }
@@ -36,4 +36,4 @@
 {
     <p>No hay ofertas para esta propiedad.</p>
 }
-<a asp-controller="PropiertyMaintenance" asp-action="Index" class="btn btn-secondary">Volver</a>
+<a asp-controller="PropertyMaintenance" asp-action="Detail" asp-route-id="@ViewBag.PropertyId" class="btn btn-secondary">Volver</a>

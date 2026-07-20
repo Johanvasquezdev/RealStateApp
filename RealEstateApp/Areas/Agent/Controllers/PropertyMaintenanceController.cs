@@ -106,25 +106,10 @@ public class PropertyMaintenanceController : Controller
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
         
         ViewBag.Conversations = await _chatService.GetConversationsByPropertyAsync(id, userId);
-        ViewBag.Offers = await _offerService.GetAllOffersByPropertyAsync(id, userId);
+        ViewBag.Offers = await _offerService.GetOfferSummaryByPropertyAsync(id, userId);
         
         return View(property);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> AcceptOffer(int offerId, int propertyId)
-    {
-        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        await _offerService.AcceptOfferAsync(offerId, userId);
-        return RedirectToAction("Detail", new { id = propertyId });
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> RejectOffer(int offerId, int propertyId)
-    {
-        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        await _offerService.RejectOfferAsync(offerId, userId);
-        return RedirectToAction("Detail", new { id = propertyId });
-    }
 }
 
