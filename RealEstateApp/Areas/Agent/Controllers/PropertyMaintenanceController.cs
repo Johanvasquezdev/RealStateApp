@@ -31,7 +31,7 @@ public class PropertyMaintenanceController : Controller
     public async Task<IActionResult> Index()
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        var propiedades = await _propiedadService.GetPropertiesByAgentAsync(userId);
+        var propiedades = await _propertyService.GetPropertiesByAgentAsync(userId);
         return View(propiedades);
     }
 
@@ -54,13 +54,13 @@ public class PropertyMaintenanceController : Controller
             return View(vm);
         }
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        await _propiedadService.CreateAsync(vm, userId);
+        await _propertyService.CreateAsync(vm, userId);
         return RedirectToAction("Index");
     }
 
     public async Task<IActionResult> Edit(int id)
     {
-        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        var property = await _propertyService.GetPropertyDetailAsync(id);
         if (property != null && property.Status == PropertyStatus.Sold.ToString())
         {
             TempData["Error"] = "No puede editar una propiedad que ya ha sido vendida.";
@@ -68,7 +68,7 @@ public class PropertyMaintenanceController : Controller
         }
 
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        var vm = await _propiedadService.GetPropertyForEditAsync(id, userId);
+        var vm = await _propertyService.GetPropertyForEditAsync(id, userId);
         if (vm is null) return NotFound();
         ViewBag.PropertyTypes = await _propertyTypeService.GetAllViewModel();
         ViewBag.SaleTypes = await _saleTypeService.GetAllViewModel();
@@ -79,7 +79,7 @@ public class PropertyMaintenanceController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(AgentPropertySaveViewModel vm)
     {
-        var property = await _propiedadService.GetPropertyDetailAsync(vm.Id);
+        var property = await _propertyService.GetPropertyDetailAsync(vm.Id);
         if (property != null && property.Status == PropertyStatus.Sold.ToString())
         {
             TempData["Error"] = "No puede editar una propiedad que ya ha sido vendida.";
@@ -94,7 +94,7 @@ public class PropertyMaintenanceController : Controller
             return View(vm);
         }
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        await _propiedadService.UpdateAsync(vm, userId);
+        await _propertyService.UpdateAsync(vm, userId);
         return RedirectToAction("Index");
     }
 
@@ -108,7 +108,7 @@ public class PropertyMaintenanceController : Controller
         }
 
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        var vm = await _propiedadService.GetPropertyForEditAsync(id, userId);
+        var vm = await _propertyService.GetPropertyForEditAsync(id, userId);
         if (vm is null) return NotFound();
         return View(vm);
     }
@@ -116,7 +116,7 @@ public class PropertyMaintenanceController : Controller
     [HttpPost, ActionName("Delete")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var property = await _propiedadService.GetPropertyDetailAsync(id);
+        var property = await _propertyService.GetPropertyDetailAsync(id);
         if (property != null && property.Status == PropertyStatus.Sold.ToString())
         {
             TempData["Error"] = "No puede eliminar una propiedad que ya ha sido vendida.";
@@ -124,7 +124,7 @@ public class PropertyMaintenanceController : Controller
         }
 
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        await _propiedadService.DeleteAsync(id, userId);
+        await _propertyService.DeleteAsync(id, userId);
         return RedirectToAction("Index");
     }
 
