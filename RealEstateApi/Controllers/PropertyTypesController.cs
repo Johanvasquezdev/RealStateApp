@@ -35,7 +35,7 @@ public class PropertyTypesController(IPropertyTypeService service) : ControllerB
         }
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Create([FromBody] SavePropertyTypeViewModel vm)
     {
@@ -46,7 +46,7 @@ public class PropertyTypesController(IPropertyTypeService service) : ControllerB
         return StatusCode(201, created);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("update")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Update(int id, [FromBody] SavePropertyTypeViewModel vm)
     {
@@ -65,7 +65,7 @@ public class PropertyTypesController(IPropertyTypeService service) : ControllerB
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Delete(int id)
     {

@@ -56,7 +56,7 @@ public class AgentsController : ControllerBase
     }
 
 
-    [HttpPatch("{id}/status")]
+    [HttpPatch("change-status")]
     [Authorize(Roles = "Administrador")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

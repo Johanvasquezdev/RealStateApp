@@ -25,7 +25,7 @@ public class AccountController : ControllerBase
         _accountService = accountService;
     }
 
-    [HttpPost("authenticate")]
+    [HttpPost("login")]
     public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request)
     {
         try
@@ -39,7 +39,7 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpPost("register-developer")]
+    [HttpPost("register-dev")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> RegisterDeveloper([FromBody] SaveDeveloperViewModel vm)
     {

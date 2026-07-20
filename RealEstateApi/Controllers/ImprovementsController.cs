@@ -35,7 +35,7 @@ public class ImprovementsController(IImprovementService service) : ControllerBas
         }
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Create([FromBody] SaveImprovementViewModel vm)
     {
@@ -46,7 +46,7 @@ public class ImprovementsController(IImprovementService service) : ControllerBas
         return StatusCode(201, created);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("update")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Update(int id, [FromBody] SaveImprovementViewModel vm)
     {
@@ -65,7 +65,7 @@ public class ImprovementsController(IImprovementService service) : ControllerBas
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Delete(int id)
     {
