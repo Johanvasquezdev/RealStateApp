@@ -32,5 +32,17 @@ namespace RealEstateApp.Core.Application.Services
             await _repository.DeleteAsync(saleType);
             await _repository.SaveChangesAsync();
         }
+        public override async Task<List<SaleTypeViewModel>> GetAllViewModel()
+        {
+            var list = await _repository.GetAllWithIncludeAsync(["Properties"]);
+
+            return list.Select(pt => new SaleTypeViewModel
+            {
+                Id = pt.Id,
+                Name = pt.Name,
+                Description = pt.Description,
+                PropertiesCount = pt.Properties?.Count ?? 0
+            }).ToList();
+        }
     }
 }

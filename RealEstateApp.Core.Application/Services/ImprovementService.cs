@@ -32,5 +32,18 @@ namespace RealEstateApp.Core.Application.Services
             await _repository.DeleteAsync(improvement);
             await _repository.SaveChangesAsync();
         }
+
+        public override async Task<List<ImprovementViewModel>> GetAllViewModel()
+        {
+            var list = await _repository.GetAllWithIncludeAsync(["PropertyImprovements"]);
+
+            return list.Select(pt => new ImprovementViewModel
+            {
+                Id = pt.Id,
+                Name = pt.Name,
+                Description = pt.Description,
+                PropertiesCount = pt.PropertyImprovements?.Count ?? 0
+            }).ToList();
+        }
     }
 }
