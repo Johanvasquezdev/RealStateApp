@@ -64,7 +64,8 @@ public class ClientOfferService : IClientOfferService
                 PropertyCode = prop.Code,
                 PropertyImageUrl = prop.Images.FirstOrDefault()?.ImageUrl ?? "",
                 Amount = (decimal)offer.Amount,
-                Status = offer.Status,
+                Status = offer.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending ? "Pendiente" : 
+                         offer.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Accepted ? "Aceptada" : "Rechazada",
                 CreatedAt = offer.Created,
                 AgentName = agentUser != null ? $"{agentUser.FirstName} {agentUser.LastName}" : "",
                 AgentEmail = agentUser?.Email ?? "",

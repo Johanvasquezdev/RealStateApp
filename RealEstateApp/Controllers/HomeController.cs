@@ -15,9 +15,22 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index(ClientFilterPropertyViewModel filter)
     {
-        if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Agente"))
+        if (User.Identity != null && User.Identity.IsAuthenticated)
         {
-            return RedirectToAction("Index", "AgentHome");
+            if (User.IsInRole("Administrador"))
+            {
+                return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
+            }
+
+            if (User.IsInRole("Agente"))
+            {
+                return RedirectToAction("Index", "AgentHome", new { area = "Agent" });
+            }
+
+            if (User.IsInRole("Cliente"))
+            {
+                return RedirectToAction("Index", "ClientProperty", new { area = "Client" });
+            }
         }
 
         var properties = await _clientPropertyService.GetPropertiesWithFiltersAsync(filter);

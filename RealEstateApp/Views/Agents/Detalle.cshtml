@@ -1,11 +1,9 @@
-@model RealEstateApp.Core.Application.ViewModels.Agents.AgentListViewModel
+@model AgentListViewModel
 @{ ViewData["Title"] = "Detalle del Agente"; }
 
 <div class="container py-5">
-    <!-- Header Perfil -->
     <div class="card border-0 rounded-4 shadow-sm overflow-hidden mb-5">
         <div class="bg-primary bg-opacity-10 py-5">
-            <!-- Decorative background area -->
         </div>
         <div class="card-body position-relative px-4 px-md-5 pb-5 text-center text-md-start">
             <div class="row align-items-end">
@@ -28,7 +26,6 @@
         </div>
     </div>
 
-    <!-- Propiedades del Agente -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold m-0">Propiedades del Agente</h3>
         <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">@Model.PropertyCount inmuebles disponibles</span>

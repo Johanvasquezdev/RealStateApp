@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +8,7 @@ using RealEstateApp.Infrastructure.Identity.Services;
 using RealEstateApp.Infrastructure.Identity.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using RealEstateApp.Core.Domain.Settings;
 
 namespace RealEstateApp.Infrastructure.Identity.IoC;
 
@@ -74,7 +74,7 @@ public static class ServiceRegistration
             });
         }
 
-        services.Configure<RealEstateApp.Core.Domain.Settings.JwtSettings>(config.GetSection("JwtSettings"));
+        services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
         services.AddTransient<IAccountService, AccountService>();
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IUserManagementService, UserManagementService>();

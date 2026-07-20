@@ -1,11 +1,10 @@
-@model List<RealEstateApp.Core.Application.ViewModels.Properties.ClientPropertyViewModel>
+@model List<ClientPropertyViewModel>
 @{
     ViewData["Title"] = "Inicio";
-    var filter = ViewBag.Filter as RealEstateApp.Core.Application.ViewModels.Properties.ClientFilterPropertyViewModel;
+    var filter = ViewBag.Filter as ClientFilterPropertyViewModel;
 }
 
 <div class="container-fluid px-0">
-    <!-- Hero Section -->
     <div class="position-relative overflow-hidden text-start shadow-lg mb-5 hero-section" style="background: linear-gradient(to right, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.4) 100%), url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover; min-height: 600px; display: flex; align-items: center; border-radius: 0 0 3rem 3rem;">
         <div class="container p-5 fade-in-up position-relative z-1">
             <div style="max-width: 600px;">
@@ -16,7 +15,6 @@
         </div>
     </div>
 
-    <!-- Search Bar Float -->
     <div class="container position-relative" style="z-index: 10;">
         <div class="row justify-content-center">
             <div class="col-12" style="max-width: 900px; margin-top: -35px; margin-bottom: 3rem;">
@@ -59,7 +57,6 @@
         </div>
     </div>
 
-    <!-- Features / Properties Section -->
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-end mb-5 fade-in-up">
             <div>
@@ -85,7 +82,6 @@
                 {
                     <div class="col fade-in-up">
                         <div class="card property-card h-100 border-0 rounded-4">
-                            <!-- Image Wrapper -->
                             <div class="property-img-wrapper position-relative">
                                 <img src="@(string.IsNullOrEmpty(property.MainImageUrl) ? "/img/default-property.jpg" : $"/images/properties/{property.MainImageUrl}")" class="property-img" alt="@property.Code">
                                 
@@ -110,7 +106,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Content -->
                             <div class="card-body p-4">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <span class="badge bg-light text-dark border px-2 py-1">@property.PropertyTypeName</span>
@@ -129,7 +124,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Agent footer -->
                             <div class="card-footer bg-white border-top-0 p-4 pt-0 d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center gap-2">
                                     <img src="@(string.IsNullOrEmpty(property.AgentPhotoUrl) ? "/img/default-user.png" : property.AgentPhotoUrl)" 

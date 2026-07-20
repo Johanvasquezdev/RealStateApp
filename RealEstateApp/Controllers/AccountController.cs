@@ -30,10 +30,12 @@ public class AccountController : Controller
             ModelState.AddModelError("", result.Mensaje);
             return View(vm);
         }
+        if (result.Rol == "Administrador")
+            return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
         if (result.Rol == "Agente")
-            return RedirectToAction("Index", "AgentHome");
+            return RedirectToAction("Index", "AgentHome", new { area = "Agent" });
         if (result.Rol == "Cliente")
-            return RedirectToAction("Index", "ClientProperty");
+            return RedirectToAction("Index", "ClientProperty", new { area = "Client" });
             
         return RedirectToAction("Index", "Home");
     }

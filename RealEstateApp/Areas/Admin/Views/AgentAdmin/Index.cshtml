@@ -50,25 +50,23 @@ else
                         }
                     </td>
                     <td>
-                        <form asp-action="ToggleStatus" method="post" class="d-inline">
-                            <input type="hidden" name="id" value="@agent.Id" />
-                            <input type="hidden" name="activate" value="@(!agent.IsActive)" />
+                        <form asp-action="ToggleStatus" asp-route-id="@agent.Id" asp-route-activate="@(!agent.IsActive ? "true" : "false")" method="post" class="d-inline">
                             @if (agent.IsActive)
                             {
                                 <button type="submit" class="btn btn-sm btn-warning"
-                                        onclick="return confirm('¿Está seguro que desea inactivar este agente?');">
+                                        onclick="return confirm('¿Está seguro que desea inactivar este Agente?');">
                                     Inactivar
                                 </button>
                             }
                             else
                             {
                                 <button type="submit" class="btn btn-sm btn-success"
-                                        onclick="return confirm('¿Está seguro que desea activar este agente?');">
+                                        onclick="return confirm('¿Está seguro que desea activar este Agente?');">
                                     Activar
                                 </button>
                             }
                         </form>
-                        <a asp-action="Delete" asp-route-id="@agent.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                        <a asp-action="Delete" asp-route-id="@agent.Id" class="btn btn-sm btn-danger">Eliminar Agente (Permanente).</a>
                     </td>
                 </tr>
             }

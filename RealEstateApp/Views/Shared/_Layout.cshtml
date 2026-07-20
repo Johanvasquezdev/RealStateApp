@@ -47,7 +47,7 @@
                             if (User.IsInRole("Cliente"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
                                         <i class="bi bi-house"></i> Inicio
                                     </a>
                                 </li>
@@ -87,6 +87,16 @@
                                 <li class="nav-item">
                                     <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PropertyMaintenance" ? "active" : "")" asp-area="Agent" asp-controller="PropertyMaintenance" asp-action="Index">
                                         <i class="bi bi-building"></i> Mis Propiedades
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Offer" ? "active" : "")" asp-area="Agent" asp-controller="Offer" asp-action="Index">
+                                        <i class="bi bi-tag"></i> Ofertas
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Chat" ? "active" : "")" asp-area="Agent" asp-controller="Chat" asp-action="Index">
+                                        <i class="bi bi-chat"></i> Chat
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -179,7 +189,7 @@
                                 <i class="bi bi-person-circle text-gray"></i>
                                 <span class="fw-bold text-dark fs-7">@User.Identity.Name</span>
                             </div>
-                            <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">Cerrar sesión</a>
+                            <a class="btn btn-primary" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar sesión</a>
                         }
                         else
                         {
