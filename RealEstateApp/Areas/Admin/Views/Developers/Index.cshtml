@@ -3,71 +3,59 @@
     ViewData["Title"] = "Mantenimiento de desarrolladores";
 }
 
-<h2 class="mb-4">Mantenimiento de desarrolladores</h2>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Desarrolladores</h2>
+        <a asp-action="Create" class="btn btn-primary">Crear desarrollador</a>
+    </div>
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
 
-<a asp-action="Create" class="btn btn-primary mb-3">Crear desarrollador</a>
-
-<table class="table table-striped align-middle">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Usuario</th>
-            <th>Cédula</th>
-            <th>Correo</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var admin in Model)
-        {
-            <tr>
-                <td>@admin.FirstName</td>
-                <td>@admin.LastName</td>
-                <td>@admin.UserName</td>
-                <td>@admin.IdCard</td>
-                <td>@admin.Email</td>
-                <td>
-                    @if (admin.IsActive)
+    <div class="card property-card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Nombre</th>
+                        <th>Usuario</th>
+                        <th>Cédula</th>
+                        <th>Correo</th>
+                        <th>Estado</th>
+                        <th class="text-end pe-4">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var dev in Model)
                     {
-                        <span class="badge text-bg-success">Activo</span>
+                        <tr>
+                            <td class="ps-4 fw-bold">@dev.FirstName @dev.LastName</td>
+                            <td>@dev.UserName</td>
+                            <td>@dev.IdCard</td>
+                            <td>@dev.Email</td>
+                            <td>
+                                <span class="badge @(dev.IsActive ? "bg-success" : "bg-secondary") rounded-pill">
+                                    @(dev.IsActive ? "Activo" : "Inactivo")
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <a asp-action="Edit" asp-route-id="@dev.Id" class="btn btn-sm btn-outline-primary">Editar</a>
+                                <form asp-action="ToggleStatus" asp-route-id="@dev.Id" asp-route-activate="@(!dev.IsActive ? "true" : "false")" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm @(dev.IsActive ? "btn-outline-warning" : "btn-outline-success")">
+                                        @(dev.IsActive ? "Inactivar" : "Activar")
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <span class="badge text-bg-secondary">Inactivo</span>
-                    }
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@admin.Id" class="btn btn-sm btn-primary">Editar</a>
-                    <form asp-action="ToggleStatus" asp-route-id="@admin.Id" asp-route-activate="@(!admin.IsActive ? "true" : "false")" method="post" class="d-inline">
-                        @if (admin.IsActive)
-                        {
-                            <button type="submit" class="btn btn-sm btn-warning"
-                                    onclick="return confirm('¿Está seguro que desea inactivar este desarrollador?');">
-                                Inactivar
-                            </button>
-                        }
-                        else
-                        {
-                            <button type="submit" class="btn btn-sm btn-success"
-                                    onclick="return confirm('¿Está seguro que desea activar este desarrollador?');">
-                                Activar
-                            </button>
-                        }
-                    </form>
-
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

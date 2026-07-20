@@ -3,23 +3,26 @@
     ViewData["Title"] = "Editar tipo de venta";
 }
 
-<h2 class="mb-4">Editar tipo de venta</h2>
-
-<div asp-validation-summary="All" class="text-danger"></div>
-
-<form asp-action="Edit" method="post">
-    <input asp-for="Id" type="hidden" />
-    <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 20px;">
+                <h3 class="mb-4 fw-bold">Editar tipo de venta</h3>
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                <form asp-action="Edit" method="post">
+                    <input asp-for="Id" type="hidden" />
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nombre</label>
+                        <input asp-for="Name" class="form-control" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Descripción</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary px-4">Guardar cambios</button>
+                    <a asp-action="Index" class="btn btn-outline-primary">Volver atrás</a>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Descripción</label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Guardar cambios</button>
-    <a asp-action="Index" class="btn btn-secondary">Volver atrás</a>
-</form>
+</div>

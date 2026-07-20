@@ -1,82 +1,43 @@
 ﻿@model AdminDashboardViewModel
 @{
-    ViewData["Title"] = "Panel de Administracion";
+    ViewData["Title"] = "Panel de Administración";
 }
 
-<h2 class="mb-4">Panel de Administracion</h2>
+<div class="container py-4">
+    <h2 class="mb-4 fw-bold">Panel de Administración</h2>
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
 
-<div class="row g-3">
-    <div class="col-md-3">
-        <div class="card text-bg-success">
-            <div class="card-body">
-                <h6>Propiedades disponibles</h6>
-                <h2>@Model.AvailableProperties</h2>
+    <div class="row g-4">
+        @foreach (var item in new[] {
+            new { T = "Propiedades", V = Model.AvailableProperties.ToString(), I = "house" },
+            new { T = "Vendidas", V = Model.SoldProperties.ToString(), I = "check2-circle" },
+            new { T = "Agentes Act.", V = Model.ActiveAgents.ToString(), I = "person-badge" },
+            new { T = "Agentes Inact.", V = Model.InactiveAgents.ToString(), I = "person-x" },
+            new { T = "Clientes Act.", V = Model.ActiveClients.ToString(), I = "people" },
+            new { T = "Clientes Inact.", V = Model.InactiveClients.ToString(), I = "person-slash" },
+            new { T = "Devs Activos", V = Model.ActiveDevelopers.ToString(), I = "building" },
+            new { T = "Devs Inactivos", V = Model.InactiveDevelopers.ToString(), I = "building-x" }
+        })
+        {
+            <div class="col-6 col-md-3">
+                <div class="card property-card border-0 shadow-sm p-3 text-center h-100">
+                    <div class="navbar-brand-icon mx-auto mb-3" style="background-color: var(--primary); color: white;">
+                        <i class="bi bi-@item.I"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-1" style="color: var(--primary);">@item.V</h4>
+                        <p class="text-gray mb-0" style="font-size: 0.8rem; font-weight: 600;">@item.T</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-bg-secondary">
-            <div class="card-body">
-                <h6>Propiedades vendidas</h6>
-                <h2>@Model.SoldProperties</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-bg-primary">
-            <div class="card-body">
-                <h6>Agentes activos</h6>
-                <h2>@Model.ActiveAgents</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-bg-warning">
-            <div class="card-body">
-                <h6>Agentes inactivos</h6>
-                <h2>@Model.InactiveAgents</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-bg-primary">
-            <div class="card-body">
-                <h6>Clientes activos</h6>
-                <h2>@Model.ActiveClients</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-bg-warning">
-            <div class="card-body">
-                <h6>Clientes inactivos</h6>
-                <h2>@Model.InactiveClients</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-bg-primary">
-            <div class="card-body">
-                <h6>Desarrolladores activos</h6>
-                <h2>@Model.ActiveDevelopers</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-bg-warning">
-            <div class="card-body">
-                <h6>Desarrolladores inactivos</h6>
-                <h2>@Model.InactiveDevelopers</h2>
-            </div>
-        </div>
+        }
     </div>
 </div>

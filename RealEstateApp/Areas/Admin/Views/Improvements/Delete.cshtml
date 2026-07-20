@@ -3,23 +3,27 @@
     ViewData["Title"] = "Eliminar mejora";
 }
 
-<h2 class="mb-4">Eliminar mejora</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card property-card border-0 shadow-sm p-4">
+                <h4 class="mb-3">Eliminar mejora</h4>
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> ¿Está seguro que desea eliminar esta mejora? Esta acción es permanente.
+                </div>
 
-<div class="alert alert-warning">
-    ¿Está seguro que desea eliminar esta mejora?
+                <div class="mb-4">
+                    <p><strong>Nombre:</strong> @Model.Name</p>
+                    <p><strong>Descripción:</strong> @Model.Description</p>
+                    <p><strong>Propiedades asociadas:</strong> @Model.PropertiesCount</p>
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button type="submit" class="btn btn-primary" style="background-color: #dc3545 !important; border-color: #dc3545 !important;">Confirmar</button>
+                    <a asp-action="Index" class="btn btn-outline-primary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
-<dl class="row">
-    <dt class="col-sm-3">Nombre</dt>
-    <dd class="col-sm-9">@Model.Name</dd>
-    <dt class="col-sm-3">Descripción</dt>
-    <dd class="col-sm-9">@Model.Description</dd>
-    <dt class="col-sm-3">Propiedades asociadas</dt>
-    <dd class="col-sm-9">@Model.PropertiesCount</dd>
-</dl>
-
-<form asp-action="Delete" method="post">
-    <input type="hidden" name="id" value="@Model.Id" />
-    <button type="submit" class="btn btn-danger">Aceptar</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
