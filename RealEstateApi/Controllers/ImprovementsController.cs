@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Improvement;
@@ -11,7 +11,7 @@ public class ImprovementsController(IImprovementService service) : ControllerBas
 {
     private readonly IImprovementService _service = service;
 
-    [HttpGet]
+    [HttpGet("list")]
     [Authorize(Roles = "Administrador,Desarrollador")]
     public async Task<IActionResult> List()
     {
@@ -20,7 +20,7 @@ public class ImprovementsController(IImprovementService service) : ControllerBas
         return Ok(list);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("getbyid/{id}")]
     [Authorize(Roles = "Administrador,Desarrollador")]
     public async Task<IActionResult> GetById(int id)
     {

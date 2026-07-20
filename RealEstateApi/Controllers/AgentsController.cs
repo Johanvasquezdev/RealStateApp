@@ -20,8 +20,7 @@ public class AgentsController : ControllerBase
         _userManagementService = userManagementService;
     }
 
-    [HttpGet]
-    [AllowAnonymous]
+    [HttpGet("list")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AgentListViewModel>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAll()
@@ -31,8 +30,7 @@ public class AgentsController : ControllerBase
         return Ok(agentes);
     }
 
-    [HttpGet("{id}")]
-    [AllowAnonymous]
+    [HttpGet("getbyid/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AgentListViewModel))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -43,8 +41,7 @@ public class AgentsController : ControllerBase
         return Ok(agente);
     }
 
-    [HttpGet("{id}/properties")]
-    [AllowAnonymous]
+    [HttpGet("getagentproperty")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<AgentPropertyViewModel>))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetProperties(string id)

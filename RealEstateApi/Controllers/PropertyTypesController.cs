@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Property;
@@ -11,7 +11,7 @@ public class PropertyTypesController(IPropertyTypeService service) : ControllerB
 {
     private readonly IPropertyTypeService _service = service;
 
-    [HttpGet]
+    [HttpGet("list")]
     [Authorize(Roles = "Administrador,Desarrollador")]
     public async Task<IActionResult> List()
     {
@@ -20,7 +20,7 @@ public class PropertyTypesController(IPropertyTypeService service) : ControllerB
         return Ok(list);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("getbyid/{id}")]
     [Authorize(Roles = "Administrador,Desarrollador")]
     public async Task<IActionResult> GetById(int id)
     {
