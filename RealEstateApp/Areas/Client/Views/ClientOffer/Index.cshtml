@@ -1,5 +1,4 @@
-@model List<RealEstateApp.Core.Application.ViewModels.Offers.ClientOfferListViewModel>
-@using RealEstateApp.Core.Domain.Enums
+@model List<ClientOfferListViewModel>
 @{
     ViewData["Title"] = "Mis Ofertas";
 }
@@ -50,13 +49,11 @@
 
                 <div class="card border-0 rounded-4 shadow-sm overflow-hidden" style="border: 1px solid #dee2e6 !important;">
                     <div class="row g-0">
-                        <!-- Left Image -->
                         <div class="col-md-4 col-lg-3">
                             <img src="@(string.IsNullOrEmpty(offer.PropertyImageUrl) ? "/img/default-property.jpg" : offer.PropertyImageUrl)" class="img-fluid w-100 h-100" alt="Propiedad" style="object-fit: cover; min-height: 200px;"
                                  onerror="this.onerror=null;this.src='/img/default-property.jpg';">
                         </div>
                         
-                        <!-- Right Details -->
                         <div class="col-md-8 col-lg-9 p-4 d-flex flex-column justify-content-center">
                             
                             <div class="d-flex justify-content-between align-items-start mb-2">
@@ -108,8 +105,8 @@
 
                         </div>
                     </div>
-                </div>
             }
+        
         </div>
     }
 </div>
