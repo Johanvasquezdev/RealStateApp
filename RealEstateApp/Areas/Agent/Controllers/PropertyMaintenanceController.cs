@@ -28,10 +28,17 @@ public class PropertyMaintenanceController : Controller
         _offerService = offerService;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? filterCode)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         var propiedades = await _propertyService.GetPropertiesByAgentAsync(userId);
+        
+        if (!string.IsNullOrWhiteSpace(filterCode))
+        {
+            propiedades = propiedades.Where(p => p.Code.Contains(filterCode, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        
+        ViewBag.FilterCode = filterCode;
         return View(propiedades);
     }
 
@@ -52,13 +59,6 @@ public class PropertyMaintenanceController : Controller
             ModelState.AddModelError("Images", "Debe subir entre 1 y 4 imágenes.");
         }
 
-        if (!ModelState.IsValid)
-        {
-            ViewBag.PropertyTypes = await _propertyTypeService.GetAllViewModel();
-            ViewBag.SaleTypes = await _saleTypeService.GetAllViewModel();
-            ViewBag.Improvements = await _improvementService.GetAllViewModel();
-            return View(vm);
-        }
         var propertyTypes = await _propertyTypeService.GetAllViewModel();
         var saleTypes = await _saleTypeService.GetAllViewModel();
         
@@ -119,13 +119,6 @@ public class PropertyMaintenanceController : Controller
             ModelState.AddModelError("Images", "Debe tener entre 1 y 4 imágenes en total.");
         }
 
-        if (!ModelState.IsValid)
-        {
-            ViewBag.PropertyTypes = await _propertyTypeService.GetAllViewModel();
-            ViewBag.SaleTypes = await _saleTypeService.GetAllViewModel();
-            ViewBag.Improvements = await _improvementService.GetAllViewModel();
-            return View(vm);
-        }
         var propertyTypes = await _propertyTypeService.GetAllViewModel();
         var saleTypes = await _saleTypeService.GetAllViewModel();
         

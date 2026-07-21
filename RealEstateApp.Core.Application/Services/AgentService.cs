@@ -40,6 +40,7 @@ public class AgentService : IAgentService
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
                 ProfilePictureUrl = user.ProfilePictureUrl,
                 PropertyCount = properties.Count,
                 Activate = user.IsActive
@@ -65,6 +66,7 @@ public class AgentService : IAgentService
             FirstName = user.FirstName,
             LastName = user.LastName,
             Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
             ProfilePictureUrl = user.ProfilePictureUrl,
             PropertyCount = properties.Count,
             Activate = user.IsActive

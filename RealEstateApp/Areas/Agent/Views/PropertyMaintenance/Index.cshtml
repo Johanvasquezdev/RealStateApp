@@ -13,6 +13,30 @@
         </a>
     </div>
 
+    <!-- Filter Form -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <form asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="col-md-8 col-lg-9">
+                    <label for="filterCode" class="form-label fw-bold text-muted mb-2">Buscar por Código</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 text-muted">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0 ps-0 form-control-lg" id="filterCode" name="filterCode" value="@ViewBag.FilterCode" placeholder="Ej. 123456" />
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-grow-1 rounded-pill fw-bold">Buscar</button>
+                    @if (!string.IsNullOrEmpty(ViewBag.FilterCode))
+                    {
+                        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill d-flex align-items-center"><i class="bi bi-x-circle me-1"></i>Limpiar</a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Properties Table -->
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="table-responsive">

@@ -35,7 +35,8 @@
                         
                         <div class="mx-auto position-relative mb-4 mt-2">
                             <div class="rounded-circle d-flex align-items-center justify-content-center p-1" style="width: 130px; height: 130px; border: 3px solid var(--bs-primary); margin: 0 auto;">
-                                <img src="@(string.IsNullOrEmpty(agent.ProfilePictureUrl) ? "/img/default-user.png" : agent.ProfilePictureUrl)" 
+                                <img src="@(string.IsNullOrEmpty(agent.ProfilePictureUrl) ? $"/img/default-user.png" : agent.ProfilePictureUrl)" 
+                                     onerror="this.onerror=null; this.src='/img/default-user.png';"
                                      class="rounded-circle w-100 h-100" 
                                      alt="@agent.FirstName" 
                                      style="object-fit: cover;">
@@ -45,7 +46,7 @@
                         <h5 class="fw-bolder text-dark mb-3">@agent.FirstName @agent.LastName</h5>
                         
                         <div class="text-gray small mb-4 d-flex flex-column gap-2">
-                            <div><i class="bi bi-telephone text-muted me-2"></i>N/A</div>
+                            <div><i class="bi bi-telephone text-muted me-2"></i>@(string.IsNullOrEmpty(agent.PhoneNumber) ? "N/A" : agent.PhoneNumber)</div>
                             <div><i class="bi bi-envelope text-muted me-2"></i>@agent.Email</div>
                         </div>
                         

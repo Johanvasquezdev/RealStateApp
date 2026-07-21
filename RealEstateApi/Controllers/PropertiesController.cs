@@ -28,7 +28,7 @@ public class PropertiesController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var properties = await _propertyRepository.FindWithIncludesAsync(
-            p => p.Status == PropertyStatus.Available,
+            p => true,
             "PropertyType", "SaleType", "Images");
 
         var result = _mapper.Map<List<PropertyListApiResponse>>(properties);
@@ -43,11 +43,11 @@ public class PropertiesController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var property = await _propertyRepository.FirstOrDefaultWithIncludesAsync(
-            p => p.Id == id && p.Status == PropertyStatus.Available,
+            p => p.Id == id,
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
 
         if (property == null)
-            return NotFound(new { error = "Propiedad no encontrada o no está disponible." });
+            return NotFound(new { error = "Propiedad no encontrada." });
 
         var agent = await _userService.FindByIdAsync(property.AgentId);
 
@@ -61,11 +61,11 @@ public class PropertiesController : ControllerBase
     public async Task<IActionResult> GetByCode(string code)
     {
         var property = await _propertyRepository.FirstOrDefaultWithIncludesAsync(
-            p => p.Code == code && p.Status == PropertyStatus.Available,
+            p => p.Code == code,
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
 
         if (property == null)
-            return NotFound(new { error = "Propiedad no encontrada o no está disponible." });
+            return NotFound(new { error = "Propiedad no encontrada." });
 
         var agent = await _userService.FindByIdAsync(property.AgentId);
 
