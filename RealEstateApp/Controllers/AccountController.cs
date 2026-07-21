@@ -40,13 +40,13 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    public IActionResult Registro()
+    public IActionResult Register()
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Registro(RegisterViewModel vm)
+    public async Task<IActionResult> Register(RegisterViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
         var origin = $"{Request.Scheme}://{Request.Host.Value}";
@@ -56,22 +56,22 @@ public class AccountController : Controller
             ModelState.AddModelError("", result.Mensaje);
             return View(vm);
         }
-        return RedirectToAction("RegistroCompletado");
+        return RedirectToAction("RegisterCompleted");
     }
 
-    public IActionResult RegistroCompletado()
+    public IActionResult RegisterCompleted()
     {
         return View();
     }
 
     [HttpGet]
-    public IActionResult ReenviarActivacion()
+    public IActionResult ResendActivation()
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> ReenviarActivacion(string email)
+    public async Task<IActionResult> ResendActivation(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
         {

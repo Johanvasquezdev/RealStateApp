@@ -67,7 +67,7 @@
                         {
                             <tr>
                                 <td class="py-3 px-4">
-                                    <img src="@(string.IsNullOrEmpty(p.MainImage) ? "/img/default-property.jpg" : $"/images/properties/{p.MainImage}")" alt="Propiedad" class="img-thumbnail rounded-3" style="width: 60px; height: 60px; object-fit: cover;">
+                                    <img src="@(string.IsNullOrEmpty(p.MainImage) ? "/img/default-property.jpg" : p.MainImage)" alt="Propiedad" class="img-thumbnail rounded-3" style="width: 60px; height: 60px; object-fit: cover;">
                                 </td>
                                 <td class="py-3 px-4 fw-bold">@p.Code</td>
                                 <td class="py-3 px-4 fw-bold text-success">RD$ @p.Price.ToString("N2")</td>

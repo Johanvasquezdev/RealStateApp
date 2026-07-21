@@ -37,6 +37,10 @@ public class AccountController : ControllerBase
         {
             return Unauthorized(new { error = ex.Message });
         }
+        catch (RealEstateApp.Core.Application.Exceptions.ForbiddenAccessException ex)
+        {
+            return StatusCode(403, new { error = ex.Message });
+        }
     }
 
     [HttpPost("register-dev")]
@@ -56,6 +60,10 @@ public class AccountController : ControllerBase
         var existingUserName = await _userManager.FindByNameAsync(vm.UserName);
         if (existingUserName is not null)
             return BadRequest(new { error = "Ya existe un usuario registrado con este nombre de usuario." });
+
+        var cleanIdCard = vm.IdCard?.Replace("-", "") ?? string.Empty;
+        if (!string.IsNullOrEmpty(cleanIdCard) && _userManager.Users.Any(u => u.IdCard == cleanIdCard))
+            return BadRequest(new { error = "Ya existe un usuario registrado con esta cédula." });
 
         var user = new ApplicationUser
         {
@@ -94,6 +102,10 @@ public class AccountController : ControllerBase
         var existingUserName = await _userManager.FindByNameAsync(vm.UserName);
         if (existingUserName is not null)
             return BadRequest(new { error = "Ya existe un usuario registrado con este nombre de usuario." });
+
+        var cleanIdCard = vm.IdCard?.Replace("-", "") ?? string.Empty;
+        if (!string.IsNullOrEmpty(cleanIdCard) && _userManager.Users.Any(u => u.IdCard == cleanIdCard))
+            return BadRequest(new { error = "Ya existe un usuario registrado con esta cédula." });
 
         var user = new ApplicationUser
         {

@@ -24,7 +24,7 @@ public class ChatController : Controller
         return View(conversaciones);
     }
 
-    public async Task<IActionResult> Conversacion(int propertyId, string clientId)
+    public async Task<IActionResult> Conversation(int propertyId, string clientId)
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
         var detalle = await _chatService.GetConversationDetailAsync(propertyId, clientId, userId);

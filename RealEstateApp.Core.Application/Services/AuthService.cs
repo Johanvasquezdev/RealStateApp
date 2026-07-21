@@ -20,13 +20,16 @@ public class AuthService : IAuthService
     #region RegisterResult
     public async Task<RegisterResult> RegisterAsync(RegisterViewModel vm, string origin)
     {
+        if (vm.TipoUsuario != "Cliente" && vm.TipoUsuario != "Agente")
+            return new RegisterResult { Exito = false, Mensaje = "Tipo de usuario no válido. Solo se permiten Clientes o Agentes." };
+
         var existingUser = await _userService.FindByNameAsync(vm.Username);
         if (existingUser is not null)
-            return new RegisterResult { Exito = false, Mensaje = "El nombre de usuario ya est� en uso." };
+            return new RegisterResult { Exito = false, Mensaje = "El nombre de usuario ya est en uso." };
 
         var existingEmail = await _userService.FindByEmailAsync(vm.Email);
         if (existingEmail is not null)
-            return new RegisterResult { Exito = false, Mensaje = "El correo electr�nico ya est� registrado." };
+            return new RegisterResult { Exito = false, Mensaje = "El correo electrnico ya est registrado." };
 
         string? profilePictureUrl = null;
         if (vm.ProfilePicture is not null)

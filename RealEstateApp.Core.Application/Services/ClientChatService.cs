@@ -21,6 +21,16 @@ public class ClientChatService : IClientChatService
     #region Send Message
     public async Task<int> SendMessageAsync(MessageSaveViewModel vm)
     {
+        if (string.IsNullOrEmpty(vm.SenderId) || string.IsNullOrEmpty(vm.ReceiverId))
+            throw new InvalidOperationException("Sender and Receiver IDs are required.");
+
+        if (vm.SenderId == vm.ReceiverId)
+            throw new InvalidOperationException("No puede enviarse un mensaje a sí mismo.");
+
+        var receiverRoles = await _userService.GetRolesAsync(vm.ReceiverId);
+        if (receiverRoles == null || !receiverRoles.Contains("Agente"))
+            throw new InvalidOperationException("El destinatario no es un Agente válido.");
+
         var repo = _unitOfWork.Repository<Message>();
         var entity = new Message
         {

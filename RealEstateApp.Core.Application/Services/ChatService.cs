@@ -81,6 +81,13 @@ public class ChatService : IChatService
 
     public async Task SendMessageAsync(AgentSendMessageViewModel vm, string senderId)
     {
+        if (senderId == vm.ReceiverId)
+            throw new InvalidOperationException("No puede enviarse un mensaje a sí mismo.");
+
+        var receiverRoles = await _userService.GetRolesAsync(vm.ReceiverId);
+        if (receiverRoles == null || !receiverRoles.Contains("Cliente"))
+            throw new InvalidOperationException("El destinatario no es un Cliente válido.");
+
         var messageRepo = _unitOfWork.Repository<Message>();
         var msg = new Message
         {

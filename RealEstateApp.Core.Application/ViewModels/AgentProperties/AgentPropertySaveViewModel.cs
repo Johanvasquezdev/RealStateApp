@@ -36,4 +36,5 @@ public class AgentPropertySaveViewModel
     public List<int> ImprovementIds { get; set; } = new();
     public List<IFormFile>? Images { get; set; }
     public List<string>? ExistingImages { get; set; }
+    public List<string>? ImagesToDelete { get; set; } = new();
 }

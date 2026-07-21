@@ -1,13 +1,13 @@
 @model List<AgentChatSummaryViewModel>
-@{ ViewData["Title"] = "Conversaciones"; }
+@{ ViewData["Title"] = "Conversations"; }
 
-<h2>Conversaciones</h2>
+<h2>Conversations</h2>
 @if (Model.Any())
 {
     <div class="list-group">
         @foreach (var chat in Model)
         {
-            <a asp-action="Conversacion" asp-route-clientId="@chat.ClientId" class="list-group-item list-group-item-action d-flex align-items-center p-3">
+            <a asp-action="Conversation" asp-route-clientId="@chat.ClientId" class="list-group-item list-group-item-action d-flex align-items-center p-3">
                 @if (!string.IsNullOrEmpty(chat.ClientPhoto) && chat.ClientPhoto != "default-user.png" && chat.ClientPhoto != "default-profile.png")
                 {
                     <img src="@chat.ClientPhoto" alt="Profile" class="rounded-circle me-3 object-fit-cover shadow-sm" style="width: 50px; height: 50px;" onerror="this.onerror=null;this.src='/img/default-user.png';" />

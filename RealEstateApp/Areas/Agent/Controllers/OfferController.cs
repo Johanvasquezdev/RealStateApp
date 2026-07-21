@@ -24,7 +24,7 @@ public class OfferController : Controller
         return View(ofertas);
     }
 
-    public async Task<IActionResult> Detalle(int propertyId, string clientId)
+    public async Task<IActionResult> Details(int propertyId, string clientId)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         var ofertas = await _ofertaService.GetOffersByClientPropertyAsync(propertyId, clientId, userId);
@@ -32,14 +32,14 @@ public class OfferController : Controller
         return View(ofertas);
     }
 
-    public async Task<IActionResult> Aceptar(int id, int propertyId)
+    public async Task<IActionResult> Accept(int id, int propertyId)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         await _ofertaService.AcceptOfferAsync(id, userId);
         return RedirectToAction("Index", new { propertyId });
     }
 
-    public async Task<IActionResult> Rechazar(int id, int propertyId)
+    public async Task<IActionResult> Reject(int id, int propertyId)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         await _ofertaService.RejectOfferAsync(id, userId);

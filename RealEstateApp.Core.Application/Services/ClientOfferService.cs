@@ -20,6 +20,15 @@ public class ClientOfferService : IClientOfferService
     public async Task<int> CreateOfferAsync(OfferSaveViewModel vm)
     {
         var repo = _unitOfWork.Repository<Offer>();
+        var propertyRepo = _unitOfWork.Repository<Property>();
+        
+        var property = await propertyRepo.FirstOrDefaultAsync(p => p.Id == vm.PropertyId);
+        if (property == null) throw new Exception("La propiedad no existe.");
+        if (property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold)
+            throw new Exception("La propiedad ya fue vendida.");
+
+        bool hasAccepted = await repo.AnyAsync(o => o.PropertyId == vm.PropertyId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Accepted);
+        if (hasAccepted) throw new Exception("Esta propiedad ya tiene una oferta aceptada y no admite más ofertas.");
         
         // Check if there is already a pending offer from this client
         bool hasPending = await repo.AnyAsync(o => o.PropertyId == vm.PropertyId && o.ClientId == vm.ClientId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending);

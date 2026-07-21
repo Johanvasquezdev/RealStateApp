@@ -48,5 +48,19 @@ public class GeneralProfile : Profile
             .ForMember(d => d.AgentEmail, o => o.Ignore())
             .ForMember(d => d.AgentPhotoUrl, o => o.Ignore())
             .ForMember(d => d.ImageUrls, o => o.Ignore());
+
+        // API ViewModels
+        CreateMap<Property, RealEstateApp.Core.Application.DTOs.Properties.PropertyListApiResponse>()
+            .ForMember(d => d.PropertyType, o => o.MapFrom(s => s.PropertyType != null ? s.PropertyType.Name : string.Empty))
+            .ForMember(d => d.SaleType, o => o.MapFrom(s => s.SaleType != null ? s.SaleType.Name : string.Empty))
+            .ForMember(d => d.MainImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault() != null ? s.Images.FirstOrDefault()!.ImageUrl : string.Empty));
+
+        CreateMap<Property, RealEstateApp.Core.Application.DTOs.Properties.PropertyApiResponse>()
+            .ForMember(d => d.PropertyType, o => o.MapFrom(s => s.PropertyType != null ? s.PropertyType.Name : string.Empty))
+            .ForMember(d => d.SaleType, o => o.MapFrom(s => s.SaleType != null ? s.SaleType.Name : string.Empty))
+            .ForMember(d => d.Status, o => o.MapFrom(s => s.Status.ToString()))
+            .ForMember(d => d.Images, o => o.MapFrom(s => s.Images.Select(i => i.ImageUrl).ToList()))
+            .ForMember(d => d.Improvements, o => o.MapFrom(s => s.PropertyImprovements.Select(pi => pi.Improvement!.Name).ToList()))
+            .ForMember(d => d.AgentName, o => o.Ignore());
     }
 }

@@ -46,6 +46,12 @@ public class PropertyMaintenanceController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(AgentPropertySaveViewModel vm)
     {
+        var imageCount = vm.Images?.Count ?? 0;
+        if (imageCount < 1 || imageCount > 4)
+        {
+            ModelState.AddModelError("Images", "Debe subir entre 1 y 4 imágenes.");
+        }
+
         if (!ModelState.IsValid)
         {
             ViewBag.PropertyTypes = await _propertyTypeService.GetAllViewModel();
@@ -53,6 +59,27 @@ public class PropertyMaintenanceController : Controller
             ViewBag.Improvements = await _improvementService.GetAllViewModel();
             return View(vm);
         }
+        var propertyTypes = await _propertyTypeService.GetAllViewModel();
+        var saleTypes = await _saleTypeService.GetAllViewModel();
+        
+        if (!propertyTypes.Any(pt => pt.Id == vm.PropertyTypeId))
+        {
+            ModelState.AddModelError("PropertyTypeId", "El tipo de propiedad seleccionado no existe.");
+        }
+        
+        if (!saleTypes.Any(st => st.Id == vm.SaleTypeId))
+        {
+            ModelState.AddModelError("SaleTypeId", "El tipo de venta seleccionado no existe.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.PropertyTypes = propertyTypes;
+            ViewBag.SaleTypes = saleTypes;
+            ViewBag.Improvements = await _improvementService.GetAllViewModel();
+            return View(vm);
+        }
+
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         await _propertyService.CreateAsync(vm, userId);
         return RedirectToAction("Index");
@@ -86,6 +113,12 @@ public class PropertyMaintenanceController : Controller
             return RedirectToAction("Index");
         }
 
+        var imageCount = (vm.Images?.Count ?? 0) + (vm.ExistingImages?.Count ?? 0) - (vm.ImagesToDelete?.Count ?? 0);
+        if (imageCount < 1 || imageCount > 4)
+        {
+            ModelState.AddModelError("Images", "Debe tener entre 1 y 4 imágenes en total.");
+        }
+
         if (!ModelState.IsValid)
         {
             ViewBag.PropertyTypes = await _propertyTypeService.GetAllViewModel();
@@ -93,6 +126,27 @@ public class PropertyMaintenanceController : Controller
             ViewBag.Improvements = await _improvementService.GetAllViewModel();
             return View(vm);
         }
+        var propertyTypes = await _propertyTypeService.GetAllViewModel();
+        var saleTypes = await _saleTypeService.GetAllViewModel();
+        
+        if (!propertyTypes.Any(pt => pt.Id == vm.PropertyTypeId))
+        {
+            ModelState.AddModelError("PropertyTypeId", "El tipo de propiedad seleccionado no existe.");
+        }
+        
+        if (!saleTypes.Any(st => st.Id == vm.SaleTypeId))
+        {
+            ModelState.AddModelError("SaleTypeId", "El tipo de venta seleccionado no existe.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            ViewBag.PropertyTypes = propertyTypes;
+            ViewBag.SaleTypes = saleTypes;
+            ViewBag.Improvements = await _improvementService.GetAllViewModel();
+            return View(vm);
+        }
+
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         await _propertyService.UpdateAsync(vm, userId);
         return RedirectToAction("Index");

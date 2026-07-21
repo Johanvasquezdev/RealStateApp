@@ -1,4 +1,4 @@
-﻿@model AgentPropertySaveViewModel
+@model AgentPropertySaveViewModel
 @{ ViewData["Title"] = "Editar Propiedad"; }
 
 <h2>Editar Propiedad</h2>
@@ -49,10 +49,19 @@
     {
         <div class="mb-3">
             <label class="form-label">Imágenes actuales</label>
-            <div class="d-flex gap-2">
+            <div class="d-flex flex-wrap gap-3">
                 @foreach (var img in Model.ExistingImages)
                 {
-                    <img src="~/images/properties/@img" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;" />
+                    <input type="hidden" name="ExistingImages" value="@img" />
+                    <div class="position-relative">
+                        <img src="@img" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;" />
+                        <div class="form-check mt-1">
+                            <input class="form-check-input" type="checkbox" name="ImagesToDelete" value="@img" id="del_@img.GetHashCode()">
+                            <label class="form-check-label text-danger" for="del_@img.GetHashCode()">
+                                Eliminar
+                            </label>
+                        </div>
+                    </div>
                 }
             </div>
         </div>

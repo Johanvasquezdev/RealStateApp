@@ -11,16 +11,19 @@ namespace RealEstateApp.Areas.Client.Controllers;
 public class ClientPropertyController : Controller
 {
     private readonly IClientPropertyService _clientPropertyService;
+    private readonly IPropertyTypeService _propertyTypeService;
 
-    public ClientPropertyController(IClientPropertyService clientPropertyService)
+    public ClientPropertyController(IClientPropertyService clientPropertyService, IPropertyTypeService propertyTypeService)
     {
         _clientPropertyService = clientPropertyService;
+        _propertyTypeService = propertyTypeService;
     }
 
     public async Task<IActionResult> Index(ClientFilterPropertyViewModel filter)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var properties = await _clientPropertyService.GetPropertiesWithFiltersAsync(filter, userId);
+        ViewBag.PropertyTypes = await _propertyTypeService.GetAllViewModel();
         ViewBag.Filter = filter;
         return View(properties);
     }

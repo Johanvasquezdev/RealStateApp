@@ -12,11 +12,13 @@ public class PropertyService : IPropertyService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IFileStorageService _fileStorageService;
 
-    public PropertyService(IUnitOfWork unitOfWork, IMapper mapper)
+    public PropertyService(IUnitOfWork unitOfWork, IMapper mapper, IFileStorageService fileStorageService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _fileStorageService = fileStorageService;
     }
 
     public async Task<List<AgentPropertyViewModel>> GetAvailablePropertiesAsync()
@@ -78,7 +80,7 @@ public class PropertyService : IPropertyService
         if (prop is null) return null;
         var vm = _mapper.Map<AgentPropertyViewModel>(prop);
         vm.MainImage = prop.Images.FirstOrDefault()?.ImageUrl;
-        vm.Images = prop.Images.Select(i => $"/images/properties/{i.ImageUrl}").ToList();
+        vm.Images = prop.Images.Select(i => i.ImageUrl).ToList();
         vm.Improvements = prop.PropertyImprovements.Select(pi => pi.Improvement.Name).ToList();
         return vm;
     }
@@ -117,7 +119,7 @@ public class PropertyService : IPropertyService
         {
             foreach (var img in vm.Images)
             {
-                var url = await SaveImageAsync(img, entity.Id);
+                var url = _fileStorageService.UploadFile(img, "properties", false, "");
                 await imageRepo.AddAsync(new PropertyImage { ImageUrl = url, PropertyId = entity.Id });
             }
         }
@@ -152,11 +154,24 @@ public class PropertyService : IPropertyService
         foreach (var impId in vm.ImprovementIds)
             await improvementRepo.AddAsync(new PropertyImprovement { PropertyId = entity.Id, ImprovementId = impId });
 
+        if (vm.ImagesToDelete != null && vm.ImagesToDelete.Any())
+        {
+            foreach (var urlToDelete in vm.ImagesToDelete)
+            {
+                var imgEntity = entity.Images.FirstOrDefault(i => i.ImageUrl == urlToDelete);
+                if (imgEntity != null)
+                {
+                    _fileStorageService.DeleteFile(imgEntity.ImageUrl, "properties");
+                    await imageRepo.DeleteAsync(imgEntity);
+                }
+            }
+        }
+
         if (vm.Images is not null && vm.Images.Any())
         {
             foreach (var img in vm.Images)
             {
-                var url = await SaveImageAsync(img, entity.Id);
+                var url = _fileStorageService.UploadFile(img, "properties", false, "");
                 await imageRepo.AddAsync(new PropertyImage { ImageUrl = url, PropertyId = entity.Id });
             }
         }
@@ -174,8 +189,7 @@ public class PropertyService : IPropertyService
 
         foreach (var img in entity.Images)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "properties", img.ImageUrl);
-            if (File.Exists(path)) File.Delete(path);
+            _fileStorageService.DeleteFile(img.ImageUrl, "properties");
         }
 
         await propertyRepo.DeleteAsync(entity);
@@ -201,16 +215,7 @@ public class PropertyService : IPropertyService
         return code;
     }
 
-    private async Task<string> SaveImageAsync(IFormFile file, int propertyId)
-    {
-        var dir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "properties");
-        Directory.CreateDirectory(dir);
-        var fileName = $"{propertyId}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-        var path = Path.Combine(dir, fileName);
-        using var stream = new FileStream(path, FileMode.Create);
-        await file.CopyToAsync(stream);
-        return fileName;
-    }
+
 
     private List<AgentPropertyViewModel> MapWithImages(List<Property> properties)
     {

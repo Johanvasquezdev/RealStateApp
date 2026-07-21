@@ -38,8 +38,8 @@
                         <span class="badge @(o.Status == "Pending" ? "bg-warning" : o.Status == "Accepted" ? "bg-success" : "bg-danger")">@o.Status</span>
                     </td>
                     <td>
-                        <a asp-action="Detalle" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-info">Ver Detalle</a>
-                        <a asp-controller="Chat" asp-action="Conversacion" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-outline-primary">Chat</a>
+                        <a asp-action="Details" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-info">Ver Detalle</a>
+                        <a asp-controller="Chat" asp-action="Conversation" asp-route-propertyId="@ViewBag.PropertyId" asp-route-clientId="@o.ClientId" class="btn btn-sm btn-outline-primary">Chat</a>
                     </td>
                 </tr>
             }

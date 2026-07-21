@@ -21,12 +21,25 @@
                             <input type="text" name="Code" class="form-control rounded-3" placeholder="Ej. 123456" value="@filter.Code" />
                         </div>
 
-                        <!-- Add a hidden select or fetch property types for dropdown in a real scenario.
-                             For now we use a generic input or just assume ViewBag.PropertyTypes is populated.
-                             Actually, let's just make it a number input if we don't have the list here. -->
                         <div class="mb-3">
-                            <label class="form-label text-muted small fw-bold">ID Tipo de Propiedad</label>
-                            <input type="number" name="PropertyTypeId" class="form-control rounded-3" value="@filter.PropertyTypeId" />
+                            <label class="form-label text-muted small fw-bold">Tipo de Propiedad</label>
+                            <select name="PropertyTypeId" class="form-select rounded-3">
+                                <option value="">Todos los tipos</option>
+                                @if(ViewBag.PropertyTypes != null)
+                                {
+                                    foreach(var pt in ViewBag.PropertyTypes)
+                                    {
+                                        if (filter.PropertyTypeId == pt.Id)
+                                        {
+                                            <option value="@pt.Id" selected>@pt.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@pt.Id">@pt.Name</option>
+                                        }
+                                    }
+                                }
+                            </select>
                         </div>
 
                         <div class="row">
@@ -86,7 +99,7 @@
                         <div class="col">
                             <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden property-card hover-lift">
                                 <div class="position-relative">
-                                    <img src="@(string.IsNullOrEmpty(prop.MainImageUrl) ? "/img/default-property.jpg" : $"/images/properties/{prop.MainImageUrl}")" class="card-img-top property-image" alt="Propiedad" style="height: 200px; object-fit: cover;">
+                                    <img src="@(string.IsNullOrEmpty(prop.MainImageUrl) ? "/img/default-property.jpg" : prop.MainImageUrl)" class="card-img-top property-image" alt="Propiedad" style="height: 200px; object-fit: cover;">
                                     <div class="position-absolute top-0 start-0 m-3">
                                         <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold">
                                             <i class="bi bi-tag-fill text-primary me-1"></i> @prop.PropertyTypeName

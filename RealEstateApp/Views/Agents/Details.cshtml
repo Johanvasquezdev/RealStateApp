@@ -1,5 +1,5 @@
 @model AgentListViewModel
-@{ ViewData["Title"] = "Detalle del Agente"; }
+@{ ViewData["Title"] = "Agent Details"; }
 
 <div class="container py-5">
     <div class="card border-0 rounded-4 shadow-sm overflow-hidden mb-5">
@@ -50,7 +50,7 @@
                 <div class="col">
                     <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden hover-lift">
                         <div class="position-relative">
-                            <img src="@(string.IsNullOrEmpty(prop.MainImage) ? "/img/default-property.jpg" : $"/images/properties/{prop.MainImage}")" class="card-img-top property-image" alt="Propiedad" style="height: 200px; object-fit: cover;">
+                            <img src="@(string.IsNullOrEmpty(prop.MainImage) ? "/img/default-property.jpg" : prop.MainImage)" class="card-img-top property-image" alt="Propiedad" style="height: 200px; object-fit: cover;">
                             <div class="position-absolute top-0 start-0 m-3">
                                 <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold">
                                     <i class="bi bi-tag-fill text-primary me-1"></i> @prop.PropertyType

@@ -4,7 +4,12 @@ using RealEstateApp.Infrastructure.Identity.IoC;
 using RealEstateApp.Infrastructure.Persistence.IoC;
 using RealEstateApp.Infrastructure.Shared.IoC;
 
+using Microsoft.AspNetCore.Identity;
+using RealEstateApp.Infrastructure.Identity.Entities;
+using RealEstateApp.Infrastructure.Identity.Seeds;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -50,6 +55,28 @@ builder.Services.Configure<Microsoft.AspNetCore.Authentication.AuthenticationOpt
 });
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
+
+#region seed identity data
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        await DefaultRoles.SeedAsync(roleManager);
+        await DefaultUsers.SeedAsync(userManager);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Ocurrió un error durante el sembrado de datos de Identity.");
+    }
+}
+#endregion
 
 if (app.Environment.IsDevelopment())
 {

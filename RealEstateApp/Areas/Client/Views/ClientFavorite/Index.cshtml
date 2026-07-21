@@ -32,7 +32,7 @@
                         <div class="card property-card h-100 border-0 rounded-4">
                             <!-- Image Wrapper -->
                             <div class="property-img-wrapper position-relative">
-                                <img src="@(string.IsNullOrEmpty(property.MainImageUrl) ? "/img/default-property.jpg" : $"/images/properties/{property.MainImageUrl}")" class="property-img" alt="@property.Code" style="height:250px; object-fit:cover; width:100%;">
+                                <img src="@(string.IsNullOrEmpty(property.MainImageUrl) ? "/img/default-property.jpg" : property.MainImageUrl)" class="property-img" alt="@property.Code" style="height:250px; object-fit:cover; width:100%;">
                                 
                                 <span class="tag-badge position-absolute m-3 top-0 start-0 badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold">
                                     <i class="bi bi-circle-fill me-1" style="font-size: 8px; color: @(property.SaleTypeName == "Venta" ? "var(--bs-primary)" : "var(--bs-info)");"></i>

@@ -54,6 +54,9 @@ public class AgentService : IAgentService
         var user = await _userService.FindByIdAsync(id);
         if (user is null) return null;
 
+        var roles = await _userService.GetRolesAsync(user.Id);
+        if (!roles.Contains("Agente")) return null;
+
         var properties = await _propertyRepository.FindAsync(p => p.AgentId == user.Id);
 
         return new AgentListViewModel

@@ -1,6 +1,6 @@
 @model List<AgentOfferDetailViewModel>
 @{
-    ViewData["Title"] = "Detalle de Ofertas";
+    ViewData["Title"] = "Offers Details";
 }
 
 <div class="container mt-4">
@@ -23,7 +23,7 @@
             }
             else
             {
-                <h2 class="fw-bold text-dark mb-0">Detalle de Ofertas</h2>
+                <h2 class="fw-bold text-dark mb-0">Offers Details</h2>
             }
         </div>
         <a asp-action="Index" asp-route-propertyId="@ViewBag.PropertyId" class="btn btn-outline-secondary rounded-pill px-4">
@@ -69,10 +69,10 @@
                                         @if (o.Status == "Pending")
                                         {
                                             <div class="d-inline-flex gap-2">
-                                                <a asp-action="Aceptar" asp-route-id="@o.Id" asp-route-propertyId="@ViewBag.PropertyId" class="btn btn-sm btn-success rounded-pill px-3">
+                                                <a asp-action="Accept" asp-route-id="@o.Id" asp-route-propertyId="@ViewBag.PropertyId" class="btn btn-sm btn-success rounded-pill px-3">
                                                     <i class="bi bi-check-circle me-1"></i> Aceptar
                                                 </a>
-                                                <a asp-action="Rechazar" asp-route-id="@o.Id" asp-route-propertyId="@ViewBag.PropertyId" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                                <a asp-action="Reject" asp-route-id="@o.Id" asp-route-propertyId="@ViewBag.PropertyId" class="btn btn-sm btn-outline-danger rounded-pill px-3">
                                                     <i class="bi bi-x-circle me-1"></i> Rechazar
                                                 </a>
                                             </div>

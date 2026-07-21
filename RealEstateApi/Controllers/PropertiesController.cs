@@ -15,11 +15,13 @@ public class PropertiesController : ControllerBase
 {
     private readonly IGenericRepository<Property> _propertyRepository;
     private readonly IUserService _userService;
+    private readonly AutoMapper.IMapper _mapper;
 
-    public PropertiesController(IGenericRepository<Property> propertyRepository, IUserService userService)
+    public PropertiesController(IGenericRepository<Property> propertyRepository, IUserService userService, AutoMapper.IMapper mapper)
     {
         _propertyRepository = propertyRepository;
         _userService = userService;
+        _mapper = mapper;
     }
 
     [HttpGet("list")]
@@ -29,18 +31,7 @@ public class PropertiesController : ControllerBase
             p => p.Status == PropertyStatus.Available,
             "PropertyType", "SaleType", "Images");
 
-        var result = properties.Select(p => new PropertyListApiResponse
-        {
-            Id = p.Id,
-            Code = p.Code,
-            PropertyType = p.PropertyType.Name,
-            SaleType = p.SaleType.Name,
-            Price = (decimal)p.Price,
-            LandSize = p.LandSize,
-            Rooms = p.Rooms,
-            Bathrooms = p.Bathrooms,
-            MainImageUrl = p.Images.FirstOrDefault()?.ImageUrl ?? string.Empty
-        }).ToList();
+        var result = _mapper.Map<List<PropertyListApiResponse>>(properties);
 
         if (result.Count == 0)
             return NoContent();
@@ -60,23 +51,8 @@ public class PropertiesController : ControllerBase
 
         var agent = await _userService.FindByIdAsync(property.AgentId);
 
-        var result = new PropertyApiResponse
-        {
-            Id = property.Id,
-            Code = property.Code,
-            PropertyType = property.PropertyType.Name,
-            SaleType = property.SaleType.Name,
-            Price = (decimal)property.Price,
-            LandSize = property.LandSize,
-            Rooms = property.Rooms,
-            Bathrooms = property.Bathrooms,
-            Description = property.Description,
-            Status = property.Status.ToString(),
-            AgentId = property.AgentId,
-            AgentName = agent != null ? $"{agent.FirstName} {agent.LastName}" : "Unknown",
-            Images = property.Images.Select(i => i.ImageUrl).ToList(),
-            Improvements = property.PropertyImprovements.Select(pi => pi.Improvement.Name).ToList()
-        };
+        var result = _mapper.Map<PropertyApiResponse>(property);
+        result.AgentName = agent != null ? $"{agent.FirstName} {agent.LastName}" : "Unknown";
 
         return Ok(result);
     }
@@ -93,23 +69,8 @@ public class PropertiesController : ControllerBase
 
         var agent = await _userService.FindByIdAsync(property.AgentId);
 
-        var result = new PropertyApiResponse
-        {
-            Id = property.Id,
-            Code = property.Code,
-            PropertyType = property.PropertyType.Name,
-            SaleType = property.SaleType.Name,
-            Price = (decimal)property.Price,
-            LandSize = property.LandSize,
-            Rooms = property.Rooms,
-            Bathrooms = property.Bathrooms,
-            Description = property.Description,
-            Status = property.Status.ToString(),
-            AgentId = property.AgentId,
-            AgentName = agent != null ? $"{agent.FirstName} {agent.LastName}" : "Unknown",
-            Images = property.Images.Select(i => i.ImageUrl).ToList(),
-            Improvements = property.PropertyImprovements.Select(pi => pi.Improvement.Name).ToList()
-        };
+        var result = _mapper.Map<PropertyApiResponse>(property);
+        result.AgentName = agent != null ? $"{agent.FirstName} {agent.LastName}" : "Unknown";
 
         return Ok(result);
     }

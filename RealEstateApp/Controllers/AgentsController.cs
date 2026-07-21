@@ -19,7 +19,7 @@ public class AgentsController : Controller
         return View(agentes);
     }
 
-    public async Task<IActionResult> Detalle(string id)
+    public async Task<IActionResult> Details(string id)
     {
         var agente = await _agenteService.GetAgentByIdAsync(id);
         if (agente == null) return NotFound();

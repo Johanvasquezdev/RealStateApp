@@ -38,6 +38,11 @@ public class AccountService : IAccountService
 
         var roles = await _userManager.GetRolesAsync(user);
         
+        if (roles.Contains("Cliente") || roles.Contains("Agente"))
+        {
+            throw new RealEstateApp.Core.Application.Exceptions.ForbiddenAccessException("El usuario no tiene permisos para acceder a la API.");
+        }
+        
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id),

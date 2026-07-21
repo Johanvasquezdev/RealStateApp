@@ -10,7 +10,7 @@ public class ApplicationUser : IdentityUser
     public string IdCard
     {
         get => _idCard;
-        set => _idCard = value?.Replace("-", "").Replace(" ", "") ?? string.Empty;
+        set => _idCard = string.IsNullOrEmpty(value) ? string.Empty : new string(value.Where(char.IsDigit).ToArray());
     } // Cedula
     public string? ProfilePictureUrl { get; set; }
     public bool IsActive { get; set; } = true;

@@ -42,16 +42,28 @@ public class PropertyTypesController(IPropertyTypeService service) : ControllerB
         if (!ModelState.IsValid)
             return BadRequest(new { error = "Los datos enviados no son válidos.", details = ModelState });
 
-        var created = await _service.Add(vm);
-        return StatusCode(201, created);
+        try
+        {
+            var created = await _service.Add(vm);
+            return StatusCode(201, created);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
-    [HttpPut("update")]
+    [HttpPut("update/{id}")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Update(int id, [FromBody] SavePropertyTypeViewModel vm)
     {
         if (!ModelState.IsValid)
             return BadRequest(new { error = "Los datos enviados no son válidos.", details = ModelState });
+
+        if (id != vm.Id)
+        {
+            vm.Id = id;
+        }
 
         try
         {
