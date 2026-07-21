@@ -99,7 +99,9 @@
                         <div class="col">
                             <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden property-card hover-lift">
                                 <div class="position-relative">
-                                    <img src="@(string.IsNullOrEmpty(prop.MainImageUrl) ? "/img/default-property.jpg" : prop.MainImageUrl)" class="card-img-top property-image" alt="Propiedad" style="height: 200px; object-fit: cover;">
+                                    <img src="@(string.IsNullOrEmpty(prop.MainImageUrl) ? "/img/default-property.jpg" : prop.MainImageUrl)" 
+                                         onerror="this.onerror=null; this.src='/img/default-property.jpg';"
+                                         class="card-img-top property-image" alt="Propiedad" style="height: 200px; object-fit: cover;">
                                     <div class="position-absolute top-0 start-0 m-3">
                                         <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold">
                                             <i class="bi bi-tag-fill text-primary me-1"></i> @prop.PropertyTypeName
@@ -109,7 +111,7 @@
                                         <span class="badge bg-dark bg-opacity-75 text-white shadow-sm px-3 py-2 rounded-pill fw-bold">
                                             Cod: @prop.Code
                                         </span>
-                                        <form method="post" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@prop.Id" class="favorite-form">
+                                        <form method="post" asp-area="Client" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@prop.Id" class="favorite-form">
                                             <button type="submit" class="btn btn-light rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center toggle-favorite-btn" style="width: 40px; height: 40px;" title="@(prop.IsFavorite ? "Quitar de favoritos" : "Agregar a favoritos")">
                                                 <i class="bi @(prop.IsFavorite ? "bi-heart-fill" : "bi-heart") fs-5 text-danger"></i>
                                             </button>
@@ -123,11 +125,11 @@
                                     <div class="d-flex justify-content-between text-muted small mb-4">
                                         <div class="d-flex align-items-center" title="Habitaciones">
                                             <i class="bi bi-door-open fs-5 me-2 text-secondary"></i>
-                                            <span class="fw-bold">@prop.Rooms</span>
+                                            <span class="fw-bold">@prop.Rooms Hab</span>
                                         </div>
                                         <div class="d-flex align-items-center" title="Baños">
                                             <i class="bi bi-droplet fs-5 me-2 text-secondary"></i>
-                                            <span class="fw-bold">@prop.Bathrooms</span>
+                                            <span class="fw-bold">@prop.Bathrooms Baños</span>
                                         </div>
                                         <div class="d-flex align-items-center" title="Tamaño">
                                             <i class="bi bi-arrows-fullscreen fs-5 me-2 text-secondary"></i>

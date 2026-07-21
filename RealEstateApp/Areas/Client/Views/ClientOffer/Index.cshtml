@@ -77,11 +77,14 @@
                             
                             <div class="d-flex justify-content-between align-items-center mt-auto">
                                 <div class="d-flex align-items-center">
-                                    <img src="@(string.IsNullOrEmpty(offer.AgentPhotoUrl) ? "/img/default-user.png" : offer.AgentPhotoUrl)" alt="@offer.AgentName" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                                    <img src="@(string.IsNullOrEmpty(offer.AgentPhotoUrl) ? "/img/default-user.png" : offer.AgentPhotoUrl)" 
+                                         onerror="this.onerror=null;this.src='/img/default-user.png';" 
+                                         alt="@offer.AgentName" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
                                     <div>
                                         <p class="mb-0 fw-bold fs-7">@offer.AgentName</p>
                                         <p class="mb-0 text-gray" style="font-size: 0.7rem;">@offer.AgentEmail</p>
                                     </div>
+                                </div>
                                 </div>
                                 
                                 <div>
