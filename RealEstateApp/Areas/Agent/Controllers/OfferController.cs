@@ -24,11 +24,10 @@ public class OfferController : Controller
         return View(ofertas);
     }
 
-    public async Task<IActionResult> Detalle(int propertyId, string clienteId)
+    public async Task<IActionResult> Detalle(int propertyId, string clientId)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        var ofertas = await _ofertaService.GetOffersByClientPropertyAsync(propertyId, clienteId, userId);
-        if (!ofertas.Any()) return NotFound();
+        var ofertas = await _ofertaService.GetOffersByClientPropertyAsync(propertyId, clientId, userId);
         ViewBag.PropertyId = propertyId;
         return View(ofertas);
     }
