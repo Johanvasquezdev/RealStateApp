@@ -36,5 +36,6 @@ public class RegisterViewModel
 
     [RegularExpression(@"^[\d\- +()]*$", ErrorMessage = "El teléfono debe contener solo números (ej. 8090000000 o 809-000-0000)")]
     public string? PhoneNumber { get; set; }
+    [Required(ErrorMessage = "La foto de perfil es obligatoria")]
     public IFormFile? ProfilePicture { get; set; }
 }

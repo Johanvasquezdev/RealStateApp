@@ -54,9 +54,13 @@ public class PropertyMaintenanceController : Controller
     public async Task<IActionResult> Create(AgentPropertySaveViewModel vm)
     {
         var imageCount = vm.Images?.Count ?? 0;
-        if (imageCount < 1 || imageCount > 4)
+        if (imageCount < 1)
         {
-            ModelState.AddModelError("Images", "Debe subir entre 1 y 4 imágenes.");
+            ModelState.AddModelError("Images", "Debe cargarse al menos una imagen de la propiedad.");
+        }
+        else if (imageCount > 4)
+        {
+            ModelState.AddModelError("Images", "No se deben permitir más de 4 imágenes por propiedad.");
         }
 
         var propertyTypes = await _propertyTypeService.GetAllViewModel();
@@ -114,9 +118,13 @@ public class PropertyMaintenanceController : Controller
         }
 
         var imageCount = (vm.Images?.Count ?? 0) + (vm.ExistingImages?.Count ?? 0) - (vm.ImagesToDelete?.Count ?? 0);
-        if (imageCount < 1 || imageCount > 4)
+        if (imageCount < 1)
         {
-            ModelState.AddModelError("Images", "Debe tener entre 1 y 4 imágenes en total.");
+            ModelState.AddModelError("Images", "Debe cargarse al menos una imagen de la propiedad.");
+        }
+        else if (imageCount > 4)
+        {
+            ModelState.AddModelError("Images", "No se deben permitir más de 4 imágenes por propiedad.");
         }
 
         var propertyTypes = await _propertyTypeService.GetAllViewModel();
