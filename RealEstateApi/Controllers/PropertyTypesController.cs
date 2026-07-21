@@ -75,6 +75,10 @@ public class PropertyTypesController(IPropertyTypeService service) : ControllerB
         {
             return NotFound(new { error = "El tipo de propiedad solicitado no existe." });
         }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     [HttpDelete("delete")]

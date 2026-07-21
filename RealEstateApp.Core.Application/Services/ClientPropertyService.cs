@@ -71,6 +71,7 @@ public class ClientPropertyService : IClientPropertyService
         }
 
         // Map extra fields
+        var filteredViewModels = new List<ClientPropertyViewModel>();
         foreach (var vm in viewModels)
         {
             var prop = properties.First(p => p.Id == vm.Id);
@@ -86,15 +87,19 @@ public class ClientPropertyService : IClientPropertyService
                 }
             }
 
-            if (agentUser != null)
+            if (agentUser == null || !agentUser.IsActive)
             {
-                vm.AgentName = $"{agentUser.FirstName} {agentUser.LastName}";
-                vm.AgentPhotoUrl = agentUser.ProfilePictureUrl ?? "";
+                continue; // Skip properties from inactive agents
             }
+
+            vm.AgentName = $"{agentUser.FirstName} {agentUser.LastName}";
+            vm.AgentPhotoUrl = agentUser.ProfilePictureUrl ?? "";
             vm.IsFavorite = userFavoritePropertyIds.Contains(vm.Id);
+            
+            filteredViewModels.Add(vm);
         }
 
-        return viewModels;
+        return filteredViewModels;
     }
     #endregion
 
@@ -115,14 +120,16 @@ public class ClientPropertyService : IClientPropertyService
 
         // Agent info
         var agentUser = await _userService.FindByIdAsync(prop.AgentId);
-        if (agentUser != null)
+        if (agentUser == null || !agentUser.IsActive)
         {
-            vm.AgentName = $"{agentUser.FirstName} {agentUser.LastName}";
-            vm.AgentEmail = agentUser.Email;
-            vm.AgentPhone = agentUser.PhoneNumber ?? "";
-            vm.AgentPhotoUrl = agentUser.ProfilePictureUrl ?? "";
-            vm.AgentId = agentUser.Id;
+            return null; // Do not show properties of inactive agents
         }
+
+        vm.AgentName = $"{agentUser.FirstName} {agentUser.LastName}";
+        vm.AgentEmail = agentUser.Email;
+        vm.AgentPhone = agentUser.PhoneNumber ?? "";
+        vm.AgentPhotoUrl = agentUser.ProfilePictureUrl ?? "";
+        vm.AgentId = agentUser.Id;
 
         vm.CanMakeOffer = await CheckCanMakeOfferAsync(prop.Id, clientId);
 

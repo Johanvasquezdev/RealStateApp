@@ -32,7 +32,8 @@ public class HomeController : Controller
             // Si el usuario es Cliente, le permitimos ver el Home público.
         }
 
-        var properties = await _clientPropertyService.GetPropertiesWithFiltersAsync(filter);
+        string? userId = User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : null;
+        var properties = await _clientPropertyService.GetPropertiesWithFiltersAsync(filter, userId);
         ViewBag.PropertyTypes = await _propertyTypeService.GetAllViewModel();
         ViewBag.Filter = filter;
         return View(properties);

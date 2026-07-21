@@ -17,17 +17,23 @@ namespace RealEstateApp.Core.Application.Services
                 throw new InvalidOperationException("Ya existe una mejora con este nombre.");
             return await base.Add(vm);
         }
+
+        public override async Task Update(SaveImprovementViewModel vm, int id)
+        {
+            if (await _repository.AnyAsync(x => x.Name == vm.Name && x.Id != id))
+                throw new InvalidOperationException("Ya existe una mejora con este nombre.");
+            await base.Update(vm, id);
+        }
         public override async Task Delete(int id)
         {
             var improvement = await _repository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException("La mejora solicitada no existe.");
 
             var affectedLinks = await _linkRepository.FindAsync(l => l.ImprovementId == id);
-            foreach (var link in affectedLinks)
+            if (affectedLinks.Any())
             {
-                await _linkRepository.DeleteAsync(link);
+                throw new InvalidOperationException("No se puede eliminar porque existen propiedades que utilizan esta mejora.");
             }
-            await _linkRepository.SaveChangesAsync();
 
             await _repository.DeleteAsync(improvement);
             await _repository.SaveChangesAsync();

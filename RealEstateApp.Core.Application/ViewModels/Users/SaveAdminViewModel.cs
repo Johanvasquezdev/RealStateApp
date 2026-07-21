@@ -24,5 +24,7 @@ namespace RealEstateApp.Core.Application.ViewModels.Users
 
         public string? Password { get; set; }
         public string? ConfirmPassword { get; set; }
+
+        public string? ProfilePictureUrl { get; set; }
     }
 }

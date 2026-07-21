@@ -58,12 +58,18 @@ public class ClientOfferService : IClientOfferService
         var offers = await offerRepo.FindAsync(o => o.ClientId == clientId);
         var result = new List<ClientOfferListViewModel>();
 
+        var agentCache = new Dictionary<string, DTOs.UserDto?>();
+
         foreach (var offer in offers.OrderByDescending(o => o.Created))
         {
             var prop = await propertyRepo.FirstOrDefaultWithIncludesAsync(p => p.Id == offer.PropertyId, "Images", "PropertyType");
             if (prop == null) continue;
 
-            var agentUser = await _userService.FindByIdAsync(prop.AgentId);
+            if (!agentCache.TryGetValue(prop.AgentId, out var agentUser))
+            {
+                agentUser = await _userService.FindByIdAsync(prop.AgentId);
+                agentCache[prop.AgentId] = agentUser;
+            }
 
             result.Add(new ClientOfferListViewModel
             {

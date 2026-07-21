@@ -75,6 +75,10 @@ public class SaleTypesController(ISaleTypeService service) : ControllerBase
         {
             return NotFound(new { error = "El tipo de venta solicitado no existe." });
         }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     [HttpDelete("delete")]

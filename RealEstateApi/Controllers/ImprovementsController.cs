@@ -75,6 +75,10 @@ public class ImprovementsController(IImprovementService service) : ControllerBas
         {
             return NotFound(new { error = "La mejora solicitada no existe." });
         }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     [HttpDelete("delete")]

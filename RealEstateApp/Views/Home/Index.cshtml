@@ -126,8 +126,8 @@
                                 </span>
 
                                 <form method="post" asp-area="Client" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@property.Id" class="d-inline position-absolute top-0 end-0 m-3 favorite-form" style="z-index: 2;">
-                                    <button type="submit" class="btn btn-light rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" title="Agregar a favoritos">
-                                        <i class="bi bi-heart fs-5 text-danger"></i>
+                                    <button type="submit" class="btn btn-light rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center toggle-favorite-btn" style="width: 40px; height: 40px;" title="@(property.IsFavorite ? "Quitar de favoritos" : "Agregar a favoritos")">
+                                        <i class="bi @(property.IsFavorite ? "bi-heart-fill" : "bi-heart") fs-5 text-danger"></i>
                                     </button>
                                 </form>
                                 

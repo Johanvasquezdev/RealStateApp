@@ -17,17 +17,23 @@ namespace RealEstateApp.Core.Application.Services
                 throw new InvalidOperationException("Ya existe un tipo de propiedad con este nombre.");
             return await base.Add(vm);
         }
+
+        public override async Task Update(SavePropertyTypeViewModel vm, int id)
+        {
+            if (await _repository.AnyAsync(x => x.Name == vm.Name && x.Id != id))
+                throw new InvalidOperationException("Ya existe un tipo de propiedad con este nombre.");
+            await base.Update(vm, id);
+        }
         public override async Task Delete(int id)
         {
             var propertyType = await _repository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException("El tipo de propiedad solicitado no existe.");
 
             var affected = await _propertyRepository.FindAsync(p => p.PropertyTypeId == id);
-            foreach (var property in affected)
+            if (affected.Any())
             {
-                await _propertyRepository.DeleteAsync(property);
+                throw new InvalidOperationException("No se puede eliminar porque existen propiedades asociadas a este tipo.");
             }
-            await _propertyRepository.SaveChangesAsync();
 
             await _repository.DeleteAsync(propertyType);
             await _repository.SaveChangesAsync();
