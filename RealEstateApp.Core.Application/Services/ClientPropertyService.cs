@@ -4,6 +4,7 @@ using RealEstateApp.Core.Application.ViewModels.Properties;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
 using RealEstateApp.Core.Domain.Common;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace RealEstateApp.Core.Application.Services;
 
@@ -12,15 +13,18 @@ public class ClientPropertyService : IClientPropertyService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IUserService _userService;
+    private readonly IMemoryCache _memoryCache;
 
     public ClientPropertyService(
         IUnitOfWork unitOfWork,
         IMapper mapper,
-        IUserService userService)
+        IUserService userService,
+        IMemoryCache memoryCache)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _userService = userService;
+        _memoryCache = memoryCache;
     }
 
     #region List properties
@@ -72,9 +76,16 @@ public class ClientPropertyService : IClientPropertyService
             var prop = properties.First(p => p.Id == vm.Id);
             vm.MainImageUrl = prop.Images.FirstOrDefault()?.ImageUrl ?? "";
             
-            // Note: AgentName and AgentPhotoUrl can be fetched via IUserService if they aren't stored in the AppUser entity.
-            // Assuming we fetch it here
-            var agentUser = await _userService.FindByIdAsync(prop.AgentId);
+            // Get agent info with caching to prevent N+1 queries
+            if (!_memoryCache.TryGetValue($"Agent_{prop.AgentId}", out DTOs.UserDto? agentUser))
+            {
+                agentUser = await _userService.FindByIdAsync(prop.AgentId);
+                if (agentUser != null)
+                {
+                    _memoryCache.Set($"Agent_{prop.AgentId}", agentUser, TimeSpan.FromMinutes(30));
+                }
+            }
+
             if (agentUser != null)
             {
                 vm.AgentName = $"{agentUser.FirstName} {agentUser.LastName}";
