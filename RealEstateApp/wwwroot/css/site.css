@@ -4,6 +4,7 @@
 :root {
     --primary: #103524;
     --primary-hover: #164a32;
+    --bs-success-rgb: 16, 53, 36;
     --secondary: #e2e8f0;
     --dark: #111827;
     --gray-text: #6b7280;
@@ -42,12 +43,14 @@ body {
     color: white !important;
 }
 
+
+
 .text-success {
-    color: var(--primary) !important;
+    color: rgba(16, 53, 36, var(--bs-text-opacity, 1)) !important;
 }
 
 .bg-success {
-    background-color: var(--primary) !important;
+    background-color: rgba(16, 53, 36, var(--bs-bg-opacity, 1)) !important;
 }
 
 .alert-success {
@@ -57,7 +60,7 @@ body {
 }
 
 .badge.bg-success {
-    background-color: var(--primary) !important;
+    background-color: rgba(16, 53, 36, var(--bs-bg-opacity, 1)) !important;
 }
 
 /* Custom Buttons */
