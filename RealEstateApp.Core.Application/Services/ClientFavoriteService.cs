@@ -47,7 +47,6 @@ public class ClientFavoriteService : IClientFavoriteService
             f => f.ClientId == clientId, 
             "Property", "Property.PropertyType", "Property.SaleType", "Property.Images");
 
-        // Filtrar solo las disponibles o las que quiera ver
         var availableProperties = favorites
             .Select(f => f.Property)
             .Where(p => p.Status == PropertyStatus.Available)

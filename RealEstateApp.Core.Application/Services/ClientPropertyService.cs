@@ -35,7 +35,6 @@ public class ClientPropertyService : IClientPropertyService
             p => p.Status == PropertyStatus.Available,
             "PropertyType", "SaleType", "Images");
 
-        // Apply filters
         if (!string.IsNullOrEmpty(filters.AgentId))
             properties = properties.Where(p => p.AgentId == filters.AgentId).ToList();
 
@@ -57,7 +56,6 @@ public class ClientPropertyService : IClientPropertyService
         if (!string.IsNullOrWhiteSpace(filters.Code))
             properties = properties.Where(p => p.Code != null && p.Code.Contains(filters.Code.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
 
-        // Sort: newest to oldest
         properties = properties.OrderByDescending(p => p.Created).ToList();
 
         var viewModels = _mapper.Map<List<ClientPropertyViewModel>>(properties);
@@ -70,7 +68,6 @@ public class ClientPropertyService : IClientPropertyService
             userFavoritePropertyIds = userFavs.Select(f => f.PropertyId).ToList();
         }
 
-        // Map extra fields
         var filteredViewModels = new List<ClientPropertyViewModel>();
         foreach (var vm in viewModels)
         {
@@ -78,7 +75,6 @@ public class ClientPropertyService : IClientPropertyService
             var url = prop.Images.FirstOrDefault()?.ImageUrl ?? "";
             vm.MainImageUrl = string.IsNullOrEmpty(url) ? "" : (url.StartsWith("http") || url.StartsWith("/") ? url : $"/Images/properties/{url}");
 
-            // Get agent info with caching to prevent N+1 queries
             if (!_memoryCache.TryGetValue($"Agent_{prop.AgentId}", out DTOs.UserDto? agentUser))
             {
                 agentUser = await _userService.FindByIdAsync(prop.AgentId);
@@ -90,7 +86,7 @@ public class ClientPropertyService : IClientPropertyService
 
             if (agentUser == null || !agentUser.IsActive)
             {
-                continue; // Skip properties from inactive agents
+                continue;
             }
 
             vm.AgentName = $"{agentUser.FirstName} {agentUser.LastName}";
@@ -126,7 +122,6 @@ public class ClientPropertyService : IClientPropertyService
         vm.ImageUrls = prop.Images.Select(i => string.IsNullOrEmpty(i.ImageUrl) ? "" : (i.ImageUrl.StartsWith("http") || i.ImageUrl.StartsWith("/") ? i.ImageUrl : $"/Images/properties/{i.ImageUrl}")).ToList();
         vm.Improvements = prop.PropertyImprovements.Select(pi => pi.Improvement.Name).ToList();
 
-        // Agent info
         var agentUser = await _userService.FindByIdAsync(prop.AgentId);
         if (agentUser == null)
         {
@@ -136,7 +131,7 @@ public class ClientPropertyService : IClientPropertyService
         if (!agentUser.IsActive)
         {
             Console.WriteLine($"[DEBUG] Agent {prop.AgentId} is inactive. Hiding property {id}.");
-            return null; // Do not show properties of inactive agents
+            return null;
         }
 
         vm.AgentName = $"{agentUser.FirstName} {agentUser.LastName}";
@@ -156,11 +151,9 @@ public class ClientPropertyService : IClientPropertyService
 
         var offerRepo = _unitOfWork.Repository<Offer>();
         
-        // Cannot make offer if another offer is already accepted
         var hasAcceptedOffer = await offerRepo.AnyAsync(o => o.PropertyId == propertyId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Accepted);
         if (hasAcceptedOffer) return false;
 
-        // Cannot make offer if THIS client already has a pending offer
         var hasPendingOffer = await offerRepo.AnyAsync(o => o.PropertyId == propertyId && o.ClientId == clientId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending);
         if (hasPendingOffer) return false;
 

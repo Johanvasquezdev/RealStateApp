@@ -72,13 +72,11 @@ public static class DefaultUsers
         };
         await CreateIfNotExists(userManager, developer, "Developer123$", Roles.Desarrollador.ToString());
 
-        // Fix any invalid IdCards (clean up demo data)
         var allUsers = userManager.Users.ToList();
         foreach (var u in allUsers)
         {
             if (string.IsNullOrEmpty(u.IdCard) || u.IdCard == "string" || u.IdCard.Contains("-") || u.IdCard.Length != 11)
             {
-                // Generate a generic valid IdCard based on their HashCode or just a random 11 digit number
                 u.IdCard = Math.Abs(u.Id.GetHashCode()).ToString().PadRight(11, '0').Substring(0, 11);
                 await userManager.UpdateAsync(u);
             }

@@ -5,7 +5,7 @@ namespace RealEstateApp.Core.Domain.Entities;
 
 public class Property : AuditableBaseEntity
 {
-    public string Code { get; set; } = null!; // 6 digits code
+    public string Code { get; set; } = null!;
     public double Price { get; set; }
     public double LandSize { get; set; }
     public int Rooms { get; set; }
@@ -13,9 +13,8 @@ public class Property : AuditableBaseEntity
     public string Description { get; set; } = null!;
     public PropertyStatus Status { get; set; } = PropertyStatus.Available;
 
-    public string AgentId { get; set; } = null!; // Relates to Identity User
+    public string AgentId { get; set; } = null!;
 
-    // Navigation Properties
     public int PropertyTypeId { get; set; }
     public PropertyType PropertyType { get; set; } = null!;
 

@@ -31,11 +31,10 @@ public class GeneralProfile : Profile
             .ForMember(d => d.Images, o => o.Ignore())
             .ForMember(d => d.Improvements, o => o.Ignore());
 
-        // Client ViewModels (Persona 2)
         CreateMap<Property, ClientPropertyViewModel>()
             .ForMember(d => d.PropertyTypeName, o => o.MapFrom(s => s.PropertyType != null ? s.PropertyType.Name : string.Empty))
             .ForMember(d => d.SaleTypeName, o => o.MapFrom(s => s.SaleType != null ? s.SaleType.Name : string.Empty))
-            .ForMember(d => d.AgentName, o => o.Ignore()) // Se llena mediante IUserService
+            .ForMember(d => d.AgentName, o => o.Ignore())
             .ForMember(d => d.AgentPhotoUrl, o => o.Ignore())
             .ForMember(d => d.MainImageUrl, o => o.Ignore());
 
@@ -43,13 +42,12 @@ public class GeneralProfile : Profile
             .ForMember(d => d.PropertyTypeName, o => o.MapFrom(s => s.PropertyType != null ? s.PropertyType.Name : string.Empty))
             .ForMember(d => d.SaleTypeName, o => o.MapFrom(s => s.SaleType != null ? s.SaleType.Name : string.Empty))
             .ForMember(d => d.Improvements, o => o.MapFrom(s => s.PropertyImprovements.Select(pi => pi.Improvement!.Name).ToList()))
-            .ForMember(d => d.AgentName, o => o.Ignore()) // Se llena mediante IUserService
+            .ForMember(d => d.AgentName, o => o.Ignore())
             .ForMember(d => d.AgentPhone, o => o.Ignore())
             .ForMember(d => d.AgentEmail, o => o.Ignore())
             .ForMember(d => d.AgentPhotoUrl, o => o.Ignore())
             .ForMember(d => d.ImageUrls, o => o.Ignore());
 
-        // API ViewModels
         CreateMap<Property, RealEstateApp.Core.Application.DTOs.Properties.PropertyListApiResponse>()
             .ForMember(d => d.PropertyType, o => o.MapFrom(s => s.PropertyType != null ? s.PropertyType.Name : string.Empty))
             .ForMember(d => d.SaleType, o => o.MapFrom(s => s.SaleType != null ? s.SaleType.Name : string.Empty))

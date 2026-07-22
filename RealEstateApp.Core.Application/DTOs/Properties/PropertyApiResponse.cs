@@ -11,7 +11,7 @@ public class PropertyApiResponse
     public int Rooms { get; set; }
     public int Bathrooms { get; set; }
     public string Description { get; set; } = null!;
-    public string Status { get; set; } = null!; // PropertyStatus enum name
+    public string Status { get; set; } = null!;
     
     public string AgentId { get; set; } = null!;
     public string AgentName { get; set; } = null!;

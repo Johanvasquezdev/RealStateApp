@@ -36,7 +36,6 @@ public class ClientPropertyDetailViewModel
     [Display(Name = "Mejoras")]
     public List<string> Improvements { get; set; } = new();
     
-    // Agent info
     public string AgentId { get; set; } = null!;
     
     [Display(Name = "Agente")]

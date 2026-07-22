@@ -11,7 +11,7 @@ public class ApplicationUser : IdentityUser
     {
         get => _idCard;
         set => _idCard = string.IsNullOrEmpty(value) ? string.Empty : new string(value.Where(char.IsDigit).ToArray());
-    } // Cedula
+    }
     public string? ProfilePictureUrl { get; set; }
     public bool IsActive { get; set; } = true;
 }

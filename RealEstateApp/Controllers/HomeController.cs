@@ -28,8 +28,6 @@ public class HomeController : Controller
             {
                 return RedirectToAction("Index", "AgentHome", new { area = "Agent" });
             }
-
-            // Si el usuario es Cliente, le permitimos ver el Home público.
         }
 
         string? userId = User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : null;

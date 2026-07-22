@@ -117,7 +117,6 @@ public class OfferService : IOfferService
             offer.Property.Status = PropertyStatus.Sold;
             await propertyRepo.UpdateAsync(offer.Property);
 
-            // Reject all other pending offers for this property
             var otherOffers = await offerRepo.FindAsync(o => o.PropertyId == offer.Property.Id && o.Id != offerId && o.Status == OfferStatus.Pending);
             foreach (var otherOffer in otherOffers)
             {

@@ -93,7 +93,6 @@
 
             const messageInput = document.getElementById("messageInput");
             
-            // Auto-resize textarea
             messageInput.addEventListener("input", function() {
                 this.style.height = "auto";
                 this.style.height = (this.scrollHeight) + "px";
@@ -102,7 +101,6 @@
                 }
             });
 
-            // Handle Enter key (Shift+Enter for new line)
             messageInput.addEventListener("keydown", function(e) {
                 if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -110,7 +108,6 @@
                 }
             });
 
-            // Prevent submitting empty messages
             document.getElementById("chatForm").addEventListener("submit", function(e) {
                 if (messageInput.value.trim() === "") {
                     e.preventDefault();

@@ -24,7 +24,6 @@ public static class ServiceRegistration
         services.AddTransient<IOfferService, OfferService>();
         services.AddTransient<IChatService, ChatService>();
 
-        // Persona 2: Cliente Services
         services.AddTransient<IClientAgentService, ClientAgentService>();
         services.AddTransient<IClientFavoriteService, ClientFavoriteService>();
         services.AddTransient<IClientOfferService, ClientOfferService>();

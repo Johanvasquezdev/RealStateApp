@@ -30,7 +30,6 @@ public class ClientOfferService : IClientOfferService
         bool hasAccepted = await repo.AnyAsync(o => o.PropertyId == vm.PropertyId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Accepted);
         if (hasAccepted) throw new Exception("Esta propiedad ya tiene una oferta aceptada y no admite más ofertas.");
         
-        // Check if there is already a pending offer from this client
         bool hasPending = await repo.AnyAsync(o => o.PropertyId == vm.PropertyId && o.ClientId == vm.ClientId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending);
         if (hasPending) throw new Exception("Ya tienes una oferta pendiente para esta propiedad.");
 

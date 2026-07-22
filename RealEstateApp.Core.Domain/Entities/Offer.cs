@@ -5,7 +5,7 @@ namespace RealEstateApp.Core.Domain.Entities;
 
 public class Offer : AuditableBaseEntity
 {
-    public string ClientId { get; set; } = null!; // Relates to Identity User
+    public string ClientId { get; set; } = null!;
     public double Amount { get; set; }
     public OfferStatus Status { get; set; } = OfferStatus.Pending;
 

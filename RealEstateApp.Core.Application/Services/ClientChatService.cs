@@ -9,7 +9,7 @@ public class ClientChatService : IClientChatService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _userService;
-    private readonly IClientPropertyService _propertyService; // for checking property info if needed
+    private readonly IClientPropertyService _propertyService;
 
     public ClientChatService(IUnitOfWork unitOfWork, IUserService userService, IClientPropertyService propertyService)
     {
@@ -51,10 +51,8 @@ public class ClientChatService : IClientChatService
     {
         var msgRepo = _unitOfWork.Repository<Message>();
         
-        // Find all messages where client is sender or receiver
         var messages = await msgRepo.FindAsync(m => m.SenderId == clientId || m.ReceiverId == clientId);
 
-        // Group by Agent (the other person) and Property
         var conversations = messages
             .GroupBy(m => new { 
                 AgentId = m.SenderId == clientId ? m.ReceiverId : m.SenderId, 
@@ -114,7 +112,6 @@ public class ClientChatService : IClientChatService
             }).ToList()
         };
 
-        // We can get AgentPropertyCount by asking the user service or via unitofwork
         var propRepo = _unitOfWork.Repository<Property>();
         result.AgentPropertyCount = await propRepo.CountAsync(p => p.AgentId == agentId);
 

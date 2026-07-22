@@ -23,7 +23,6 @@ public class ClientAgentService : IClientAgentService
     public async Task<List<ClientAgentViewModel>> GetAgentsAsync()
     {
         var users = await _userService.GetUsersInRoleAsync("Agente");
-        // Filtrar activos si es necesario, o lo hace el UserService
         var activeAgents = users.Where(u => u.IsActive).ToList();
         
         var vms = new List<ClientAgentViewModel>();
