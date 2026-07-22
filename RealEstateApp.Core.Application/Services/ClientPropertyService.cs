@@ -75,8 +75,9 @@ public class ClientPropertyService : IClientPropertyService
         foreach (var vm in viewModels)
         {
             var prop = properties.First(p => p.Id == vm.Id);
-            vm.MainImageUrl = prop.Images.FirstOrDefault()?.ImageUrl ?? "";
-            
+            var url = prop.Images.FirstOrDefault()?.ImageUrl ?? "";
+            vm.MainImageUrl = string.IsNullOrEmpty(url) ? "" : (url.StartsWith("http") || url.StartsWith("/") ? url : $"/Images/properties/{url}");
+
             // Get agent info with caching to prevent N+1 queries
             if (!_memoryCache.TryGetValue($"Agent_{prop.AgentId}", out DTOs.UserDto? agentUser))
             {

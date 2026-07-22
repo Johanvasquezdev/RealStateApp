@@ -125,19 +125,23 @@ public class AgentService : IAgentService
     public async Task<List<AgentPropertyViewModel>> GetPropertiesByAgentAsync(string id)
     {
         var properties = await _propertyRepository.FindWithIncludesAsync(p => p.AgentId == id, "PropertyType", "SaleType", "Images");
-        return properties.Select(p => new AgentPropertyViewModel
+        return properties.Select(p => 
         {
-            Id = p.Id,
-            Code = p.Code,
-            Price = p.Price,
-            Description = p.Description,
-            LandSize = p.LandSize,
-            Rooms = p.Rooms,
-            Bathrooms = p.Bathrooms,
-            PropertyType = p.PropertyType?.Name ?? "",
-            SaleType = p.SaleType?.Name ?? "",
-            Status = p.Status.ToString(),
-            MainImage = p.Images?.FirstOrDefault()?.ImageUrl
+            var url = p.Images?.FirstOrDefault()?.ImageUrl ?? "";
+            return new AgentPropertyViewModel
+            {
+                Id = p.Id,
+                Code = p.Code,
+                Price = p.Price,
+                Description = p.Description,
+                LandSize = p.LandSize,
+                Rooms = p.Rooms,
+                Bathrooms = p.Bathrooms,
+                PropertyType = p.PropertyType?.Name ?? "",
+                SaleType = p.SaleType?.Name ?? "",
+                Status = p.Status.ToString(),
+                MainImage = string.IsNullOrEmpty(url) ? "" : (url.StartsWith("http") || url.StartsWith("/") ? url : $"/Images/properties/{url}")
+            };
         }).ToList();
     }
 }

@@ -61,6 +61,16 @@
                                     Cod: @prop.Code
                                 </span>
                             </div>
+                            <div class="position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);">
+                                @{
+                                    string statusClass = prop.Status == "Available" ? "bg-success" : "bg-danger";
+                                    string statusText = prop.Status == "Available" ? "Disponible" : 
+                                                        (prop.SaleType != null && prop.SaleType.Contains("Alquiler", StringComparison.OrdinalIgnoreCase) ? "Alquilado" : "Vendido");
+                                }
+                                <span class="badge @statusClass text-white shadow-sm px-3 py-2 rounded-pill fw-bold">
+                                    @statusText
+                                </span>
+                            </div>
                         </div>
                         <div class="card-body p-4">
                             <h5 class="card-title fw-bold text-truncate mb-1">@prop.PropertyType en @prop.SaleType</h5>

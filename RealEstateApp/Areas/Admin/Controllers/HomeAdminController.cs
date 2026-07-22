@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateApp.Core.Application.Interfaces;
 
@@ -10,10 +10,10 @@ namespace RealEstateApp.Areas.Admin.Controllers
     {
         private readonly IUserManagementService _userManagementService = userManagementService;
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> GetDashboardModal()
         {
             var dashboard = await _userManagementService.GetDashboardCounts();
-            return View(dashboard);
+            return PartialView("_DashboardModal", dashboard);
         }
     }
 }

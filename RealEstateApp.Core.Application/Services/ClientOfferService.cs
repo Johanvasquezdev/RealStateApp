@@ -71,13 +71,15 @@ public class ClientOfferService : IClientOfferService
                 agentCache[prop.AgentId] = agentUser;
             }
 
+            var url = prop.Images.FirstOrDefault()?.ImageUrl ?? "";
+            
             result.Add(new ClientOfferListViewModel
             {
                 OfferId = offer.Id,
                 PropertyId = prop.Id,
                 PropertyName = prop.PropertyType != null ? prop.PropertyType.Name : "Propiedad",
                 PropertyCode = prop.Code,
-                PropertyImageUrl = prop.Images.FirstOrDefault()?.ImageUrl ?? "",
+                PropertyImageUrl = string.IsNullOrEmpty(url) ? "" : (url.StartsWith("http") || url.StartsWith("/") ? url : $"/Images/properties/{url}"),
                 Amount = (decimal)offer.Amount,
                 Status = offer.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending ? "Pendiente" : 
                          offer.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Accepted ? "Aceptada" : "Rechazada",

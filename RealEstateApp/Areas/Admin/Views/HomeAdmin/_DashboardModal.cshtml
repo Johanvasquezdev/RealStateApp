@@ -1,0 +1,39 @@
+@model AdminDashboardViewModel
+
+<div class="modal fade" id="dashboardModal" tabindex="-1" aria-labelledby="dashboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h4 class="modal-title fw-bold" id="dashboardModalLabel">Panel de Administración</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 p-md-5">
+                <div class="row g-4">
+                    @foreach (var item in new[] {
+                        new { T = "Propiedades", V = Model.AvailableProperties.ToString(), I = "house" },
+                        new { T = "Vendidas", V = Model.SoldProperties.ToString(), I = "check2-circle" },
+                        new { T = "Agentes Act.", V = Model.ActiveAgents.ToString(), I = "person-badge" },
+                        new { T = "Agentes Inact.", V = Model.InactiveAgents.ToString(), I = "person-x" },
+                        new { T = "Clientes Act.", V = Model.ActiveClients.ToString(), I = "people" },
+                        new { T = "Clientes Inact.", V = Model.InactiveClients.ToString(), I = "person-slash" },
+                        new { T = "Devs Activos", V = Model.ActiveDevelopers.ToString(), I = "building" },
+                        new { T = "Devs Inactivos", V = Model.InactiveDevelopers.ToString(), I = "building-x" }
+                    })
+                    {
+                        <div class="col-6 col-md-3">
+                            <div class="card property-card border-0 shadow-sm p-3 text-center h-100">
+                                <div class="navbar-brand-icon mx-auto mb-3" style="background-color: var(--primary); color: white;">
+                                    <i class="bi bi-@item.I"></i>
+                                </div>
+                                <div>
+                                    <h4 class="fw-bold mb-1" style="color: var(--primary);">@item.V</h4>
+                                    <p class="text-gray mb-0" style="font-size: 0.8rem; font-weight: 600;">@item.T</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

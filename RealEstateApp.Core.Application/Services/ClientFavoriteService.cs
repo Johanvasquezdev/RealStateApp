@@ -11,11 +11,13 @@ public class ClientFavoriteService : IClientFavoriteService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IUserService _userService;
 
-    public ClientFavoriteService(IUnitOfWork unitOfWork, IMapper mapper)
+    public ClientFavoriteService(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _userService = userService;
     }
 
     public async Task ToggleFavoriteAsync(int propertyId, string clientId)
@@ -56,8 +58,17 @@ public class ClientFavoriteService : IClientFavoriteService
         foreach (var vm in vms)
         {
             var prop = availableProperties.First(p => p.Id == vm.Id);
-            vm.MainImageUrl = prop.Images?.FirstOrDefault()?.ImageUrl ?? string.Empty;
+            
+            var url = prop.Images?.FirstOrDefault()?.ImageUrl ?? "";
+            vm.MainImageUrl = string.IsNullOrEmpty(url) ? "" : (url.StartsWith("http") || url.StartsWith("/") ? url : $"/Images/properties/{url}");
             vm.IsFavorite = true;
+
+            var agentUser = await _userService.FindByIdAsync(prop.AgentId);
+            if (agentUser != null)
+            {
+                vm.AgentName = $"{agentUser.FirstName} {agentUser.LastName}";
+                vm.AgentPhotoUrl = agentUser.ProfilePictureUrl ?? "";
+            }
         }
 
         return vms;
