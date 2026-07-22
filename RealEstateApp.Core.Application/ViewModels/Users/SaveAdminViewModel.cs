@@ -13,6 +13,7 @@ namespace RealEstateApp.Core.Application.ViewModels.Users
         public string LastName { get; set; } = null!;
 
         [Required(ErrorMessage = "La cédula es requerida.")]
+        [RegularExpression("^[0-9]{11}$", ErrorMessage = "La cédula debe tener exactamente 11 dígitos numéricos.")]
         public string IdCard { get; set; } = null!;
 
         [Required(ErrorMessage = "El correo electrónico es requerido.")]

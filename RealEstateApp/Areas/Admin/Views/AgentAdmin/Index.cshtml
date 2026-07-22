@@ -43,7 +43,7 @@
                             </td>
                             <td class="text-end pe-4">
                                 <form asp-action="ToggleStatus" asp-route-id="@agent.Id" asp-route-activate="@(!agent.IsActive ? "true" : "false")" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-sm @(agent.IsActive ? "btn-outline-danger" : "btn-outline-success") rounded-pill px-3"
+                                    <button type="submit" class="btn btn-sm @(agent.IsActive ? "btn-outline-warning" : "btn-outline-success") rounded-pill px-3"
                                             onclick="confirmAction(event, '¿Confirmar acción?', '¿Está seguro que desea @(agent.IsActive ? "inactivar" : "activar") este Agente?');">
                                         @(agent.IsActive ? "Inactivar" : "Activar")
                                     </button>

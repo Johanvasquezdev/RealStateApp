@@ -33,9 +33,9 @@
                             <td>@item.Description</td>
                             <td>@item.PropertiesCount</td>
                             <td class="text-end pe-4">
-                                <div class="d-inline-flex gap-1 justify-content-end">
+                                <div class="d-inline-flex gap-1 justify-content-end align-items-center">
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">Editar</a>
-                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline m-0">
                                         <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3"
                                                 onclick="confirmAction(event, '¿Eliminar tipo de venta?', 'Esta acción no se puede deshacer.');">
                                             Eliminar

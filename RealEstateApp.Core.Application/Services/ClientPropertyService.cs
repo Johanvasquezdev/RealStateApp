@@ -107,12 +107,19 @@ public class ClientPropertyService : IClientPropertyService
     #region Property details
     public async Task<ClientPropertyDetailViewModel?> GetPropertyDetailAsync(int id, string? clientId = null)
     {
+        Console.WriteLine($"[DEBUG] GetPropertyDetailAsync called for id {id}");
         var repo = _unitOfWork.Repository<Property>();
         var prop = await repo.FirstOrDefaultWithIncludesAsync(
-            p => p.Id == id && p.Status == PropertyStatus.Available,
+            p => p.Id == id,
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
 
-        if (prop == null) return null;
+        if (prop == null) 
+        {
+            Console.WriteLine($"[DEBUG] Property {id} not found in DB.");
+            return null;
+        }
+
+        Console.WriteLine($"[DEBUG] Property {id} found. Status is {prop.Status}. AgentId is {prop.AgentId}");
 
         var vm = _mapper.Map<ClientPropertyDetailViewModel>(prop);
         
@@ -121,8 +128,14 @@ public class ClientPropertyService : IClientPropertyService
 
         // Agent info
         var agentUser = await _userService.FindByIdAsync(prop.AgentId);
-        if (agentUser == null || !agentUser.IsActive)
+        if (agentUser == null)
         {
+            Console.WriteLine($"[DEBUG] Agent {prop.AgentId} not found for property {id}.");
+            return null; 
+        }
+        if (!agentUser.IsActive)
+        {
+            Console.WriteLine($"[DEBUG] Agent {prop.AgentId} is inactive. Hiding property {id}.");
             return null; // Do not show properties of inactive agents
         }
 

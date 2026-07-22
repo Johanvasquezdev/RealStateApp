@@ -28,7 +28,7 @@ public static class DefaultUsers
         {
             FirstName = "Admin",
             LastName = "Sistema",
-            IdCard = "000-0000000-1",
+            IdCard = "00000000001",
             UserName = "admin",
             Email = "admin@realestateapp.com",
             EmailConfirmed = true,
@@ -40,7 +40,7 @@ public static class DefaultUsers
         {
             FirstName = "Cliente",
             LastName = "Demo",
-            IdCard = "000-0000000-2",
+            IdCard = "00000000002",
             UserName = "cliente",
             Email = "cliente@realestateapp.com",
             EmailConfirmed = true,
@@ -52,7 +52,7 @@ public static class DefaultUsers
         {
             FirstName = "Agente",
             LastName = "Demo",
-            IdCard = "000-0000000-3",
+            IdCard = "00000000003",
             UserName = "agente",
             Email = "agente@realestateapp.com",
             EmailConfirmed = true,
@@ -64,13 +64,27 @@ public static class DefaultUsers
         {
             FirstName = "Developer",
             LastName = "Demo",
-            IdCard = "000-0000000-4",
+            IdCard = "00000000004",
             UserName = "developer",
             Email = "developer@realestateapp.com",
             EmailConfirmed = true,
             IsActive = true
         };
         await CreateIfNotExists(userManager, developer, "Developer123$", Roles.Desarrollador.ToString());
+
+        // Fix any invalid IdCards (clean up demo data)
+        var allUsers = userManager.Users.ToList();
+        bool anyUpdated = false;
+        foreach (var u in allUsers)
+        {
+            if (string.IsNullOrEmpty(u.IdCard) || u.IdCard == "string" || u.IdCard.Contains("-") || u.IdCard.Length != 11)
+            {
+                // Generate a generic valid IdCard based on their HashCode or just a random 11 digit number
+                u.IdCard = Math.Abs(u.Id.GetHashCode()).ToString().PadRight(11, '0').Substring(0, 11);
+                await userManager.UpdateAsync(u);
+                anyUpdated = true;
+            }
+        }
     }
 
     private static async Task CreateIfNotExists( UserManager<ApplicationUser> userManager,

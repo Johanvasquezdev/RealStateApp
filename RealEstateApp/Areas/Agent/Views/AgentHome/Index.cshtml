@@ -87,7 +87,7 @@
                                 <td class="py-3 px-4">@p.PropertyType</td>
                                 <td class="py-3 px-4">@p.SaleType</td>
                                 <td class="py-3 px-4">
-                                    <span class="badge rounded-pill px-3 py-2 @(p.Status == "Available" ? "bg-success bg-opacity-10 text-success" : "bg-secondary bg-opacity-10 text-secondary")">
+                                    <span class="badge rounded-pill px-3 py-2 @(p.Status == "Available" ? "bg-success bg-opacity-10 text-success" : (p.SaleType == "Venta" ? "bg-danger bg-opacity-10 text-danger" : "bg-info bg-opacity-10 text-info"))">
                                         @(p.Status == "Available" ? "Disponible" : (p.SaleType == "Venta" ? "Vendida" : "Alquilada"))
                                     </span>
                                 </td>
