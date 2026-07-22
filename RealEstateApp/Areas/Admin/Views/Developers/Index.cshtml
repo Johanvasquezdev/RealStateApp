@@ -1,4 +1,4 @@
-﻿@model List<UserListItemViewModel>
+@model List<UserListItemViewModel>
 @{
     ViewData["Title"] = "Mantenimiento de desarrolladores";
 }
@@ -47,7 +47,8 @@
                             <td class="text-end pe-4">
                                 <a asp-action="Edit" asp-route-id="@dev.Id" class="btn btn-sm btn-outline-primary">Editar</a>
                                 <form asp-action="ToggleStatus" asp-route-id="@dev.Id" asp-route-activate="@(!dev.IsActive ? "true" : "false")" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-sm @(dev.IsActive ? "btn-outline-warning" : "btn-outline-success")">
+                                    <button type="submit" class="btn btn-sm @(dev.IsActive ? "btn-outline-warning" : "btn-outline-success")"
+                                            onclick="confirmAction(event, '¿Confirmar acción?', '¿Está seguro que desea @(dev.IsActive ? "inactivar" : "activar") este Desarrollador?');">
                                         @(dev.IsActive ? "Inactivar" : "Activar")
                                     </button>
                                 </form>

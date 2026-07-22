@@ -10,10 +10,10 @@ namespace RealEstateApp.Areas.Admin.Controllers
     {
         private readonly IUserManagementService _userManagementService = userManagementService;
 
-        public async Task<IActionResult> GetDashboardModal()
+        public async Task<IActionResult> Index()
         {
             var dashboard = await _userManagementService.GetDashboardCounts();
-            return PartialView("_DashboardModal", dashboard);
+            return View(dashboard);
         }
     }
 }

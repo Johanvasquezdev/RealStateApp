@@ -31,7 +31,7 @@ public class AccountController : Controller
             return View(vm);
         }
         if (result.Rol == "Administrador")
-            return RedirectToAction("Index", "AgentAdmin", new { area = "Admin" });
+            return RedirectToAction("Index", "HomeAdmin", new { area = "Admin" });
         if (result.Rol == "Agente")
             return RedirectToAction("Index", "AgentHome", new { area = "Agent" });
         if (result.Rol == "Cliente")
