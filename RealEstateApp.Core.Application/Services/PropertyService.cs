@@ -67,7 +67,7 @@ public class PropertyService : IPropertyService
             Rooms = prop.Rooms,
             Bathrooms = prop.Bathrooms,
             ImprovementIds = prop.PropertyImprovements.Select(pi => pi.ImprovementId).ToList(),
-            ExistingImages = prop.Images.Select(i => i.ImageUrl).ToList()
+            ExistingImages = prop.Images.Select(i => string.IsNullOrEmpty(i.ImageUrl) ? "" : (i.ImageUrl.StartsWith("http") || i.ImageUrl.StartsWith("/") ? i.ImageUrl : "/" + i.ImageUrl)).ToList()
         };
     }
 
@@ -79,8 +79,9 @@ public class PropertyService : IPropertyService
             "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
         if (prop is null) return null;
         var vm = _mapper.Map<AgentPropertyViewModel>(prop);
-        vm.MainImage = prop.Images.FirstOrDefault()?.ImageUrl;
-        vm.Images = prop.Images.Select(i => i.ImageUrl).ToList();
+        var mainImageUrl = prop.Images.FirstOrDefault()?.ImageUrl;
+        vm.MainImage = string.IsNullOrEmpty(mainImageUrl) ? "" : (mainImageUrl.StartsWith("http") || mainImageUrl.StartsWith("/") ? mainImageUrl : "/" + mainImageUrl);
+        vm.Images = prop.Images.Select(i => string.IsNullOrEmpty(i.ImageUrl) ? "" : (i.ImageUrl.StartsWith("http") || i.ImageUrl.StartsWith("/") ? i.ImageUrl : "/" + i.ImageUrl)).ToList();
         vm.Improvements = prop.PropertyImprovements.Select(pi => pi.Improvement.Name).ToList();
         return vm;
     }

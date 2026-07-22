@@ -116,7 +116,7 @@ public class ClientPropertyService : IClientPropertyService
 
         var vm = _mapper.Map<ClientPropertyDetailViewModel>(prop);
         
-        vm.ImageUrls = prop.Images.Select(i => i.ImageUrl).ToList();
+        vm.ImageUrls = prop.Images.Select(i => string.IsNullOrEmpty(i.ImageUrl) ? "" : (i.ImageUrl.StartsWith("http") || i.ImageUrl.StartsWith("/") ? i.ImageUrl : "/" + i.ImageUrl)).ToList();
         vm.Improvements = prop.PropertyImprovements.Select(pi => pi.Improvement.Name).ToList();
 
         // Agent info
