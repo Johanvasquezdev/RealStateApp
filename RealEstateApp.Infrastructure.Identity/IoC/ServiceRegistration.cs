@@ -54,6 +54,11 @@ public static class ServiceRegistration
             options.ExpireTimeSpan = TimeSpan.FromHours(8);
         });
 
+        services.Configure<SecurityStampValidatorOptions>(options =>
+        {
+            options.ValidationInterval = TimeSpan.Zero;
+        });
+
         var jwtSettings = config.GetSection("JwtSettings");
         var key = jwtSettings["Key"];
         if (!string.IsNullOrEmpty(key))

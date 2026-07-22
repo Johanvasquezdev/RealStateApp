@@ -225,7 +225,7 @@ public class PropertyService : IPropertyService
     {
         var repo = _unitOfWork.Repository<Property>();
         var properties = await repo.FindWithIncludesAsync(
-            p => p.Status == PropertyStatus.Available,
+            p => p.Status == PropertyStatus.Available || p.Status == PropertyStatus.Sold,
             "PropertyType", "SaleType");
         return _mapper.Map<List<RealEstateApp.Core.Application.DTOs.Properties.PropertyListApiResponse>>(properties);
     }
@@ -234,7 +234,7 @@ public class PropertyService : IPropertyService
     {
         var repo = _unitOfWork.Repository<Property>();
         var prop = await repo.FirstOrDefaultWithIncludesAsync(
-            p => p.Id == id && p.Status == PropertyStatus.Available,
+            p => p.Id == id && (p.Status == PropertyStatus.Available || p.Status == PropertyStatus.Sold),
             "PropertyType", "SaleType", "Agent", "PropertyImprovements.Improvement");
         
         if (prop == null) return null;
@@ -245,7 +245,7 @@ public class PropertyService : IPropertyService
     {
         var repo = _unitOfWork.Repository<Property>();
         var prop = await repo.FirstOrDefaultWithIncludesAsync(
-            p => p.Code == code && p.Status == PropertyStatus.Available,
+            p => p.Code == code && (p.Status == PropertyStatus.Available || p.Status == PropertyStatus.Sold),
             "PropertyType", "SaleType", "Agent", "PropertyImprovements.Improvement");
             
         if (prop == null) return null;
