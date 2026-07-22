@@ -9,6 +9,7 @@ public static class ServiceRegistration
 {
     public static IServiceCollection AddApplicationLayer(this IServiceCollection services)
     {
+        services.AddMemoryCache();
         services.AddAutoMapper(typeof(ServiceRegistration).Assembly);
 
         services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
