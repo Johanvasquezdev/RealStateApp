@@ -202,7 +202,7 @@
                                         <div class="text-end">
                                             @if (!string.IsNullOrEmpty(conv.LastMessage))
                                             {
-                                                <small class="text-muted d-block mb-2">@conv.LastMessageDate.ToString("g")</small>
+                                                <small class="text-muted d-block mb-2">@conv.LastMessageDate.ToLocalTime().ToString("g")</small>
                                             }
                                             <span class="btn btn-sm rounded-pill px-3" style="background-color: #e8f5e9; color: #12402d;">
                                                 Ver Chat <i class="bi bi-chevron-right ms-1"></i>

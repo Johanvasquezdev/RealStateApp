@@ -45,7 +45,7 @@
                                 <div class="text-white p-3 shadow-sm" style="background-color: #1a3c34; border-radius: 20px; border-bottom-right-radius: 4px;">
                                     <p class="mb-0" style="font-size: 0.95rem;">@msg.Content</p>
                                 </div>
-                                <div class="text-end mt-1 fw-bold" style="font-size: 0.7rem; color: #6c757d;">@msg.SentAt.ToString("h:mm tt").ToUpper()</div>
+                                <div class="text-end mt-1 fw-bold" style="font-size: 0.7rem; color: #6c757d;">@msg.SentAt.ToLocalTime().ToString("h:mm tt").ToUpper()</div>
                             </div>
                         </div>
                     }
@@ -57,7 +57,7 @@
                                 <div class="bg-white text-dark p-3 shadow-sm border" style="border-radius: 20px; border-bottom-left-radius: 4px;">
                                     <p class="mb-0" style="font-size: 0.95rem;">@msg.Content</p>
                                 </div>
-                                <div class="text-end mt-1 fw-bold" style="font-size: 0.7rem; color: #6c757d;">@msg.SentAt.ToString("h:mm tt").ToUpper()</div>
+                                <div class="text-end mt-1 fw-bold" style="font-size: 0.7rem; color: #6c757d;">@msg.SentAt.ToLocalTime().ToString("h:mm tt").ToUpper()</div>
                             </div>
                         </div>
                     }

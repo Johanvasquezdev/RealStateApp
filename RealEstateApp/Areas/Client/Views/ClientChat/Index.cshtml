@@ -38,7 +38,7 @@
                             <div class="ms-4 flex-grow-1 min-w-0">
                                 <div class="d-flex justify-content-between align-items-baseline mb-1">
                                     <h5 class="fw-bold mb-0 text-truncate">@chat.AgentName</h5>
-                                    <small class="text-muted fw-medium text-nowrap ms-2">@chat.LastMessageDate.ToString("g")</small>
+                                    <small class="text-muted fw-medium text-nowrap ms-2">@chat.LastMessageDate.ToLocalTime().ToString("g")</small>
                                 </div>
                                 <p class="text-muted mb-0 text-truncate pe-md-5">@chat.LastMessage</p>
                             </div>
