@@ -3,13 +3,19 @@ using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Improvement;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Interfaces;
+using RealEstateApp.Core.Domain.Common;
 
 namespace RealEstateApp.Core.Application.Services
 {
-    public class ImprovementService(IGenericRepository<Improvement> repository, IGenericRepository<PropertyImprovement> linkRepository, IMapper mapper)
+    public class ImprovementService(
+        IGenericRepository<Improvement> repository, 
+        IGenericRepository<PropertyImprovement> linkRepository, 
+        IMapper mapper,
+        IUnitOfWork unitOfWork)
     : GenericService<SaveImprovementViewModel, ImprovementViewModel, Improvement>(repository, mapper), IImprovementService
     {
         private readonly IGenericRepository<PropertyImprovement> _linkRepository = linkRepository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public override async Task<SaveImprovementViewModel> Add(SaveImprovementViewModel vm)
         {
@@ -30,13 +36,24 @@ namespace RealEstateApp.Core.Application.Services
                 ?? throw new KeyNotFoundException("La mejora solicitada no existe.");
 
             var affectedLinks = await _linkRepository.FindAsync(l => l.ImprovementId == id);
-            if (affectedLinks.Any())
+            
+            using var transaction = await _unitOfWork.BeginTransactionAsync();
+            try
             {
-                throw new InvalidOperationException("No se puede eliminar porque existen propiedades que utilizan esta mejora.");
-            }
+                foreach (var link in affectedLinks)
+                {
+                    await _linkRepository.DeleteAsync(link);
+                }
 
-            await _repository.DeleteAsync(improvement);
-            await _repository.SaveChangesAsync();
+                await _repository.DeleteAsync(improvement);
+                await _unitOfWork.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         public override async Task<List<ImprovementViewModel>> GetAllViewModel()

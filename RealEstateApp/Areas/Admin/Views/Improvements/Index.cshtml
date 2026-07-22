@@ -45,7 +45,7 @@
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">Editar</a>
                                         <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline m-0">
                                             <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3"
-                                                    onclick="confirmAction(event, '¿Eliminar mejora?', 'Esta acción no se puede deshacer.');">
+                                                    onclick="confirmAction(event, '¿Está seguro que desea eliminar esta mejora?', 'Si presiona Aceptar, el sistema eliminará la mejora seleccionada, esto debe de desvincular la mejora en todas las propiedades que la tengan asignada.');">
                                                 Eliminar
                                             </button>
                                         </form>

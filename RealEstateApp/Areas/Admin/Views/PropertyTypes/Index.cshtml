@@ -37,7 +37,7 @@
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">Editar</a>
                                     <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline m-0">
                                         <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3"
-                                                onclick="confirmAction(event, '¿Eliminar tipo de propiedad?', 'Esta acción no se puede deshacer.');">
+                                                onclick="confirmAction(event, '¿Está seguro que desea eliminar este tipo de propiedad y todas las propiedades asociadas?', 'Si presiona Aceptar, el sistema eliminará el tipo de propiedad seleccionado y todas las propiedades que tengan asignado este tipo.');">
                                             Eliminar
                                         </button>
                                     </form>
