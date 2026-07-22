@@ -1,4 +1,4 @@
-﻿@model List<ImprovementViewModel>
+@model List<ImprovementViewModel>
 @{
     ViewData["Title"] = "Mantenimiento de mejoras";
 }
@@ -41,8 +41,15 @@
                                 <td class="text-gray">@item.Description</td>
                                 <td>@item.PropertiesCount</td>
                                 <td class="text-end pe-4">
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Editar</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger ms-1">Eliminar</a>
+                                    <div class="d-inline-flex gap-1 justify-content-end">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">Editar</a>
+                                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                                    onclick="confirmAction(event, '¿Eliminar mejora?', 'Esta acción no se puede deshacer.');">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         }
