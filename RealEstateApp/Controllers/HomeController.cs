@@ -41,7 +41,7 @@ public class HomeController : Controller
     {
         var clientId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         var property = await _clientPropertyService.GetPropertyDetailAsync(id, clientId);
-        if (property == null) return NotFound();
+        if (property == null) return View("NotFound", (object)"La propiedad solicitada no existe o no se encuentra disponible.");
 
         return View(property);
     }

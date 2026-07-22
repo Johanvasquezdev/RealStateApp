@@ -22,7 +22,7 @@ public class AgentsController : Controller
     public async Task<IActionResult> Details(string id)
     {
         var agente = await _agenteService.GetAgentByIdAsync(id);
-        if (agente == null) return NotFound();
+        if (agente == null) return View("NotFound", (object)"El agente solicitado no existe o no se encuentra disponible.");
         var propiedades = await _agenteService.GetPropertiesByAgentAsync(id);
         ViewBag.Propiedades = propiedades.Where(p => p.Status == "Available").ToList();
         return View(agente);
