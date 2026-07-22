@@ -25,7 +25,7 @@ public class AgentsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAll()
     {
-        var agentes = await _agenteService.GetActiveAgentsAsync(null);
+        var agentes = await _agenteService.GetAllAgentsAsync();
         if (agentes.Count == 0) return NoContent();
         return Ok(agentes);
     }
@@ -36,7 +36,7 @@ public class AgentsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetById(string id)
     {
-        var agente = await _agenteService.GetAgentByIdAsync(id);
+        var agente = await _agenteService.GetAgentByIdIncludingInactiveAsync(id);
         if (agente is null) return NotFound();
         return Ok(agente);
     }

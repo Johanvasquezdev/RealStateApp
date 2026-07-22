@@ -50,6 +50,30 @@ public class AgentService : IAgentService
         return result.OrderBy(a => a.FirstName).ThenBy(a => a.LastName).ToList();
     }
 
+    public async Task<List<AgentListViewModel>> GetAllAgentsAsync()
+    {
+        var users = await _userService.GetUsersInRoleAsync("Agente");
+
+        var result = new List<AgentListViewModel>();
+        foreach (var user in users)
+        {
+            var properties = await _propertyRepository.FindAsync(p => p.AgentId == user.Id);
+            result.Add(new AgentListViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+                PropertyCount = properties.Count,
+                Activate = user.IsActive
+            });
+        }
+
+        return result.OrderBy(a => a.FirstName).ThenBy(a => a.LastName).ToList();
+    }
+
     public async Task<AgentListViewModel?> GetAgentByIdAsync(string id)
     {
         var user = await _userService.FindByIdAsync(id);
@@ -59,6 +83,29 @@ public class AgentService : IAgentService
         if (!roles.Contains("Agente")) return null;
 
         if (!user.IsActive) return null;
+
+        var properties = await _propertyRepository.FindAsync(p => p.AgentId == user.Id);
+
+        return new AgentListViewModel
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            ProfilePictureUrl = user.ProfilePictureUrl,
+            PropertyCount = properties.Count,
+            Activate = user.IsActive
+        };
+    }
+
+    public async Task<AgentListViewModel?> GetAgentByIdIncludingInactiveAsync(string id)
+    {
+        var user = await _userService.FindByIdAsync(id);
+        if (user is null) return null;
+
+        var roles = await _userService.GetRolesAsync(user.Id);
+        if (!roles.Contains("Agente")) return null;
 
         var properties = await _propertyRepository.FindAsync(p => p.AgentId == user.Id);
 
