@@ -65,11 +65,6 @@ namespace RealEstateApp.Areas.Admin.Controllers
             }
         }
 
-        public async Task<IActionResult> Delete(int id)
-        {
-            var vm = await _service.GetByIdViewModel(id);
-            return View(vm);
-        }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

@@ -34,8 +34,9 @@ public class RegisterViewModel
     [Required(ErrorMessage = "El tipo de usuario es requerido")]
     public string TipoUsuario { get; set; } = null!;
 
+    [Required(ErrorMessage = "El teléfono es requerido")]
     [RegularExpression(@"^[\d\- +()]*$", ErrorMessage = "El teléfono debe contener solo números (ej. 8090000000 o 809-000-0000)")]
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = null!;
     [Required(ErrorMessage = "La foto de perfil es obligatoria")]
     public IFormFile ProfilePicture { get; set; } = null!;
 }
