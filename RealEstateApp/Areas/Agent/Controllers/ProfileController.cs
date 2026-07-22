@@ -27,6 +27,11 @@ public class ProfileController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(AgentProfileViewModel vm)
     {
+        if (vm.ProfilePicture == null && string.IsNullOrEmpty(vm.ExistingProfilePictureUrl))
+        {
+            ModelState.AddModelError(nameof(vm.ProfilePicture), "La foto de perfil es obligatoria.");
+        }
+
         if (!ModelState.IsValid) return View("Index", vm);
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
         await _perfilService.UpdateProfileAsync(userId, vm);
