@@ -39,6 +39,15 @@ public class HomeController : Controller
         return View(properties);
     }
 
+    public async Task<IActionResult> Details(int id)
+    {
+        var clientId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var property = await _clientPropertyService.GetPropertyDetailAsync(id, clientId);
+        if (property == null) return NotFound();
+
+        return View(property);
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

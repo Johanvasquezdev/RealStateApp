@@ -24,7 +24,7 @@ public class AgentsController : Controller
         var agente = await _agenteService.GetAgentByIdAsync(id);
         if (agente == null) return NotFound();
         var propiedades = await _agenteService.GetPropertiesByAgentAsync(id);
-        ViewBag.Propiedades = propiedades;
+        ViewBag.Propiedades = propiedades.Where(p => p.Status == "Available").ToList();
         return View(agente);
     }
 }

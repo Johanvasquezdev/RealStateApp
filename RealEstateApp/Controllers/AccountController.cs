@@ -35,7 +35,7 @@ public class AccountController : Controller
         if (result.Rol == "Agente")
             return RedirectToAction("Index", "AgentHome", new { area = "Agent" });
         if (result.Rol == "Cliente")
-            return RedirectToAction("Index", "ClientProperty", new { area = "Client" });
+            return RedirectToAction("Index", "Home", new { area = "" });
             
         return RedirectToAction("Index", "Home");
     }

@@ -26,7 +26,7 @@
                 <h2 class="fw-bold text-dark mb-0">Offers Details</h2>
             }
         </div>
-        <a asp-action="Index" asp-route-propertyId="@ViewBag.PropertyId" class="btn btn-outline-secondary rounded-pill px-4">
+        <a asp-controller="PropertyMaintenance" asp-action="Detail" asp-route-id="@ViewBag.PropertyId" asp-fragment="offers" class="btn btn-outline-secondary rounded-pill px-4">
             <i class="bi bi-arrow-left me-2"></i> Volver a Ofertas
         </a>
     </div>

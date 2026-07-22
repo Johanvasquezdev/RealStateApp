@@ -43,9 +43,9 @@
                                 </span>
                             </td>
                             <td class="text-end pe-4">
-                                <a asp-action="Edit" asp-route-id="@admin.Id" class="btn btn-sm btn-outline-primary">Editar</a>
+                                <a asp-action="Edit" asp-route-id="@admin.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">Editar</a>
                                 <form asp-action="ToggleStatus" asp-route-id="@admin.Id" asp-route-activate="@(!admin.IsActive ? "true" : "false")" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-sm @(admin.IsActive ? "btn-outline-danger" : "btn-outline-success")"
+                                    <button type="submit" class="btn btn-sm @(admin.IsActive ? "btn-outline-danger" : "btn-outline-success") rounded-pill px-3"
                                             onclick="confirmAction(event, '¿Confirmar acción?', '¿Está seguro que desea @(admin.IsActive ? "inactivar" : "activar") este Administrador?');">
                                         @(admin.IsActive ? "Inactivar" : "Activar")
                                     </button>

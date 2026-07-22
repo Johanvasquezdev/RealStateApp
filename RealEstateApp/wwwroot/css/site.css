@@ -2,8 +2,8 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
 
 :root {
-    --primary: #198754;
-    --primary-hover: #157347;
+    --primary: #103524;
+    --primary-hover: #164a32;
     --secondary: #e2e8f0;
     --dark: #111827;
     --gray-text: #6b7280;
@@ -14,9 +14,50 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #ffffff;
     color: var(--dark);
-    -webkit-font-smoothing: antialiased;
+    background-color: var(--light-bg);
+}
+
+/* Overriding Bootstrap success colors to use our premium dark green */
+.btn-success {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: white !important;
+}
+
+.btn-success:hover, .btn-success:focus, .btn-success:active {
+    background-color: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+    color: white !important;
+}
+
+.btn-outline-success {
+    color: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+.btn-outline-success:hover, .btn-outline-success:focus, .btn-outline-success:active {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: white !important;
+}
+
+.text-success {
+    color: var(--primary) !important;
+}
+
+.bg-success {
+    background-color: var(--primary) !important;
+}
+
+.alert-success {
+    background-color: rgba(16, 53, 36, 0.1) !important;
+    border-color: rgba(16, 53, 36, 0.2) !important;
+    color: var(--primary) !important;
+}
+
+.badge.bg-success {
+    background-color: var(--primary) !important;
 }
 
 /* Custom Buttons */

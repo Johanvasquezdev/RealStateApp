@@ -38,6 +38,19 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100" style="background: white;">
+                <div class="card-body p-4 d-flex flex-column justify-content-center">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title text-muted m-0">Vendidas/Alquiladas</h5>
+                        <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: #f8f9fa; color: #6c757d;">
+                            <i class="bi bi-bookmark-check fs-4"></i>
+                        </div>
+                    </div>
+                    <p class="card-text fw-bold m-0" style="font-size: 3rem; color: #0a261c;">@Model.Count(p => p.Status != "Available")</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Properties Table -->
@@ -75,7 +88,7 @@
                                 <td class="py-3 px-4">@p.SaleType</td>
                                 <td class="py-3 px-4">
                                     <span class="badge rounded-pill px-3 py-2 @(p.Status == "Available" ? "bg-success bg-opacity-10 text-success" : "bg-secondary bg-opacity-10 text-secondary")">
-                                        @(p.Status == "Available" ? "Disponible" : "Vendida/Alquilada")
+                                        @(p.Status == "Available" ? "Disponible" : (p.SaleType == "Venta" ? "Vendida" : "Alquilada"))
                                     </span>
                                 </td>
                             </tr>

@@ -28,6 +28,7 @@ public class ClientPropertyController : Controller
         return View(properties);
     }
 
+    [AllowAnonymous]
     public async Task<IActionResult> Details(int id)
     {
         var clientId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

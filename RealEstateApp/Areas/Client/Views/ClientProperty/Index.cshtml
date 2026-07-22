@@ -97,7 +97,7 @@
                     @foreach (var prop in Model)
                     {
                         <div class="col">
-                            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden property-card hover-lift">
+                            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden property-card hover-lift position-relative">
                                 <div class="position-relative">
                                     <img src="@(string.IsNullOrEmpty(prop.MainImageUrl) ? "/img/default-property.jpg" : prop.MainImageUrl)" 
                                          onerror="this.onerror=null; this.src='/img/default-property.jpg';"
@@ -111,7 +111,7 @@
                                         <span class="badge bg-dark bg-opacity-75 text-white shadow-sm px-3 py-2 rounded-pill fw-bold">
                                             Cod: @prop.Code
                                         </span>
-                                        <form method="post" asp-area="Client" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@prop.Id" class="favorite-form">
+                                        <form method="post" asp-area="Client" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@prop.Id" class="favorite-form" style="z-index: 3; position: relative;">
                                             <button type="submit" class="btn btn-light rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center toggle-favorite-btn" style="width: 40px; height: 40px;" title="@(prop.IsFavorite ? "Quitar de favoritos" : "Agregar a favoritos")">
                                                 <i class="bi @(prop.IsFavorite ? "bi-heart-fill" : "bi-heart") fs-5 text-danger"></i>
                                             </button>
@@ -137,8 +137,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-grid mt-auto">
-                                        <a asp-action="Details" asp-route-id="@prop.Id" class="btn btn-outline-primary rounded-3 fw-bold py-2 btn-hover-filled">
+                                    <div class="d-grid mt-auto" style="z-index: 2; position: relative;">
+                                        <a asp-action="Details" asp-route-id="@prop.Id" class="btn btn-outline-primary rounded-3 fw-bold py-2 btn-hover-filled stretched-link">
                                             Ver Detalles
                                         </a>
                                     </div>

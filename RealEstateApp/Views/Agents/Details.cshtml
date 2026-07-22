@@ -26,14 +26,14 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold m-0">Propiedades del Agente</h3>
-        <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">@Model.PropertyCount inmuebles disponibles</span>
-    </div>
-
     @{
         var propiedades = ViewBag.Propiedades as List<AgentPropertyViewModel>;
     }
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold m-0">Propiedades del Agente</h3>
+        <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">@(propiedades?.Count ?? 0) inmuebles disponibles</span>
+    </div>
 
     @if (propiedades == null || !propiedades.Any())
     {

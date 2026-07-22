@@ -55,7 +55,7 @@ public class ClientPropertyService : IClientPropertyService
             properties = filters.Bathrooms.Value == 4 ? properties.Where(p => p.Bathrooms >= 4).ToList() : properties.Where(p => p.Bathrooms == filters.Bathrooms.Value).ToList();
             
         if (!string.IsNullOrWhiteSpace(filters.Code))
-            properties = properties.Where(p => p.Code == filters.Code).ToList();
+            properties = properties.Where(p => p.Code != null && p.Code.Contains(filters.Code.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
 
         // Sort: newest to oldest
         properties = properties.OrderByDescending(p => p.Created).ToList();
@@ -116,7 +116,7 @@ public class ClientPropertyService : IClientPropertyService
 
         var vm = _mapper.Map<ClientPropertyDetailViewModel>(prop);
         
-        vm.ImageUrls = prop.Images.Select(i => string.IsNullOrEmpty(i.ImageUrl) ? "" : (i.ImageUrl.StartsWith("http") || i.ImageUrl.StartsWith("/") ? i.ImageUrl : "/" + i.ImageUrl)).ToList();
+        vm.ImageUrls = prop.Images.Select(i => string.IsNullOrEmpty(i.ImageUrl) ? "" : (i.ImageUrl.StartsWith("http") || i.ImageUrl.StartsWith("/") ? i.ImageUrl : $"/Images/properties/{i.ImageUrl}")).ToList();
         vm.Improvements = prop.PropertyImprovements.Select(pi => pi.Improvement.Name).ToList();
 
         // Agent info

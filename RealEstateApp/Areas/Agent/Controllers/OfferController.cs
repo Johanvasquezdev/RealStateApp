@@ -36,14 +36,14 @@ public class OfferController : Controller
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         await _ofertaService.AcceptOfferAsync(id, userId);
-        return RedirectToAction("Index", new { propertyId });
+        return RedirectToAction("Detail", "PropertyMaintenance", new { id = propertyId }, "offers");
     }
 
     public async Task<IActionResult> Reject(int id, int propertyId)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         await _ofertaService.RejectOfferAsync(id, userId);
-        return RedirectToAction("Index", new { propertyId });
+        return RedirectToAction("Detail", "PropertyMaintenance", new { id = propertyId }, "offers");
     }
 }
 

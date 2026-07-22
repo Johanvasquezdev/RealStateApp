@@ -17,9 +17,9 @@
 
     <div class="container position-relative" style="z-index: 10;">
         <div class="row justify-content-center">
-            <div class="col-12" style="max-width: 900px; margin-top: -35px; margin-bottom: 3rem;">
+            <div class="col-12" style="max-width: 1100px; margin-top: -35px; margin-bottom: 3rem;">
                 <div class="search-bar-modern mx-3">
-                    <form method="get" class="d-flex flex-wrap align-items-center w-100 gap-2 p-2">
+                    <form method="get" asp-controller="Home" asp-action="Index" class="d-flex flex-wrap align-items-center w-100 gap-2 p-2">
                         <div class="search-input-group flex-grow-1" style="min-width: 120px;">
                             <label>Código</label>
                             <input type="text" name="Code" placeholder="Ej. 123456" value="@filter?.Code">
@@ -64,14 +64,14 @@
 
                         <div class="search-divider d-none d-md-block"></div>
 
-                        <div class="search-input-group flex-grow-1" style="max-width: 100px;">
+                        <div class="search-input-group flex-grow-1" style="min-width: 90px;">
                             <label>Hab.</label>
                             <input type="number" name="Rooms" placeholder="Camas" value="@filter?.Rooms">
                         </div>
 
                         <div class="search-divider d-none d-md-block"></div>
 
-                        <div class="search-input-group flex-grow-1" style="max-width: 100px;">
+                        <div class="search-input-group flex-grow-1" style="min-width: 90px;">
                             <label>Baños</label>
                             <input type="number" name="Bathrooms" placeholder="Baños" value="@filter?.Bathrooms">
                         </div>
@@ -114,7 +114,7 @@
                 @foreach (var property in Model)
                 {
                     <div class="col fade-in-up">
-                        <div class="card property-card h-100 border-0 rounded-4">
+                        <div class="card property-card h-100 border-0 rounded-4 position-relative">
                             <div class="property-img-wrapper position-relative">
                                 <img src="@(string.IsNullOrEmpty(property.MainImageUrl) ? "/img/default-property.jpg" : property.MainImageUrl)" 
                                      onerror="this.onerror=null; this.src='/img/default-property.jpg';"
@@ -125,7 +125,7 @@
                                     @property.SaleTypeName
                                 </span>
 
-                                <form method="post" asp-area="Client" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@property.Id" class="d-inline position-absolute top-0 end-0 m-3 favorite-form" style="z-index: 2;">
+                                <form method="post" asp-area="Client" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@property.Id" class="d-inline position-absolute top-0 end-0 m-3 favorite-form" style="z-index: 3; position: relative;">
                                     <button type="submit" class="btn btn-light rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center toggle-favorite-btn" style="width: 40px; height: 40px;" title="@(property.IsFavorite ? "Quitar de favoritos" : "Agregar a favoritos")">
                                         <i class="bi @(property.IsFavorite ? "bi-heart-fill" : "bi-heart") fs-5 text-danger"></i>
                                     </button>
@@ -159,14 +159,14 @@
                                 </div>
                             </div>
                             
-                            <div class="card-footer bg-white border-top-0 p-4 pt-0 d-flex justify-content-between align-items-center">
+                            <div class="card-footer bg-white border-top-0 p-4 pt-0 d-flex justify-content-between align-items-center" style="z-index: 2; position: relative;">
                                 <div class="d-flex align-items-center gap-2">
                                     <img src="@(string.IsNullOrEmpty(property.AgentPhotoUrl) ? "/img/default-user.png" : property.AgentPhotoUrl)" 
                                          onerror="this.onerror=null; this.src='/img/default-user.png';"
                                          class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;" alt="@property.AgentName">
                                     <span class="fw-bold fs-7 text-dark">@property.AgentName</span>
                                 </div>
-                                <a asp-area="Client" asp-controller="ClientProperty" asp-action="Details" asp-route-id="@property.Id" class="btn btn-sm btn-outline-primary rounded-pill fw-bold">Ver detalle</a>
+                                <a asp-area="" asp-controller="Home" asp-action="Details" asp-route-id="@property.Id" class="btn btn-sm btn-outline-primary rounded-pill fw-bold stretched-link">Ver detalle</a>
                             </div>
                         </div>
                     </div>
