@@ -31,7 +31,7 @@
         }
     </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header class="bg-white border-bottom sticky-top py-2">
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid px-4 px-lg-5">
@@ -209,8 +209,8 @@
             </div>
         </nav>
     </header>
-    <div class="container-fluid px-0">
-        <main role="main" class="pb-3">
+    <div class="container-fluid px-0 flex-grow-1 d-flex flex-column">
+        <main role="main" class="pb-3 flex-grow-1">
             @RenderBody()
         </main>
     </div>
@@ -232,7 +232,7 @@
         </div>
     }
 
-    <footer class="border-top footer text-muted bg-white">
+    <footer class="border-top footer text-muted bg-white mt-auto">
         <div class="container-fluid px-4">
             &copy; @DateTime.Now.Year - Real Estate App
         </div>
