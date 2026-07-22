@@ -27,7 +27,7 @@
                 @Model.PropertyTypeName
                 @if(User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Cliente"))
                 {
-                <form method="post" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@Model.Id" class="d-inline ms-3 favorite-form">
+                <form method="post" asp-area="Client" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@Model.Id" class="d-inline ms-3 favorite-form">
                     <button type="submit" class="btn btn-light text-danger rounded-pill shadow-sm px-3 py-2 fw-bold" title="Agregar a favoritos">
                         <i class="bi bi-heart-fill me-1"></i> Guardar
                     </button>
@@ -212,7 +212,7 @@
             <h5 class="modal-title fw-bold" id="offerModalLabel">Enviar Oferta</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <form asp-controller="ClientOffer" asp-action="MakeOffer" method="post">
+          <form asp-area="Client" asp-controller="ClientOffer" asp-action="MakeOffer" method="post">
               <div class="modal-body">
                 <input type="hidden" name="PropertyId" value="@Model.Id" />
                 <p class="text-muted mb-4">Ingresa el monto que deseas ofrecer por <strong>@Model.PropertyTypeName</strong>.</p>
