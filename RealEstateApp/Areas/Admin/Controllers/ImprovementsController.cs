@@ -52,9 +52,17 @@ namespace RealEstateApp.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid) return View(vm);
 
-            await _service.Update(vm, vm.Id);
-            TempData["Success"] = "La mejora fue actualizada correctamente.";
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _service.Update(vm, vm.Id);
+                TempData["Success"] = "La mejora fue actualizada correctamente.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("Name", ex.Message);
+                return View(vm);
+            }
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -67,8 +75,15 @@ namespace RealEstateApp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _service.Delete(id);
-            TempData["Success"] = "La mejora fue eliminada correctamente.";
+            try
+            {
+                await _service.Delete(id);
+                TempData["Success"] = "La mejora fue eliminada correctamente.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
             return RedirectToAction(nameof(Index));
         }
     }
