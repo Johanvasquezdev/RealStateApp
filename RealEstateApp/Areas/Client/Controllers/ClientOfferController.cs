@@ -25,6 +25,7 @@ public class ClientOfferController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> MakeOffer(OfferSaveViewModel vm)
     {
         if (!ModelState.IsValid)
@@ -50,6 +51,7 @@ public class ClientOfferController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> WithdrawOffer(int offerId)
     {
         var clientId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;

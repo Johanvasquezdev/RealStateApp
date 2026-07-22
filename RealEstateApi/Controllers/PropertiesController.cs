@@ -13,25 +13,17 @@ namespace RealEstateApi.Controllers;
 [Authorize(Roles = "Administrador,Desarrollador")]
 public class PropertiesController : ControllerBase
 {
-    private readonly IGenericRepository<Property> _propertyRepository;
-    private readonly IUserService _userService;
-    private readonly AutoMapper.IMapper _mapper;
+    private readonly IPropertyService _propertyService;
 
-    public PropertiesController(IGenericRepository<Property> propertyRepository, IUserService userService, AutoMapper.IMapper mapper)
+    public PropertiesController(IPropertyService propertyService)
     {
-        _propertyRepository = propertyRepository;
-        _userService = userService;
-        _mapper = mapper;
+        _propertyService = propertyService;
     }
 
     [HttpGet("list")]
     public async Task<IActionResult> GetAll()
     {
-        var properties = await _propertyRepository.FindWithIncludesAsync(
-            p => true,
-            "PropertyType", "SaleType", "Images");
-
-        var result = _mapper.Map<List<PropertyListApiResponse>>(properties);
+        var result = await _propertyService.GetApiPropertiesAsync();
 
         if (result.Count == 0)
             return NoContent();
@@ -42,17 +34,10 @@ public class PropertiesController : ControllerBase
     [HttpGet("getbyid/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var property = await _propertyRepository.FirstOrDefaultWithIncludesAsync(
-            p => p.Id == id,
-            "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
+        var result = await _propertyService.GetApiPropertyByIdAsync(id);
 
-        if (property == null)
+        if (result == null)
             return NotFound(new { error = "Propiedad no encontrada." });
-
-        var agent = await _userService.FindByIdAsync(property.AgentId);
-
-        var result = _mapper.Map<PropertyApiResponse>(property);
-        result.AgentName = agent != null ? $"{agent.FirstName} {agent.LastName}" : "Unknown";
 
         return Ok(result);
     }
@@ -60,17 +45,10 @@ public class PropertiesController : ControllerBase
     [HttpGet("getbycode/{code}")]
     public async Task<IActionResult> GetByCode(string code)
     {
-        var property = await _propertyRepository.FirstOrDefaultWithIncludesAsync(
-            p => p.Code == code,
-            "PropertyType", "SaleType", "Images", "PropertyImprovements.Improvement");
+        var result = await _propertyService.GetApiPropertyByCodeAsync(code);
 
-        if (property == null)
+        if (result == null)
             return NotFound(new { error = "Propiedad no encontrada." });
-
-        var agent = await _userService.FindByIdAsync(property.AgentId);
-
-        var result = _mapper.Map<PropertyApiResponse>(property);
-        result.AgentName = agent != null ? $"{agent.FirstName} {agent.LastName}" : "Unknown";
 
         return Ok(result);
     }

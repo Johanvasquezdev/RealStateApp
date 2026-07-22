@@ -12,6 +12,7 @@ public class AgentPropertyViewModel
     public string PropertyType { get; set; } = null!;
     public string SaleType { get; set; } = null!;
     public string Status { get; set; } = null!;
+    public string AgentId { get; set; } = null!;
     public string? MainImage { get; set; }
     public List<string> Images { get; set; } = new();
     public List<string> Improvements { get; set; } = new();

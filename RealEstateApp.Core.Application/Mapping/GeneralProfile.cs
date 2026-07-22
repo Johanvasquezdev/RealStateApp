@@ -51,6 +51,7 @@ public class GeneralProfile : Profile
         CreateMap<Property, RealEstateApp.Core.Application.DTOs.Properties.PropertyListApiResponse>()
             .ForMember(d => d.PropertyType, o => o.MapFrom(s => s.PropertyType != null ? s.PropertyType.Name : string.Empty))
             .ForMember(d => d.SaleType, o => o.MapFrom(s => s.SaleType != null ? s.SaleType.Name : string.Empty))
+            .ForMember(d => d.Status, o => o.MapFrom(s => s.Status.ToString()))
             .ForMember(d => d.MainImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault() != null ? s.Images.FirstOrDefault()!.ImageUrl : string.Empty));
 
         CreateMap<Property, RealEstateApp.Core.Application.DTOs.Properties.PropertyApiResponse>()

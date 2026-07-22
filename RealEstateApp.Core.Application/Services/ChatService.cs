@@ -53,6 +53,9 @@ public class ChatService : IChatService
     {
         var propertyRepo = _unitOfWork.Repository<Property>();
         var property = await propertyRepo.GetByIdAsync(propertyId);
+        if (property is null || property.AgentId != agentId)
+            return null!;
+
         var client = await _userService.FindByIdAsync(clientId);
 
         var messageRepo = _unitOfWork.Repository<Message>();
@@ -83,6 +86,11 @@ public class ChatService : IChatService
     {
         if (senderId == vm.ReceiverId)
             throw new InvalidOperationException("No puede enviarse un mensaje a sí mismo.");
+
+        var propertyRepo = _unitOfWork.Repository<Property>();
+        var property = await propertyRepo.GetByIdAsync(vm.PropertyId);
+        if (property is null || property.AgentId != senderId)
+            throw new InvalidOperationException("La propiedad no pertenece al agente autenticado.");
 
         var receiverRoles = await _userService.GetRolesAsync(vm.ReceiverId);
         if (receiverRoles == null || !receiverRoles.Contains("Cliente"))

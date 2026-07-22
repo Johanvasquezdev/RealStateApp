@@ -32,6 +32,8 @@ public class OfferController : Controller
         return View(ofertas);
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Accept(int id, int propertyId)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
@@ -39,6 +41,8 @@ public class OfferController : Controller
         return RedirectToAction("Detail", "PropertyMaintenance", new { id = propertyId }, "offers");
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Reject(int id, int propertyId)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;

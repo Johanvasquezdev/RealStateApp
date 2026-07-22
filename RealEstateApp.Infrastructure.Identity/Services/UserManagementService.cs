@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RealEstateApp.Core.Application.DTOs;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Users;
+using RealEstateApp.Core.Domain.Common;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Enums;
 using RealEstateApp.Core.Domain.Interfaces;
@@ -13,16 +15,24 @@ public class UserManagementService: IUserManagementService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IGenericRepository<Property> _propertyRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IFileStorageService _fileStorageService;
     
     private readonly string RoleAdmin = Roles.Administrador.ToString();
     private readonly string RoleDeveloper = Roles.Desarrollador.ToString();
     private readonly string RoleAgent = Roles.Agente.ToString();
     private readonly string RoleClient = Roles.Cliente.ToString();
 
-    public UserManagementService(UserManager<ApplicationUser> userManager, IGenericRepository<Property> propertyRepository)
+    public UserManagementService(
+        UserManager<ApplicationUser> userManager,
+        IGenericRepository<Property> propertyRepository,
+        IUnitOfWork unitOfWork,
+        IFileStorageService fileStorageService)
     {
         _userManager = userManager;
         _propertyRepository = propertyRepository;
+        _unitOfWork = unitOfWork;
+        _fileStorageService = fileStorageService;
     }
 
     public Task<List<UserListItemViewModel>> GetAllAdmins() => GetByRole(RoleAdmin);
@@ -104,16 +114,36 @@ public class UserManagementService: IUserManagementService
         if (user is null)
             return new ResultResponse { Succeeded = false, Errors = ["El agente seleccionado no existe."] };
 
-        var agentProperties = await _propertyRepository.FindAsync(p => p.AgentId == id);
+        var agentProperties = await _propertyRepository.FindWithIncludesAsync(p => p.AgentId == id, "Images");
+        using var transaction = await _unitOfWork.BeginTransactionAsync();
 
-        foreach (var property in agentProperties)
+        try
         {
-            await _propertyRepository.DeleteAsync(property);
-        }
-        await _propertyRepository.SaveChangesAsync();
+            foreach (var property in agentProperties)
+                await _propertyRepository.DeleteAsync(property);
 
-        var result = await _userManager.DeleteAsync(user);
-        return result.Succeeded ? new ResultResponse { Succeeded = true } : new ResultResponse { Succeeded = false, Errors = result.Errors.Select(e => e.Description).ToArray() };
+            await _unitOfWork.SaveChangesAsync();
+
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                await transaction.RollbackAsync();
+                return new ResultResponse { Succeeded = false, Errors = result.Errors.Select(e => e.Description).ToArray() };
+            }
+
+            await transaction.CommitAsync();
+
+            foreach (var property in agentProperties)
+            foreach (var image in property.Images)
+                _fileStorageService.DeleteFile(image.ImageUrl, "properties");
+
+            return new ResultResponse { Succeeded = true };
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            return new ResultResponse { Succeeded = false, Errors = [ex.Message] };
+        }
     }
 
     public async Task<AdminDashboardViewModel> GetDashboardCounts()
@@ -161,8 +191,23 @@ public class UserManagementService: IUserManagementService
 
         user.FirstName = vm.FirstName;
         user.LastName = vm.LastName;
-        user.IdCard = vm.IdCard?.Replace("-", "") ?? string.Empty;
-        user.Email = vm.Email;
+        var cleanIdCard = NormalizeIdCard(vm.IdCard);
+        if (_userManager.Users.Any(u => u.IdCard == cleanIdCard && u.Id != user.Id))
+            return new ResultResponse { Succeeded = false, Errors = ["Ya existe un usuario registrado con esta cédula."] };
+
+        var existingUserName = await _userManager.FindByNameAsync(vm.UserName);
+        if (existingUserName is not null && existingUserName.Id != user.Id)
+            return new ResultResponse { Succeeded = false, Errors = ["Ya existe un usuario registrado con este nombre de usuario."] };
+
+        var existingEmail = await _userManager.FindByEmailAsync(vm.Email);
+        if (existingEmail is not null && existingEmail.Id != user.Id)
+            return new ResultResponse { Succeeded = false, Errors = ["Ya existe un usuario registrado con este correo electrónico."] };
+
+        user.IdCard = cleanIdCard;
+        user.UserName = vm.UserName.Trim();
+        user.NormalizedUserName = _userManager.NormalizeName(user.UserName);
+        user.Email = vm.Email.Trim();
+        user.NormalizedEmail = _userManager.NormalizeEmail(user.Email);
 
         var result = await _userManager.UpdateAsync(user);
         if (!result.Succeeded)
@@ -189,16 +234,28 @@ public class UserManagementService: IUserManagementService
 
         user.IsActive = activate;
         var result = await _userManager.UpdateAsync(user);
-        return result.Succeeded ? new ResultResponse { Succeeded = true } : 
-            new ResultResponse { Succeeded = false, Errors = [.. result.Errors.Select(e => e.Description)] };
+        if (!result.Succeeded)
+            return new ResultResponse { Succeeded = false, Errors = [.. result.Errors.Select(e => e.Description)] };
+
+        if (!activate)
+        {
+            var stampResult = await _userManager.UpdateSecurityStampAsync(user);
+            if (!stampResult.Succeeded)
+                return new ResultResponse { Succeeded = false, Errors = [.. stampResult.Errors.Select(e => e.Description)] };
+        }
+
+        return new ResultResponse { Succeeded = true };
     }
 
     private async Task<ResultResponse> CreateUserWithRole(SaveAdminViewModel vm, string role)
     {
+        if (string.IsNullOrWhiteSpace(vm.Password) || string.IsNullOrWhiteSpace(vm.ConfirmPassword))
+            return new ResultResponse { Succeeded = false, Errors = ["La contraseña es obligatoria al crear el usuario."] };
+
         if (vm.Password != vm.ConfirmPassword)
             return new ResultResponse { Succeeded = false, Errors = ["las claves no coinciden."] };
 
-        string cleanIdCard = vm.IdCard?.Replace("-", "") ?? string.Empty;
+        string cleanIdCard = NormalizeIdCard(vm.IdCard);
         if (_userManager.Users.Any(u => u.IdCard == cleanIdCard))
             return new ResultResponse { Succeeded = false, Errors = ["Ya existe un usuario registrado con esta cédula."] };
 
@@ -220,5 +277,8 @@ public class UserManagementService: IUserManagementService
         await _userManager.AddToRoleAsync(user, role);
         return new ResultResponse { Succeeded = true };
     }
+
+    private static string NormalizeIdCard(string? idCard) =>
+        new string((idCard ?? string.Empty).Where(char.IsDigit).ToArray());
     #endregion
 }

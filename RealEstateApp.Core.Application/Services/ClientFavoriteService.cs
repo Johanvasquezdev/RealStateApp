@@ -52,11 +52,19 @@ public class ClientFavoriteService : IClientFavoriteService
             .Where(p => p.Status == PropertyStatus.Available)
             .ToList();
 
-        var vms = _mapper.Map<List<ClientPropertyViewModel>>(availableProperties);
+        var activeAgentProperties = new List<Property>();
+        foreach (var property in availableProperties)
+        {
+            var agentUser = await _userService.FindByIdAsync(property.AgentId);
+            if (agentUser is not null && agentUser.IsActive)
+                activeAgentProperties.Add(property);
+        }
+
+        var vms = _mapper.Map<List<ClientPropertyViewModel>>(activeAgentProperties);
         
         foreach (var vm in vms)
         {
-            var prop = availableProperties.First(p => p.Id == vm.Id);
+            var prop = activeAgentProperties.First(p => p.Id == vm.Id);
             
             var url = prop.Images?.FirstOrDefault()?.ImageUrl ?? "";
             vm.MainImageUrl = string.IsNullOrEmpty(url) ? "" : (url.StartsWith("http") || url.StartsWith("/") ? url : $"/Images/properties/{url}");

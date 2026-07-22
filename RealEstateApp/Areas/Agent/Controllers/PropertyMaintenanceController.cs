@@ -51,6 +51,7 @@ public class PropertyMaintenanceController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(AgentPropertySaveViewModel vm)
     {
         var imageCount = vm.Images?.Count ?? 0;
@@ -108,6 +109,7 @@ public class PropertyMaintenanceController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(AgentPropertySaveViewModel vm)
     {
         var property = await _propertyService.GetPropertyDetailAsync(vm.Id);
@@ -169,6 +171,7 @@ public class PropertyMaintenanceController : Controller
     }
 
     [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var property = await _propertyService.GetPropertyDetailAsync(id);
@@ -189,6 +192,7 @@ public class PropertyMaintenanceController : Controller
         if (property == null) return NotFound();
         
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        if (property.AgentId != userId) return Forbid();
         
         ViewBag.Conversations = await _chatService.GetConversationsByPropertyAsync(id, userId);
         ViewBag.Offers = await _offerService.GetOfferSummaryByPropertyAsync(id, userId);

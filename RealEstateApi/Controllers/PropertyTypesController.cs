@@ -81,7 +81,7 @@ public class PropertyTypesController(IPropertyTypeService service) : ControllerB
         }
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete("{id}")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -93,6 +93,10 @@ public class PropertyTypesController(IPropertyTypeService service) : ControllerB
         catch (KeyNotFoundException)
         {
             return NotFound(new { error = "El tipo de propiedad solicitado no existe." });
+        }
+        catch (Exception)
+        {
+            return StatusCode(409, new { error = "No se puede eliminar el tipo de propiedad porque está siendo utilizado en otras propiedades." });
         }
     }
 }

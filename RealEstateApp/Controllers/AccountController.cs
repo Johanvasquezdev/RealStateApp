@@ -21,6 +21,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
@@ -35,7 +36,7 @@ public class AccountController : Controller
         if (result.Rol == "Agente")
             return RedirectToAction("Index", "AgentHome", new { area = "Agent" });
         if (result.Rol == "Cliente")
-            return RedirectToAction("Index", "Home", new { area = "" });
+            return RedirectToAction("Index", "Home", new { area = "Client" });
             
         return RedirectToAction("Index", "Home");
     }
@@ -46,6 +47,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel vm)
     {
         if (!ModelState.IsValid) return View(vm);
@@ -71,6 +73,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ResendActivation(string email)
     {
         if (string.IsNullOrWhiteSpace(email))

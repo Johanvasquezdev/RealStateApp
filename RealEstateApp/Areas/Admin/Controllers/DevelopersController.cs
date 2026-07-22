@@ -23,6 +23,9 @@ namespace RealEstateApp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SaveDeveloperViewModel vm)
         {
+            if (string.IsNullOrWhiteSpace(vm.Password))
+                ModelState.AddModelError(nameof(vm.Password), "La contrasena es obligatoria al crear el desarrollador.");
+
             if (!ModelState.IsValid) return View(vm);
 
             var result = await _service.CreateDeveloper(vm);

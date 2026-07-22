@@ -24,6 +24,9 @@ namespace RealEstateApp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SaveAdminViewModel vm)
         {
+            if (string.IsNullOrWhiteSpace(vm.Password))
+                ModelState.AddModelError(nameof(vm.Password), "La contrasena es obligatoria al crear el administrador.");
+
             if (!ModelState.IsValid) return View(vm);
 
             var result = await _service.CreateAdmin(vm);

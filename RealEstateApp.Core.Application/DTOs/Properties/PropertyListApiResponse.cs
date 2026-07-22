@@ -10,5 +10,6 @@ public class PropertyListApiResponse
     public double LandSize { get; set; }
     public int Rooms { get; set; }
     public int Bathrooms { get; set; }
+    public string Status { get; set; } = null!;
     public string MainImageUrl { get; set; } = null!;
 }

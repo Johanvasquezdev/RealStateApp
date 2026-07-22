@@ -81,7 +81,7 @@ public class ImprovementsController(IImprovementService service) : ControllerBas
         }
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete("{id}")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -93,6 +93,10 @@ public class ImprovementsController(IImprovementService service) : ControllerBas
         catch (KeyNotFoundException)
         {
             return NotFound(new { error = "La mejora solicitada no existe." });
+        }
+        catch (Exception)
+        {
+            return StatusCode(409, new { error = "No se puede eliminar la mejora porque está siendo utilizada en otras propiedades." });
         }
     }
 }

@@ -13,6 +13,8 @@ public interface IPropertyService
     Task UpdateAsync(AgentPropertySaveViewModel vm, string agentId);
     Task DeleteAsync(int id, string agentId);
     Task<string?> GetFirstImageAsync(int propertyId);
+    Task<List<RealEstateApp.Core.Application.DTOs.Properties.PropertyListApiResponse>> GetApiPropertiesAsync();
+    Task<RealEstateApp.Core.Application.DTOs.Properties.PropertyApiResponse?> GetApiPropertyByIdAsync(int id);
+    Task<RealEstateApp.Core.Application.DTOs.Properties.PropertyApiResponse?> GetApiPropertyByCodeAsync(string code);
+
 }
-
-

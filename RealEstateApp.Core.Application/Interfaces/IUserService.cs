@@ -7,6 +7,7 @@ public interface IUserService
     Task<UserDto?> FindByIdAsync(string userId);
     Task<UserDto?> FindByEmailAsync(string email);
     Task<UserDto?> FindByNameAsync(string username);
+    Task<UserDto?> FindByIdCardAsync(string idCard);
     Task<List<UserDto>> GetUsersInRoleAsync(string role);
 
     Task<(bool Succeeded, string Error, string? UserId)> CreateUserAsync(string userName, string email, string password, string firstName, string lastName, string? phoneNumber, bool isActive, string? profilePictureUrl, string idCard);

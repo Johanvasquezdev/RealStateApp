@@ -50,6 +50,9 @@ public class AccountController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(new { error = "Los datos enviados no son válidos.", details = ModelState });
 
+        if (string.IsNullOrWhiteSpace(vm.Password) || string.IsNullOrWhiteSpace(vm.ConfirmPassword))
+            return BadRequest(new { error = "La contrasena es obligatoria al crear el usuario." });
+
         if (vm.Password != vm.ConfirmPassword)
             return BadRequest(new { error = "La contraseña y la confirmación de contraseña no coinciden." });
 
@@ -61,7 +64,7 @@ public class AccountController : ControllerBase
         if (existingUserName is not null)
             return BadRequest(new { error = "Ya existe un usuario registrado con este nombre de usuario." });
 
-        var cleanIdCard = vm.IdCard?.Replace("-", "") ?? string.Empty;
+        var cleanIdCard = NormalizeIdCard(vm.IdCard);
         if (!string.IsNullOrEmpty(cleanIdCard) && _userManager.Users.Any(u => u.IdCard == cleanIdCard))
             return BadRequest(new { error = "Ya existe un usuario registrado con esta cédula." });
 
@@ -69,7 +72,7 @@ public class AccountController : ControllerBase
         {
             FirstName = vm.FirstName,
             LastName = vm.LastName,
-            IdCard = vm.IdCard?.Replace("-", "") ?? string.Empty,
+            IdCard = cleanIdCard,
             Email = vm.Email,
             UserName = vm.UserName,
             IsActive = true,
@@ -92,6 +95,9 @@ public class AccountController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(new { error = "Los datos enviados no son válidos.", details = ModelState });
 
+        if (string.IsNullOrWhiteSpace(vm.Password) || string.IsNullOrWhiteSpace(vm.ConfirmPassword))
+            return BadRequest(new { error = "La contrasena es obligatoria al crear el usuario." });
+
         if (vm.Password != vm.ConfirmPassword)
             return BadRequest(new { error = "La contraseña y la confirmación de contraseña no coinciden." });
 
@@ -103,7 +109,7 @@ public class AccountController : ControllerBase
         if (existingUserName is not null)
             return BadRequest(new { error = "Ya existe un usuario registrado con este nombre de usuario." });
 
-        var cleanIdCard = vm.IdCard?.Replace("-", "") ?? string.Empty;
+        var cleanIdCard = NormalizeIdCard(vm.IdCard);
         if (!string.IsNullOrEmpty(cleanIdCard) && _userManager.Users.Any(u => u.IdCard == cleanIdCard))
             return BadRequest(new { error = "Ya existe un usuario registrado con esta cédula." });
 
@@ -111,7 +117,7 @@ public class AccountController : ControllerBase
         {
             FirstName = vm.FirstName,
             LastName = vm.LastName,
-            IdCard = vm.IdCard?.Replace("-", "") ?? string.Empty,
+            IdCard = cleanIdCard,
             Email = vm.Email,
             UserName = vm.UserName,
             IsActive = true,
@@ -126,4 +132,7 @@ public class AccountController : ControllerBase
 
         return StatusCode(201, new { message = "El administrador fue creado correctamente.", userId = user.Id });
     }
+
+    private static string NormalizeIdCard(string? idCard) =>
+        new string((idCard ?? string.Empty).Where(char.IsDigit).ToArray());
 }

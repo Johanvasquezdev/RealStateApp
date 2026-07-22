@@ -27,11 +27,19 @@ public class ClientChatController : Controller
     public async Task<IActionResult> Conversation(int propertyId, string agentId)
     {
         var clientId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-        var chat = await _clientChatService.GetConversationWithAgentAsync(clientId, agentId, propertyId);
-        return View(chat);
+        try
+        {
+            var chat = await _clientChatService.GetConversationWithAgentAsync(clientId, agentId, propertyId);
+            return View(chat);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> SendMessage(MessageSaveViewModel vm)
     {
         if (!ModelState.IsValid)
@@ -42,7 +50,14 @@ public class ClientChatController : Controller
         var clientId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
         vm.SenderId = clientId;
 
-        await _clientChatService.SendMessageAsync(vm);
+        try
+        {
+            await _clientChatService.SendMessageAsync(vm);
+        }
+        catch (InvalidOperationException ex)
+        {
+            TempData["Error"] = ex.Message;
+        }
 
         return RedirectToAction("Conversation", new { propertyId = vm.PropertyId, agentId = vm.ReceiverId });
     }

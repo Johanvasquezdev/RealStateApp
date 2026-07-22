@@ -24,6 +24,7 @@ public class ClientProfileController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(AgentProfileViewModel vm)
     {
         if (!ModelState.IsValid) return View("Index", vm);

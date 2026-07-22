@@ -13,12 +13,14 @@ public class PropertyService : IPropertyService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IFileStorageService _fileStorageService;
+    private readonly IUserService _userService;
 
-    public PropertyService(IUnitOfWork unitOfWork, IMapper mapper, IFileStorageService fileStorageService)
+    public PropertyService(IUnitOfWork unitOfWork, IMapper mapper, IFileStorageService fileStorageService, IUserService userService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _fileStorageService = fileStorageService;
+        _userService = userService;
     }
 
     public async Task<List<AgentPropertyViewModel>> GetAvailablePropertiesAsync()
@@ -218,6 +220,38 @@ public class PropertyService : IPropertyService
 
 
 
+
+    public async Task<List<RealEstateApp.Core.Application.DTOs.Properties.PropertyListApiResponse>> GetApiPropertiesAsync()
+    {
+        var repo = _unitOfWork.Repository<Property>();
+        var properties = await repo.FindWithIncludesAsync(
+            p => p.Status == PropertyStatus.Available,
+            "PropertyType", "SaleType");
+        return _mapper.Map<List<RealEstateApp.Core.Application.DTOs.Properties.PropertyListApiResponse>>(properties);
+    }
+
+    public async Task<RealEstateApp.Core.Application.DTOs.Properties.PropertyApiResponse?> GetApiPropertyByIdAsync(int id)
+    {
+        var repo = _unitOfWork.Repository<Property>();
+        var prop = await repo.FirstOrDefaultWithIncludesAsync(
+            p => p.Id == id && p.Status == PropertyStatus.Available,
+            "PropertyType", "SaleType", "Agent", "PropertyImprovements.Improvement");
+        
+        if (prop == null) return null;
+        return _mapper.Map<RealEstateApp.Core.Application.DTOs.Properties.PropertyApiResponse>(prop);
+    }
+
+    public async Task<RealEstateApp.Core.Application.DTOs.Properties.PropertyApiResponse?> GetApiPropertyByCodeAsync(string code)
+    {
+        var repo = _unitOfWork.Repository<Property>();
+        var prop = await repo.FirstOrDefaultWithIncludesAsync(
+            p => p.Code == code && p.Status == PropertyStatus.Available,
+            "PropertyType", "SaleType", "Agent", "PropertyImprovements.Improvement");
+            
+        if (prop == null) return null;
+        return _mapper.Map<RealEstateApp.Core.Application.DTOs.Properties.PropertyApiResponse>(prop);
+    }
+    
     private List<AgentPropertyViewModel> MapWithImages(List<Property> properties)
     {
         var list = _mapper.Map<List<AgentPropertyViewModel>>(properties);

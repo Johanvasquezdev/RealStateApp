@@ -2,6 +2,7 @@ using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Core.Application.ViewModels.Messages;
 using RealEstateApp.Core.Domain.Entities;
 using RealEstateApp.Core.Domain.Common;
+using RealEstateApp.Core.Domain.Enums;
 
 namespace RealEstateApp.Core.Application.Services;
 
@@ -30,6 +31,15 @@ public class ClientChatService : IClientChatService
         var receiverRoles = await _userService.GetRolesAsync(vm.ReceiverId);
         if (receiverRoles == null || !receiverRoles.Contains("Agente"))
             throw new InvalidOperationException("El destinatario no es un Agente válido.");
+
+        var receiver = await _userService.FindByIdAsync(vm.ReceiverId);
+        var propertyRepo = _unitOfWork.Repository<Property>();
+        var property = await propertyRepo.GetByIdAsync(vm.PropertyId);
+        if (receiver == null || !receiver.IsActive || property == null ||
+            property.Status != PropertyStatus.Available || property.AgentId != vm.ReceiverId)
+        {
+            throw new InvalidOperationException("La propiedad no esta disponible o el agente no es su propietario.");
+        }
 
         var repo = _unitOfWork.Repository<Message>();
         var entity = new Message
@@ -88,14 +98,20 @@ public class ClientChatService : IClientChatService
     #region Get Conversation Details
     public async Task<ClientChatConversationViewModel> GetConversationWithAgentAsync(string clientId, string agentId, int propertyId)
     {
+        var propRepo = _unitOfWork.Repository<Property>();
+        var property = await propRepo.GetByIdAsync(propertyId);
+        var agentUser = await _userService.FindByIdAsync(agentId);
+        if (property == null || property.Status != PropertyStatus.Available || property.AgentId != agentId ||
+            agentUser == null || !agentUser.IsActive)
+        {
+            throw new KeyNotFoundException("La conversacion solicitada no esta disponible.");
+        }
+
         var msgRepo = _unitOfWork.Repository<Message>();
         var messages = await msgRepo.FindAsync(m => 
             m.PropertyId == propertyId && 
             ((m.SenderId == clientId && m.ReceiverId == agentId) || 
              (m.SenderId == agentId && m.ReceiverId == clientId)));
-
-        var agentUser = await _userService.FindByIdAsync(agentId);
-        if (agentUser == null) return new ClientChatConversationViewModel();
 
         var result = new ClientChatConversationViewModel
         {
@@ -112,7 +128,6 @@ public class ClientChatService : IClientChatService
             }).ToList()
         };
 
-        var propRepo = _unitOfWork.Repository<Property>();
         result.AgentPropertyCount = await propRepo.CountAsync(p => p.AgentId == agentId);
 
         return result;

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Infrastructure.Identity.Entities;
@@ -8,6 +10,7 @@ using RealEstateApp.Infrastructure.Identity.Services;
 using RealEstateApp.Infrastructure.Identity.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using System.Security.Claims;
 using RealEstateApp.Core.Domain.Settings;
 
 namespace RealEstateApp.Infrastructure.Identity.IoC;
@@ -70,6 +73,20 @@ public static class ServiceRegistration
                     ValidAudience = jwtSettings["Audience"],
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        var userId = context.Principal?.FindFirstValue(ClaimTypes.NameIdentifier);
+                        var identityOptions = context.HttpContext.RequestServices.GetRequiredService<IOptions<IdentityOptions>>().Value;
+                        var tokenStamp = context.Principal?.FindFirstValue(identityOptions.ClaimsIdentity.SecurityStampClaimType);
+                        var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+                        var user = string.IsNullOrWhiteSpace(userId) ? null : await userManager.FindByIdAsync(userId);
+
+                        if (user is null || !user.IsActive || string.IsNullOrWhiteSpace(tokenStamp) || tokenStamp != user.SecurityStamp)
+                            context.Fail("El token ha sido revocado o el usuario esta inactivo.");
+                    }
                 };
             });
         }

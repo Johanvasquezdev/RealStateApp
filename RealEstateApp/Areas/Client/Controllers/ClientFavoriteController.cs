@@ -26,6 +26,7 @@ public class ClientFavoriteController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ToggleFavorite(int id)
     {
         var clientId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

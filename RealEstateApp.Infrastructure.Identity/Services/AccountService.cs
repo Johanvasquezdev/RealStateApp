@@ -16,12 +16,14 @@ public class AccountService : IAccountService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly JwtSettings _jwtSettings;
+    private readonly IdentityOptions _identityOptions;
 
-    public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> jwtSettings)
+    public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> jwtSettings, IOptions<IdentityOptions> identityOptions)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _jwtSettings = jwtSettings.Value;
+        _identityOptions = identityOptions.Value;
     }
 
     public async Task<AuthenticateResponse> AuthenticateAsync(AuthenticateRequest request)
@@ -47,7 +49,8 @@ public class AccountService : IAccountService
         {
             new(ClaimTypes.NameIdentifier, user.Id),
             new(ClaimTypes.Name, user.UserName!),
-            new(ClaimTypes.Email, user.Email!)
+            new(ClaimTypes.Email, user.Email!),
+            new(_identityOptions.ClaimsIdentity.SecurityStampClaimType, user.SecurityStamp!)
         };
         claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 

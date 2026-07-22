@@ -31,13 +31,18 @@ public class AuthService : IAuthService
         if (existingEmail is not null)
             return new RegisterResult { Exito = false, Mensaje = "El correo electrnico ya est registrado." };
 
+        var normalizedIdCard = NormalizeIdCard(vm.IdCard);
+        var existingIdCard = await _userService.FindByIdCardAsync(normalizedIdCard);
+        if (existingIdCard is not null)
+            return new RegisterResult { Exito = false, Mensaje = "La cédula ya está registrada." };
+
         string? profilePictureUrl = null;
         if (vm.ProfilePicture is not null)
             profilePictureUrl = _fileStorageService.UploadFile(vm.ProfilePicture, "profile-pictures");
 
         var (succeeded, error, userId) = await _userService.CreateUserAsync(
             vm.Username, vm.Email, vm.Password, vm.FirstName, vm.LastName,
-            vm.PhoneNumber, false, profilePictureUrl, vm.IdCard?.Replace("-", "") ?? string.Empty);
+            vm.PhoneNumber, false, profilePictureUrl, normalizedIdCard);
 
         if (!succeeded)
             return new RegisterResult { Exito = false, Mensaje = error };
@@ -132,6 +137,9 @@ public class AuthService : IAuthService
     {
         await _userService.SignOutAsync();
     }
+
+    private static string NormalizeIdCard(string? idCard) =>
+        new string((idCard ?? string.Empty).Where(char.IsDigit).ToArray());
 }
 
 

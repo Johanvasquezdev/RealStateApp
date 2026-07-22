@@ -139,8 +139,9 @@ public class ClientPropertyService : IClientPropertyService
         vm.AgentPhone = agentUser.PhoneNumber ?? "";
         vm.AgentPhotoUrl = agentUser.ProfilePictureUrl ?? "";
         vm.AgentId = agentUser.Id;
+        vm.IsAvailable = prop.Status == PropertyStatus.Available;
 
-        vm.CanMakeOffer = await CheckCanMakeOfferAsync(prop.Id, clientId);
+        vm.CanMakeOffer = vm.IsAvailable && await CheckCanMakeOfferAsync(prop.Id, clientId);
 
         return vm;
     }

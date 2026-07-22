@@ -81,7 +81,7 @@ public class SaleTypesController(ISaleTypeService service) : ControllerBase
         }
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete("{id}")]
     [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -93,6 +93,10 @@ public class SaleTypesController(ISaleTypeService service) : ControllerBase
         catch (KeyNotFoundException)
         {
             return NotFound(new { error = "El tipo de venta solicitado no existe." });
+        }
+        catch (Exception)
+        {
+            return StatusCode(409, new { error = "No se puede eliminar el tipo de venta porque está siendo utilizado en otras propiedades." });
         }
     }
 }

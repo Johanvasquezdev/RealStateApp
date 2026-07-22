@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RealEstateApp.Core.Application.DTOs;
 using RealEstateApp.Core.Application.Interfaces;
 using RealEstateApp.Infrastructure.Identity.Entities;
@@ -33,6 +34,13 @@ public class UserService : IUserService
     public async Task<UserDto?> FindByNameAsync(string username)
     {
         var user = await _userManager.FindByNameAsync(username);
+        return user is null ? null : ToDto(user);
+    }
+
+    public async Task<UserDto?> FindByIdCardAsync(string idCard)
+    {
+        var normalizedIdCard = NormalizeIdCard(idCard);
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.IdCard == normalizedIdCard);
         return user is null ? null : ToDto(user);
     }
 
@@ -174,5 +182,8 @@ public class UserService : IUserService
             ProfilePictureUrl = user.ProfilePictureUrl
         };
     }
+
+    private static string NormalizeIdCard(string? idCard) =>
+        new string((idCard ?? string.Empty).Where(char.IsDigit).ToArray());
 }
 

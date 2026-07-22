@@ -33,12 +33,20 @@ public class ChatController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> EnviarMensaje(AgentSendMessageViewModel vm)
     {
-        if (!ModelState.IsValid) return RedirectToAction("Conversacion", new { propertyId = vm.PropertyId, clientId = vm.ReceiverId });
+        if (!ModelState.IsValid) return RedirectToAction("Conversation", new { propertyId = vm.PropertyId, clientId = vm.ReceiverId });
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
-        await _chatService.SendMessageAsync(vm, userId);
-        return RedirectToAction("Conversacion", new { propertyId = vm.PropertyId, clientId = vm.ReceiverId });
+        try
+        {
+            await _chatService.SendMessageAsync(vm, userId);
+        }
+        catch (InvalidOperationException ex)
+        {
+            TempData["Error"] = ex.Message;
+        }
+        return RedirectToAction("Conversation", new { propertyId = vm.PropertyId, clientId = vm.ReceiverId });
     }
 }
 
