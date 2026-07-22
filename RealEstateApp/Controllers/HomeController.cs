@@ -31,7 +31,13 @@ public class HomeController : Controller
         }
 
         string? userId = User.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : null;
-        var properties = await _clientPropertyService.GetPropertiesWithFiltersAsync(filter, userId);
+        var properties = new List<ClientPropertyViewModel>();
+        
+        if (ModelState.IsValid)
+        {
+            properties = await _clientPropertyService.GetPropertiesWithFiltersAsync(filter, userId);
+        }
+
         ViewBag.PropertyTypes = await _propertyTypeService.GetAllViewModel();
         ViewBag.Filter = filter;
         return View(properties);

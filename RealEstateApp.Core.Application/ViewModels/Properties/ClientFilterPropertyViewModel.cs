@@ -19,11 +19,11 @@ public class ClientFilterPropertyViewModel : IValidatableObject
     public decimal? MaxPrice { get; set; }
 
     [Display(Name = "Cantidad de Habitaciones")]
-    [Range(1, int.MaxValue, ErrorMessage = "La cantidad de habitaciones debe ser mayor a 0.")]
+    [Range(0, int.MaxValue, ErrorMessage = "La cantidad de habitaciones no puede ser menor que cero.")]
     public int? Rooms { get; set; }
 
     [Display(Name = "Cantidad de Baños")]
-    [Range(1, int.MaxValue, ErrorMessage = "La cantidad de baños debe ser mayor a 0.")]
+    [Range(0, int.MaxValue, ErrorMessage = "La cantidad de baños no puede ser menor que cero.")]
     public int? Bathrooms { get; set; }
 
     [Display(Name = "Código")]
