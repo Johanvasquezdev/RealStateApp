@@ -1,0 +1,24 @@
+﻿@model AgentPropertySaveViewModel
+@{ ViewData["Title"] = "Eliminar Propiedad"; }
+
+<h2>Eliminar Propiedad</h2>
+<div class="alert alert-danger">
+    ¿Está seguro de que desea eliminar esta propiedad?
+</div>
+<dl class="row">
+    <dt class="col-sm-3">Precio</dt>
+    <dd class="col-sm-9">RD$ @Model.Price.ToString("N2")</dd>
+    <dt class="col-sm-3">Descripción</dt>
+    <dd class="col-sm-9">@Model.Description</dd>
+    <dt class="col-sm-3">Tamaño</dt>
+    <dd class="col-sm-9">@Model.LandSize m²</dd>
+    <dt class="col-sm-3">Habitaciones</dt>
+    <dd class="col-sm-9">@Model.Rooms</dd>
+    <dt class="col-sm-3">Baños</dt>
+    <dd class="col-sm-9">@Model.Bathrooms</dd>
+</dl>
+<form method="post" asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

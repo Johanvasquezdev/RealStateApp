@@ -1,0 +1,112 @@
+using RealEstateApp.Core.Application.Interfaces;
+using RealEstateApp.Core.Application.ViewModels.Offers;
+using RealEstateApp.Core.Domain.Entities;
+using RealEstateApp.Core.Domain.Common;
+
+namespace RealEstateApp.Core.Application.Services;
+
+public class ClientOfferService : IClientOfferService
+{
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IUserService _userService;
+
+    public ClientOfferService(IUnitOfWork unitOfWork, IUserService userService)
+    {
+        _unitOfWork = unitOfWork;
+        _userService = userService;
+    }
+
+    #region Create Offer
+    public async Task<int> CreateOfferAsync(OfferSaveViewModel vm)
+    {
+        var repo = _unitOfWork.Repository<Offer>();
+        var propertyRepo = _unitOfWork.Repository<Property>();
+        
+        var property = await propertyRepo.FirstOrDefaultAsync(p => p.Id == vm.PropertyId);
+        if (property == null) throw new Exception("La propiedad no existe.");
+        if (property.Status == RealEstateApp.Core.Domain.Enums.PropertyStatus.Sold)
+            throw new Exception("La propiedad ya fue vendida.");
+
+        bool hasAccepted = await repo.AnyAsync(o => o.PropertyId == vm.PropertyId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Accepted);
+        if (hasAccepted) throw new Exception("Esta propiedad ya tiene una oferta aceptada y no admite más ofertas.");
+        
+        bool hasPending = await repo.AnyAsync(o => o.PropertyId == vm.PropertyId && o.ClientId == vm.ClientId && o.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending);
+        if (hasPending) throw new Exception("Ya tienes una oferta pendiente para esta propiedad.");
+
+        var entity = new Offer
+        {
+            PropertyId = vm.PropertyId,
+            ClientId = vm.ClientId,
+            Amount = (double)vm.Amount,
+            Status = RealEstateApp.Core.Domain.Enums.OfferStatus.Pending,
+            Created = DateTime.UtcNow
+        };
+
+        await repo.AddAsync(entity);
+        await _unitOfWork.SaveChangesAsync();
+        return entity.Id;
+    }
+    #endregion
+
+    #region List Offers
+    public async Task<List<ClientOfferListViewModel>> GetClientOffersAsync(string clientId)
+    {
+        var offerRepo = _unitOfWork.Repository<Offer>();
+        var propertyRepo = _unitOfWork.Repository<Property>();
+        
+        var offers = await offerRepo.FindAsync(o => o.ClientId == clientId);
+        var result = new List<ClientOfferListViewModel>();
+
+        var agentCache = new Dictionary<string, DTOs.UserDto?>();
+
+        foreach (var offer in offers.OrderByDescending(o => o.Created))
+        {
+            var prop = await propertyRepo.FirstOrDefaultWithIncludesAsync(p => p.Id == offer.PropertyId, "Images", "PropertyType");
+            if (prop == null) continue;
+
+            if (!agentCache.TryGetValue(prop.AgentId, out var agentUser))
+            {
+                agentUser = await _userService.FindByIdAsync(prop.AgentId);
+                agentCache[prop.AgentId] = agentUser;
+            }
+
+            var url = prop.Images.FirstOrDefault()?.ImageUrl ?? "";
+            
+            result.Add(new ClientOfferListViewModel
+            {
+                OfferId = offer.Id,
+                PropertyId = prop.Id,
+                PropertyName = prop.PropertyType != null ? prop.PropertyType.Name : "Propiedad",
+                PropertyCode = prop.Code,
+                PropertyImageUrl = string.IsNullOrEmpty(url) ? "" : (url.StartsWith("http") || url.StartsWith("/") ? url : $"/Images/properties/{url}"),
+                Amount = (decimal)offer.Amount,
+                Status = offer.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending ? "Pendiente" : 
+                         offer.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Accepted ? "Aceptada" : "Rechazada",
+                CreatedAt = offer.Created,
+                AgentName = agentUser != null ? $"{agentUser.FirstName} {agentUser.LastName}" : "",
+                AgentEmail = agentUser?.Email ?? "",
+                AgentPhotoUrl = agentUser?.ProfilePictureUrl
+            });
+        }
+
+        return result;
+    }
+    #endregion
+
+    #region Withdraw Offer
+    public async Task WithdrawOfferAsync(int offerId, string clientId)
+    {
+        var repo = _unitOfWork.Repository<Offer>();
+        var offer = await repo.FirstOrDefaultAsync(o => o.Id == offerId && o.ClientId == clientId);
+        
+        if (offer != null && offer.Status == RealEstateApp.Core.Domain.Enums.OfferStatus.Pending)
+        {
+            await repo.DeleteAsync(offer);
+            await _unitOfWork.SaveChangesAsync();
+        }
+    }
+    #endregion
+}
+
+
+

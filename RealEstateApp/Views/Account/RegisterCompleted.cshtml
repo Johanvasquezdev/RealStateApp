@@ -1,0 +1,25 @@
+@{
+    ViewData["Title"] = "Registro Completado";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-envelope-check-fill text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h2 class="fw-bold mb-3">¡Registro Completado!</h2>
+                    <p class="text-muted mb-4">
+                        Hemos enviado un enlace de activación a tu correo electrónico. Por favor revisa tu bandeja de entrada (y tu carpeta de spam) y haz clic en el enlace para activar tu cuenta.
+                    </p>
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-dark btn-lg rounded-pill px-4">
+                        Ir a Iniciar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

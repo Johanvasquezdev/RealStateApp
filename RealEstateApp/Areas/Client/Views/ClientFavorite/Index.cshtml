@@ -1,0 +1,106 @@
+@model List<RealEstateApp.Core.Application.ViewModels.Properties.ClientPropertyViewModel>
+@{
+    ViewData["Title"] = "Mis Favoritos";
+}
+
+<div class="container py-5">
+    <div class="mb-5">
+        <h1 class="fw-bolder mb-2">Mis Favoritos</h1>
+        <p class="text-gray fs-6">Tus propiedades guardadas para fácil acceso.</p>
+    </div>
+        @if (Model == null || !Model.Any())
+        {
+            <div class="alert alert-info rounded-4 border-0 shadow-sm text-center p-5">
+                <i class="bi bi-heart text-muted fs-1 mb-3 d-block"></i>
+                <h4 class="alert-heading fw-bold mb-3">No tienes propiedades favoritas</h4>
+                <p class="mb-0">Agrega propiedades a tus favoritos para verlas aquí.</p>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-primary mt-4 rounded-pill px-4">Explorar propiedades</a>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var property in Model)
+                {
+                    <div class="col fade-in-up">
+                        <div class="card property-card h-100 border-0 rounded-4">
+                            <!-- Image Wrapper -->
+                            <div class="property-img-wrapper position-relative">
+                                <img src="@(string.IsNullOrEmpty(property.MainImageUrl) ? "/img/default-property.jpg" : property.MainImageUrl)" class="property-img" alt="@property.Code" style="height:250px; object-fit:cover; width:100%;"
+                                     onerror="this.onerror=null;this.src='/img/default-property.jpg';">
+                                
+                                <span class="tag-badge position-absolute m-3 top-0 start-0 badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold">
+                                    <i class="bi bi-circle-fill me-1" style="font-size: 8px; color: @(property.SaleTypeName == "Venta" ? "var(--bs-primary)" : "var(--bs-info)");"></i>
+                                    @property.SaleTypeName
+                                </span>
+
+                                <form method="post" asp-controller="ClientFavorite" asp-action="ToggleFavorite" asp-route-id="@property.Id" class="position-absolute top-0 end-0 m-3 z-index-2 favorite-form">
+                                    <button type="submit" class="btn btn-light rounded-circle shadow-sm p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" title="Quitar de favoritos">
+                                        <i class="bi bi-heart-fill fs-5 text-danger"></i>
+                                    </button>
+                                </form>
+                                
+                                <div class="position-absolute bottom-0 start-0 w-100 p-3 bg-gradient-dark">
+                                    <div class="text-white d-flex justify-content-between align-items-end">
+                                        <div>
+                                            <h5 class="fw-bolder mb-0">RD$ @property.Price.ToString("N2")</h5>
+                                            <small class="opacity-75"><i class="bi bi-geo-alt me-1"></i>Código: @property.Code</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Content -->
+                            <div class="card-body p-4">
+                                <div class="mb-3">
+                                    <h5 class="card-title fw-bold text-truncate mb-0">@property.PropertyTypeName</h5>
+                                </div>
+
+                                <div class="row g-0 text-gray small fw-medium mt-3 border-top pt-3">
+                                    <div class="col-4 d-flex align-items-center justify-content-center border-end">
+                                        <i class="bi bi-door-open fs-5 me-2"></i> @property.Rooms Hab
+                                    </div>
+                                    <div class="col-4 d-flex align-items-center justify-content-center border-end">
+                                        <i class="bi bi-droplet fs-5 me-2"></i> @property.Bathrooms Baños
+                                    </div>
+                                    <div class="col-4 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-arrows-fullscreen fs-5 me-2"></i> @property.LandSize m²
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Agent footer -->
+                            <div class="card-footer bg-white border-top-0 p-4 pt-0 d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="@(string.IsNullOrEmpty(property.AgentPhotoUrl) ? "/img/default-user.png" : property.AgentPhotoUrl)" 
+                                         class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;" alt="@property.AgentName">
+                                    <span class="fw-bold fs-7 text-dark">@property.AgentName</span>
+                                </div>
+                                <a asp-controller="ClientProperty" asp-action="Details" asp-route-id="@property.Id" class="btn btn-sm btn-outline-primary rounded-pill fw-bold">Ver detalle</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .bg-gradient-dark {
+        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    }
+    .fs-7 {
+        font-size: 0.85rem;
+    }
+    .z-index-2 {
+        z-index: 2;
+    }
+    .property-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .property-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.15)!important;
+    }
+</style>

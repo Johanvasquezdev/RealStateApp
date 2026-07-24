@@ -1,0 +1,105 @@
+@model List<AgentPropertyViewModel>
+@{ ViewData["Title"] = "Mis Propiedades"; }
+
+<div class="container py-5">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bolder" style="color: #0a261c; font-size: 2.5rem; letter-spacing: -1px;">Mis Propiedades</h2>
+            <p class="text-muted fs-5 m-0">Gestiona tu catálogo de propiedades.</p>
+        </div>
+        <a asp-action="Create" class="btn text-white rounded-pill px-4 py-3 fw-bold fs-6 shadow-sm d-flex align-items-center gap-2" style="background-color: #12402d;">
+            <i class="bi bi-plus-circle-fill"></i> Agregar Propiedad
+        </a>
+    </div>
+
+    <!-- Filter Form -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <form asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="col-md-8 col-lg-9">
+                    <label for="filterCode" class="form-label fw-bold text-muted mb-2">Buscar por Código</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 text-muted">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0 ps-0 form-control-lg" id="filterCode" name="filterCode" value="@ViewBag.FilterCode" placeholder="Ej. 123456" />
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-grow-1 rounded-pill fw-bold">Buscar</button>
+                    @if (!string.IsNullOrEmpty(ViewBag.FilterCode))
+                    {
+                        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill d-flex align-items-center"><i class="bi bi-x-circle me-1"></i>Limpiar</a>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Properties Table -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead style="background-color: #f8f9fa;">
+                    <tr>
+                        <th class="text-muted fw-semibold py-3 px-4 border-0">Código</th>
+                        <th class="text-muted fw-semibold py-3 px-4 border-0">Precio</th>
+                        <th class="text-muted fw-semibold py-3 px-4 border-0">Tipo</th>
+                        <th class="text-muted fw-semibold py-3 px-4 border-0">Venta</th>
+                        <th class="text-muted fw-semibold py-3 px-4 border-0 text-center"><i class="bi bi-door-closed" title="Habitaciones"></i></th>
+                        <th class="text-muted fw-semibold py-3 px-4 border-0 text-center"><i class="bi bi-droplet" title="Baños"></i></th>
+                        <th class="text-muted fw-semibold py-3 px-4 border-0">Estado</th>
+                        <th class="text-muted fw-semibold py-3 px-4 border-0 text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(Model.Any())
+                    {
+                        @foreach (var p in Model)
+                        {
+                            <tr>
+                                <td class="py-3 px-4 fw-bold">@p.Code</td>
+                                <td class="py-3 px-4 fw-bold text-success">RD$ @p.Price.ToString("N2")</td>
+                                <td class="py-3 px-4">@p.PropertyType</td>
+                                <td class="py-3 px-4">@p.SaleType</td>
+                                <td class="py-3 px-4 text-center">@p.Rooms</td>
+                                <td class="py-3 px-4 text-center">@p.Bathrooms</td>
+                                <td class="py-3 px-4">
+                                    <span class="badge rounded-pill px-3 py-2 @(p.Status == "Available" ? "bg-success bg-opacity-10 text-success" : (p.SaleType == "Venta" ? "bg-danger bg-opacity-10 text-danger" : "bg-info bg-opacity-10 text-info"))">
+                                        @(p.Status == "Available" ? "Disponible" : (p.SaleType == "Venta" ? "Vendida" : "Alquilada"))
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4 text-end">
+                                    <div class="d-flex gap-2 justify-content-end">
+                                        <a asp-action="Detail" asp-route-id="@p.Id" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;" title="Ver Detalle">
+                                            <i class="bi bi-eye text-primary"></i>
+                                        </a>
+                                        @if (p.Status != PropertyStatus.Sold.ToString())
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;" title="Editar">
+                                                <i class="bi bi-pencil text-warning"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@p.Id" class="btn btn-sm btn-light rounded-circle shadow-sm" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;" title="Eliminar">
+                                                <i class="bi bi-trash text-danger"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                                No hay propiedades registradas aún. Haz clic en "Agregar Propiedad" para empezar.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

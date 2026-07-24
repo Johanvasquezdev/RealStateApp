@@ -1,0 +1,6 @@
+@model RealEstateApp.Core.Application.ViewModels.Properties.ClientPropertyDetailViewModel
+@{
+    ViewData["Title"] = "Detalle de Propiedad";
+}
+
+@await Html.PartialAsync("_PropertyDetail", Model)

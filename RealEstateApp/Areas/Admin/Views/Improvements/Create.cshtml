@@ -1,0 +1,31 @@
+﻿@model SaveImprovementViewModel
+@{
+    ViewData["Title"] = "Crear mejora";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 20px;">
+                <h3 class="mb-4 fw-bold">Crear nueva mejora</h3>
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <form asp-action="Create" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nombre</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Descripción</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary px-4">Crear mejora</button>
+                    <a asp-action="Index" class="btn btn-outline-primary">Volver atrás</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

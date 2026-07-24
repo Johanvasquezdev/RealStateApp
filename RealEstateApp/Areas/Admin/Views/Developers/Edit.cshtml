@@ -1,0 +1,60 @@
+﻿@model SaveDeveloperViewModel
+@{
+    ViewData["Title"] = (Model?.Id == null ? "Crear" : "Editar") + " desarrollador";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 20px;">
+                <h3 class="mb-4 fw-bold">@ViewData["Title"]</h3>
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <form asp-action="@(Model?.Id == null ? "Create" : "Edit")" method="post">
+                    @if (Model?.Id != null)
+                    {
+                        <input asp-for="Id" type="hidden" />
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Nombre</label>
+                            <input asp-for="FirstName" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Apellido</label>
+                            <input asp-for="LastName" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Cédula</label>
+                        <input asp-for="IdCard" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Correo electrónico</label>
+                        <input asp-for="Email" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nombre de usuario</label>
+                        <input asp-for="UserName" class="form-control" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">@(Model?.Id == null ? "Contraseña" : "Nueva contraseña")</label>
+                            <input asp-for="Password" type="password" class="form-control" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Confirmar contraseña</label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary px-4">Guardar</button>
+                        <a asp-action="Index" class="btn btn-outline-primary">Volver atrás</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

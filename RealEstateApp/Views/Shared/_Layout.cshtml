@@ -1,6 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    @using Microsoft.AspNetCore.Identity
+    @using RealEstateApp.Infrastructure.Identity.Entities
+    @inject UserManager<ApplicationUser> UserManager
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - RealEstateApp</title>
@@ -8,43 +11,269 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RealEstateApp.styles.css" asp-append-version="true" />
+    <style>
+        .reveal-hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        .animate-reveal {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        @@media (min-width: 992px) {
+            .navbar-center-absolute {
+                position: absolute !important;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 1000;
+            }
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RealEstateApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+<body class="d-flex flex-column min-vh-100">
+    <header class="bg-white border-bottom sticky-top py-2">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid px-4 px-lg-5">
+                <!-- Logo -->
+                <a class="navbar-brand d-flex align-items-center gap-3" asp-area="" asp-controller="Home" asp-action="Index">
+                    <div class="navbar-brand-icon">
+                        <i class="bi bi-house-door-fill"></i>
+                    </div>
+                    <div class="d-flex flex-column lh-1">
+                        <span class="fw-bolder text-dark fs-5">RealEstateApp</span>
+                        <span class="text-gray" style="font-size: 0.75rem; font-weight: 500;">Encuentra tu hogar</span>
+                    </div>
+                </a>
+
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <!-- Nav Pills (Center) -->
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 nav-pills bg-light rounded-pill p-1 navbar-center-absolute">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Cliente"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="bi bi-house"></i> Inicio
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientProperty" ? "active" : "")" asp-area="Client" asp-controller="ClientProperty" asp-action="Index">
+                                        <i class="bi bi-building"></i> Propiedades
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientFavorite" ? "active" : "")"  asp-area="Client" asp-controller="ClientFavorite" asp-action="Index">
+                                        <i class="bi bi-heart"></i> Favoritos
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientOffer" ? "active" : "")" asp-area="Client" asp-controller="ClientOffer" asp-action="Index">
+                                        <i class="bi bi-tags"></i> Mis Ofertas
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientChat" ? "active" : "")"  asp-area="Client" asp-controller="ClientChat" asp-action="Index">
+                                        <i class="bi bi-chat"></i> Chat
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "ClientProfile" ? "active" : "")"  asp-area="Client" asp-controller="ClientProfile" asp-action="Index">
+                                        <i class="bi bi-person"></i> Mi Perfil
+                                    </a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Agente"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "AgentHome" ? "active" : "")" asp-area="Agent" asp-controller="AgentHome" asp-action="Index">
+                                        <i class="bi bi-house"></i> Home
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "PropertyMaintenance" ? "active" : "")" asp-area="Agent" asp-controller="PropertyMaintenance" asp-action="Index">
+                                        <i class="bi bi-building"></i> Mis Propiedades
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Profile" ? "active" : "")" asp-area="Agent"asp-controller="Profile" asp-action="Index">
+                                        <i class="bi bi-person"></i> Mi Perfil
+                                    </a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Administrador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "HomeAdmin" ? "active" : "")"
+                                       asp-area="Admin" asp-controller="HomeAdmin" asp-action="Index">
+                                        <i class="bi bi-speedometer2"></i> Panel
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link px-3 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-gear"></i> Administración
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="AgentAdmin" asp-action="Index">
+                                                <i class="bi bi-people me-2"></i> Agentes
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Admins" asp-action="Index">
+                                                <i class="bi bi-person-badge me-2"></i> Administradores
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Developers" asp-action="Index">
+                                                <i class="bi bi-code-slash me-2"></i> Desarrolladores
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="PropertyTypes" asp-action="Index">
+                                                <i class="bi bi-house-gear me-2"></i> Tipos de propiedad
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="SaleTypes" asp-action="Index">
+                                                <i class="bi bi-tag me-2"></i> Tipos de venta
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-area="Admin" asp-controller="Improvements" asp-action="Index">
+                                                <i class="bi bi-stars me-2"></i> Mejoras
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link px-3" asp-controller="Home" asp-action="Index">
+                                        <i class="bi bi-house"></i> Home
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3" asp-controller="Agents" asp-action="Index">
+                                        <i class="bi bi-people"></i> Agentes
+                                    </a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-3 @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Agents" ? "active" : "")" asp-controller="Agents" asp-action="Index">
+                                    <i class="bi bi-people"></i> Agentes
+                                </a>
+                            </li>
+                        }
                     </ul>
+
+                    <!-- User Actions (Right) -->
+                    <div class="d-flex align-items-center gap-3 ms-auto mt-3 mt-lg-0">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            var currentUser = await UserManager.GetUserAsync(User);
+                            var profilePic = currentUser?.ProfilePictureUrl;
+                            if (string.IsNullOrEmpty(profilePic) || profilePic == "default-profile.png" || profilePic == "default-user.png")
+                            {
+                                profilePic = "/img/default-user.png";
+                            }
+
+                            <div class="bg-light rounded-pill px-3 py-2 d-flex align-items-center gap-2">
+                                <img src="@profilePic" alt="Profile" class="rounded-circle shadow-sm" style="width: 28px; height: 28px; object-fit: cover;" onerror="this.onerror=null;this.src='/img/default-user.png';" />
+                                <span class="fw-bold text-dark fs-7">@User.Identity.Name</span>
+                            </div>
+                            <a class="btn btn-primary" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar sesión</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary fw-bold px-4" asp-controller="Account" asp-action="Login">Únete a la app</a>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container-fluid px-0 flex-grow-1 d-flex flex-column">
+        <main role="main" class="pb-3 flex-grow-1">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - RealEstateApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    @if ((User.Identity == null || !User.Identity.IsAuthenticated) && ViewContext.RouteData.Values["Controller"]?.ToString() != "Account")
+    {
+        <div style="background-color: #f5f5f0;" class="py-5 mt-5 border-top">
+            <div class="container py-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h6 class="text-uppercase fw-bold mb-2 text-success" style="letter-spacing: 2px; font-size: 0.85rem;">REALESTATEAPP</h6>
+                    <h2 class="fw-bolder m-0 text-dark" style="font-size: 2.2rem; letter-spacing: -0.5px;">Una experiencia inmobiliaria<br />pensada para ti.</h2>
+                </div>
+                <div>
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-success text-white rounded-3 px-4 py-3 fw-bold fs-6 shadow-sm">
+                        Crea tu cuenta o inicia sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <footer class="border-top footer text-muted bg-white mt-auto">
+        <div class="container-fluid px-4">
+            &copy; @DateTime.Now.Year - Real Estate App
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/animations.js" asp-append-version="true"></script>
+    <script>
+        function confirmAction(event, title, text) {
+            event.preventDefault();
+            const form = event.target.closest('form');
+            Swal.fire({
+                title: title || '¿Estás seguro?',
+                text: text || "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Sí, continuar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed && form) {
+                    form.submit();
+                }
+            });
+        }
+
+        function loadDashboardModal(event) {
+            event.preventDefault();
+            $.get('@Url.Action("GetDashboardModal", "HomeAdmin", new { area = "Admin" })', function (data) {
+                if ($('#dashboardModalContainer').length === 0) {
+                    $('body').append('<div id="dashboardModalContainer"></div>');
+                }
+                $('#dashboardModalContainer').html(data);
+                var dashboardModal = new bootstrap.Modal(document.getElementById('dashboardModal'));
+                dashboardModal.show();
+            });
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

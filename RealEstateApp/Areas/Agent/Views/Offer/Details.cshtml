@@ -1,0 +1,110 @@
+@model List<AgentOfferDetailViewModel>
+@{
+    ViewData["Title"] = "Offers Details";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center">
+            @if (Model != null && Model.Any())
+            {
+                var firstOffer = Model.First();
+                @if (!string.IsNullOrEmpty(firstOffer.ClientPhoto) && firstOffer.ClientPhoto != "default-user.png" && firstOffer.ClientPhoto != "default-profile.png")
+                {
+                    <img src="@firstOffer.ClientPhoto" alt="Profile" class="rounded-circle me-3 object-fit-cover shadow-sm" style="width: 60px; height: 60px;" onerror="this.onerror=null;this.src='/img/default-user.png';" />
+                }
+                else
+                {
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3 text-white fs-4 fw-bold shadow-sm" style="width: 60px; height: 60px; background-color: #12402d;">
+                        @(firstOffer.ClientName.Substring(0, 1))
+                    </div>
+                }
+                <h2 class="fw-bold text-dark mb-0">Ofertas de @firstOffer.ClientName</h2>
+            }
+            else
+            {
+                <h2 class="fw-bold text-dark mb-0">Offers Details</h2>
+            }
+        </div>
+        <a asp-controller="PropertyMaintenance" asp-action="Detail" asp-route-id="@ViewBag.PropertyId" asp-fragment="offers" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="bi bi-arrow-left me-2"></i> Volver a Ofertas
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4 py-3 text-uppercase fs-7 text-muted">Monto de Oferta</th>
+                            <th class="py-3 text-uppercase fs-7 text-muted">Estado</th>
+                            <th class="py-3 text-uppercase fs-7 text-muted">Fecha</th>
+                            <th class="pe-4 py-3 text-uppercase fs-7 text-muted text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var o in Model)
+                            {
+                                string statusBadgeClass = o.Status == "Pending" ? "bg-warning text-dark" : 
+                                                          o.Status == "Accepted" ? "bg-success" : "bg-danger";
+                                                          
+                                string statusLabel = o.Status == "Pending" ? "Pendiente" : 
+                                                     o.Status == "Accepted" ? "Aceptada" : "Rechazada";
+
+                                <tr>
+                                    <td class="ps-4 fw-bold text-primary fs-5">RD$ @o.Amount.ToString("N2")</td>
+                                    <td>
+                                        <span class="badge rounded-pill px-3 py-2 @statusBadgeClass">@statusLabel</span>
+                                    </td>
+                                    <td class="text-muted">
+                                        <div class="d-flex flex-column">
+                                            <span><i class="bi bi-calendar3 me-1"></i> @o.Created.ToString("dd/MM/yyyy")</span>
+                                            <small><i class="bi bi-clock me-1"></i> @o.Created.ToString("HH:mm")</small>
+                                        </div>
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        @if (o.Status == "Pending")
+                                        {
+                                            <div class="d-inline-flex gap-2">
+                                                <form asp-action="Accept" method="post" style="display:inline;">
+                                                    <input type="hidden" name="id" value="@o.Id" />
+                                                    <input type="hidden" name="propertyId" value="@ViewBag.PropertyId" />
+                                                    <button type="submit" class="btn btn-sm btn-success rounded-pill px-3">
+                                                        <i class="bi bi-check-circle me-1"></i> Aceptar
+                                                    </button>
+                                                </form>
+                                                <form asp-action="Reject" method="post" style="display:inline;">
+                                                    <input type="hidden" name="id" value="@o.Id" />
+                                                    <input type="hidden" name="propertyId" value="@ViewBag.PropertyId" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                                        <i class="bi bi-x-circle me-1"></i> Rechazar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted fst-italic fs-7">Resolución finalizada</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                                    No hay ofertas registradas.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

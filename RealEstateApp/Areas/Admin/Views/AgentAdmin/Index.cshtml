@@ -1,0 +1,59 @@
+@model List<UserListItemViewModel>
+@{
+    ViewData["Title"] = "Listado de los agentes";
+}
+
+<div class="container-fluid px-4 px-xl-5 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Listado de agentes</h2>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <div class="card property-card shadow-sm border-0">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Nombre</th>
+                        <th>Correo</th>
+                        <th>Propiedades</th>
+                        <th>Estado</th>
+                        <th class="text-end pe-4">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var agent in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold">@agent.FirstName @agent.LastName</td>
+                            <td>@agent.Email</td>
+                            <td>@agent.PropertiesCount</td>
+                            <td>
+                                <span class="badge @(agent.IsActive ? "bg-success" : "bg-secondary") rounded-pill">
+                                    @(agent.IsActive ? "Activo" : "Inactivo")
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <form asp-action="ToggleStatus" asp-route-id="@agent.Id" asp-route-activate="@(!agent.IsActive ? "true" : "false")" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm @(agent.IsActive ? "btn-outline-warning" : "btn-outline-success") rounded-pill px-3"
+                                            onclick="confirmAction(event, '¿Confirmar acción?', '¿Está seguro que desea @(agent.IsActive ? "inactivar" : "activar") este Agente?');">
+                                        @(agent.IsActive ? "Inactivar" : "Activar")
+                                    </button>
+                                </form>
+                                <a asp-action="Delete" asp-route-id="@agent.Id" class="btn btn-sm btn-outline-danger rounded-pill px-3 ms-1">Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

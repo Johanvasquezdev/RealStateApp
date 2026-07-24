@@ -1,0 +1,111 @@
+@model RealEstateApp.Core.Application.ViewModels.Messages.ClientChatConversationViewModel
+@{
+    ViewData["Title"] = "Conversación";
+    var currentUser = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value;
+}
+
+<div class="container py-4 max-w-4xl">
+    <div class="card border-0 shadow-none overflow-hidden h-100 d-flex flex-column" style="min-height: 80vh; border-radius: 20px; border: 1px solid #dee2e6 !important;">
+        
+        <!-- Header del Chat -->
+        <div class="card-header bg-white border-bottom p-4">
+            <div class="d-flex align-items-center">
+                <a asp-action="Index" class="btn btn-light rounded-circle p-2 me-3" title="Volver" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <img src="@(string.IsNullOrEmpty(Model.AgentPhotoUrl) ? "/img/default-user.png" : Model.AgentPhotoUrl)" 
+                     alt="@Model.AgentName" 
+                     class="rounded-circle border" 
+                     style="width: 50px; height: 50px; object-fit: cover;">
+                <div class="ms-3">
+                    <h5 class="fw-bold text-dark mb-0 fs-5">@Model.AgentName</h5>
+                    <p class="text-gray small mb-0">Agente Inmobiliario</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cuerpo del Chat -->
+        <div class="card-body p-4 overflow-auto d-flex flex-column" id="chatContainer" style="flex: 1 1 auto; max-height: 60vh; background-color: #f7f9f8;">
+            @if (!Model.Messages.Any())
+            {
+                <div class="text-center text-muted my-auto">
+                    <i class="bi bi-chat-dots fs-1 mb-2 d-block text-secondary"></i>
+                    <p>Escribe tu primer mensaje para iniciar la conversación.</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var msg in Model.Messages)
+                {
+                    if (msg.IsFromClient)
+                    {
+                        <!-- Mensaje Cliente (Derecha) -->
+                        <div class="d-flex justify-content-end mb-4">
+                            <div class="ms-5" style="max-width: 70%;">
+                                <div class="text-white p-3 shadow-sm" style="background-color: #1a3c34; border-radius: 20px; border-bottom-right-radius: 4px;">
+                                    <p class="mb-0" style="font-size: 0.95rem;">@msg.Content</p>
+                                </div>
+                                <div class="text-end mt-1 fw-bold" style="font-size: 0.7rem; color: #6c757d;">@msg.SentAt.ToLocalTime().ToString("h:mm tt").ToUpper()</div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Mensaje Agente (Izquierda) -->
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="me-5" style="max-width: 70%;">
+                                <div class="bg-white text-dark p-3 shadow-sm border" style="border-radius: 20px; border-bottom-left-radius: 4px;">
+                                    <p class="mb-0" style="font-size: 0.95rem;">@msg.Content</p>
+                                </div>
+                                <div class="text-end mt-1 fw-bold" style="font-size: 0.7rem; color: #6c757d;">@msg.SentAt.ToLocalTime().ToString("h:mm tt").ToUpper()</div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+
+        <!-- Input de Mensaje -->
+        <div class="card-footer bg-white border-top p-4">
+            <form asp-action="SendMessage" method="post" id="chatForm">
+                <input type="hidden" name="PropertyId" value="@Model.PropertyId" />
+                <input type="hidden" name="ReceiverId" value="@Model.AgentId" />
+                
+                <div class="d-flex gap-3 align-items-center">
+                    <div class="flex-grow-1">
+                        <input type="text" name="Content" class="form-control border-0 shadow-none px-4 py-3" placeholder="Escribe un mensaje..." required autocomplete="off" style="background-color: #f0f2f1; border-radius: 30px;" />
+                    </div>
+                    <button type="submit" class="btn text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="background-color: #1a3c34; width: 50px; height: 50px;">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .max-w-4xl { max-width: 900px; margin: 0 auto; }
+    .rounded-bottom-end-0 { border-bottom-right-radius: 0 !important; }
+    .rounded-bottom-start-0 { border-bottom-left-radius: 0 !important; }
+    
+    /* Reveal animation for chat bubbles */
+    .reveal-hidden {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease-out;
+    }
+    .animate-reveal {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var chatContainer = document.getElementById("chatContainer");
+        if(chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    });
+</script>

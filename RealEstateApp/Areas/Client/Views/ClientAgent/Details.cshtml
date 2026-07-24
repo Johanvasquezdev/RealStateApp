@@ -1,0 +1,123 @@
+@model RealEstateApp.Core.Application.ViewModels.Agents.ClientAgentViewModel
+@{
+    ViewData["Title"] = "Perfil del Agente";
+}
+
+<div class="container py-5">
+    <!-- Header Perfil -->
+    <div class="card border-0 rounded-4 shadow-sm overflow-hidden mb-5">
+        <div class="bg-primary bg-opacity-10 py-5">
+            <!-- Decorative background area -->
+        </div>
+        <div class="card-body position-relative px-4 px-md-5 pb-5 text-center text-md-start">
+            <div class="row align-items-end">
+                <div class="col-md-auto mt-n5 mb-3 mb-md-0 position-relative z-index-1 text-center">
+                    <img src="@(string.IsNullOrEmpty(Model.ProfilePictureUrl) ? "/img/default-user.png" : Model.ProfilePictureUrl)" 
+                         alt="@Model.FirstName" 
+                         class="rounded-circle border border-5 border-white shadow bg-white" 
+                         style="width: 150px; height: 150px; object-fit: cover; margin-top: -75px;">
+                </div>
+                <div class="col-md">
+                    <h1 class="fw-bolder mb-1">@Model.FirstName @Model.LastName</h1>
+                    <p class="text-muted mb-0 fs-5">Agente Inmobiliario Profesional</p>
+                </div>
+                <div class="col-md-auto mt-4 mt-md-0">
+                    <div class="d-flex flex-column gap-2 text-md-end">
+                        <span class="text-muted"><i class="bi bi-envelope me-2"></i>@Model.Email</span>
+                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                        {
+                            <span class="text-muted"><i class="bi bi-telephone me-2"></i>@Model.PhoneNumber</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Propiedades del Agente -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold m-0">Propiedades del Agente</h3>
+        <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">@Model.Properties.Count inmuebles</span>
+    </div>
+
+    @if (!Model.Properties.Any())
+    {
+        <div class="alert alert-light border rounded-4 text-center p-5">
+            <i class="bi bi-house-x text-muted fs-1 mb-3 d-block"></i>
+            <h5 class="text-muted">Este agente no tiene propiedades publicadas en este momento.</h5>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var prop in Model.Properties)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden hover-lift">
+                        <div class="position-relative">
+                            <img src="@(string.IsNullOrEmpty(prop.MainImageUrl) ? "/img/default-property.jpg" : prop.MainImageUrl)" class="card-img-top property-image" alt="Propiedad" style="height: 200px; object-fit: cover;">
+                            <div class="position-absolute top-0 start-0 m-3">
+                                <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold">
+                                    <i class="bi bi-tag-fill text-primary me-1"></i> @prop.PropertyTypeName
+                                </span>
+                            </div>
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-dark bg-opacity-75 text-white shadow-sm px-3 py-2 rounded-pill fw-bold">
+                                    Cod: @prop.Code
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-bold text-truncate mb-1">@prop.PropertyTypeName en @prop.SaleTypeName</h5>
+                            <h4 class="text-primary fw-bolder mb-3">$@prop.Price.ToString("N2")</h4>
+                            
+                            <div class="d-flex justify-content-between text-muted small mb-4">
+                                <div class="d-flex align-items-center" title="Habitaciones">
+                                    <i class="bi bi-door-open fs-5 me-2 text-secondary"></i>
+                                    <span class="fw-bold">@prop.Rooms</span>
+                                </div>
+                                <div class="d-flex align-items-center" title="Baños">
+                                    <i class="bi bi-droplet fs-5 me-2 text-secondary"></i>
+                                    <span class="fw-bold">@prop.Bathrooms</span>
+                                </div>
+                                <div class="d-flex align-items-center" title="Tamaño">
+                                    <i class="bi bi-arrows-fullscreen fs-5 me-2 text-secondary"></i>
+                                    <span class="fw-bold">@prop.LandSize mt²</span>
+                                </div>
+                            </div>
+
+                            <div class="d-grid mt-auto">
+                                <a asp-controller="ClientProperty" asp-action="Details" asp-route-id="@prop.Id" class="btn btn-outline-primary rounded-3 fw-bold py-2 btn-hover-filled">
+                                    Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.15)!important;
+    }
+    .btn-hover-filled:hover {
+        background-color: var(--bs-primary);
+        color: white;
+    }
+    .property-image {
+        transition: transform 0.5s ease;
+    }
+    .hover-lift:hover .property-image {
+        transform: scale(1.05);
+    }
+    .z-index-1 {
+        z-index: 1;
+    }
+</style>

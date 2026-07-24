@@ -1,0 +1,161 @@
+@model AgentPropertySaveViewModel
+@{ ViewData["Title"] = "Editar Propiedad"; }
+
+<div class="container py-5">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h1 class="fw-bold mb-1" style="color: #12402d;">Editar Propiedad</h1>
+            <p class="text-muted mb-0">Modifica los datos de la propiedad seleccionada.</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4" style="border-color: #12402d; color: #12402d;">
+            <i class="bi bi-arrow-left me-2"></i> Volver
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4" style="background-color: #f5f8f5;">
+        <div class="card-body p-5">
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 border-0"></div>
+                
+                <h5 class="fw-bold mb-4" style="color: #12402d;">Información Básica</h5>
+                
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="PropertyTypeId" class="form-label fw-semibold text-muted text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Tipo de Propiedad</label>
+                        <select asp-for="PropertyTypeId" class="form-select form-select-lg border-0 shadow-sm" style="border-radius: 10px;" asp-items="@(new SelectList(ViewBag.PropertyTypes, "Id", "Name"))">
+                            <option value="">-- Seleccione un tipo --</option>
+                        </select>
+                        <span asp-validation-for="PropertyTypeId" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="SaleTypeId" class="form-label fw-semibold text-muted text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Tipo de Venta</label>
+                        <select asp-for="SaleTypeId" class="form-select form-select-lg border-0 shadow-sm" style="border-radius: 10px;" asp-items="@(new SelectList(ViewBag.SaleTypes, "Id", "Name"))">
+                            <option value="">-- Seleccione un tipo --</option>
+                        </select>
+                        <span asp-validation-for="SaleTypeId" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-12">
+                        <label asp-for="Price" class="form-label fw-semibold text-muted text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Precio</label>
+                        <div class="input-group input-group-lg shadow-sm" style="border-radius: 10px; overflow: hidden;">
+                            <span class="input-group-text border-0 bg-white">$</span>
+                            <input asp-for="Price" class="form-control border-0" type="number" step="0.01" />
+                        </div>
+                        <span asp-validation-for="Price" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label asp-for="Description" class="form-label fw-semibold text-muted text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Descripción</label>
+                    <textarea asp-for="Description" class="form-control border-0 shadow-sm" rows="4" style="border-radius: 10px;"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <h5 class="fw-bold mb-4" style="color: #12402d;">Distribución y Dimensiones</h5>
+
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <label asp-for="LandSize" class="form-label fw-semibold text-muted text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Tamaño</label>
+                        <div class="input-group shadow-sm" style="border-radius: 10px; overflow: hidden;">
+                            <input asp-for="LandSize" class="form-control border-0 py-2" type="number" step="0.01" />
+                            <span class="input-group-text border-0 bg-white">m²</span>
+                        </div>
+                        <span asp-validation-for="LandSize" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Rooms" class="form-label fw-semibold text-muted text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Habitaciones</label>
+                        <input asp-for="Rooms" class="form-control border-0 shadow-sm py-2" style="border-radius: 10px;" type="number" min="0" />
+                        <span asp-validation-for="Rooms" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Bathrooms" class="form-label fw-semibold text-muted text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Baños</label>
+                        <input asp-for="Bathrooms" class="form-control border-0 shadow-sm py-2" style="border-radius: 10px;" type="number" min="0" />
+                        <span asp-validation-for="Bathrooms" class="text-danger small"></span>
+                    </div>
+                </div>
+                
+                <h5 class="fw-bold mb-4" style="color: #12402d;">Mejoras y Amenidades</h5>
+                <div class="card border-0 shadow-sm mb-5 rounded-4 bg-white">
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            @if (ViewBag.Improvements != null)
+                            {
+                                foreach (var improvement in (List<ImprovementViewModel>)ViewBag.Improvements)
+                                {
+                                    <div class="col-md-4">
+                                        <div class="form-check custom-checkbox">
+                                            <input class="form-check-input" type="checkbox" name="ImprovementIds" value="@improvement.Id" id="imp_@improvement.Id"
+                                                @(Model.ImprovementIds != null && Model.ImprovementIds.Contains(improvement.Id) ? "checked" : "")>
+                                            <label class="form-check-label text-dark" for="imp_@improvement.Id">
+                                                @improvement.Name
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mb-4" style="color: #12402d;">Imágenes</h5>
+                
+                @if (Model.ExistingImages is not null && Model.ExistingImages.Any(x => !string.IsNullOrEmpty(x)))
+                {
+                    <div class="card border-0 shadow-sm mb-4 rounded-4 bg-white">
+                        <div class="card-body p-4">
+                            <label class="form-label fw-semibold text-muted text-uppercase mb-3" style="font-size: 0.8rem; letter-spacing: 0.5px;">Imágenes actuales</label>
+                            <div class="d-flex flex-wrap gap-3">
+                                @foreach (var img in Model.ExistingImages.Where(x => !string.IsNullOrEmpty(x)))
+                                {
+                                    <input type="hidden" name="ExistingImages" value="@img" />
+                                    <div class="position-relative">
+                                        <img src="@img" class="img-thumbnail rounded-3 shadow-sm" style="width: 150px; height: 150px; object-fit: cover;" />
+                                        <div class="form-check mt-2 d-flex align-items-center justify-content-center">
+                                            <input class="form-check-input me-2" type="checkbox" name="ImagesToDelete" value="@img" id="del_@img.GetHashCode()">
+                                            <label class="form-check-label text-danger fw-bold" for="del_@img.GetHashCode()">
+                                                Eliminar
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="mb-5">
+                    <div class="card border-0 shadow-sm rounded-4 bg-white">
+                        <div class="card-body p-4 text-center">
+                            <i class="bi bi-cloud-arrow-up text-muted mb-3" style="font-size: 2rem;"></i>
+                            <input asp-for="Images" class="form-control border-0" type="file" multiple accept="image/*" />
+                            <p class="text-muted small mt-2 mb-0">Sube nuevas imágenes para agregar a la propiedad. Máximo 4 en total.</p>
+                            <span asp-validation-for="Images" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-3 mt-4">
+                    <a asp-action="Index" class="btn btn-light border-0 shadow-sm px-4 py-2" style="border-radius: 8px;">Cancelar</a>
+                    <button type="submit" class="btn text-white px-5 py-2 shadow-sm fw-semibold" style="background-color: #12402d; border-radius: 8px;">
+                        <i class="bi bi-save me-2"></i> Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-checkbox .form-check-input:checked {
+        background-color: #12402d;
+        border-color: #12402d;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

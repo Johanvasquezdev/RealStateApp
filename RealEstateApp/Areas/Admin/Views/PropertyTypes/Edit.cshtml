@@ -1,0 +1,28 @@
+﻿@model SavePropertyTypeViewModel
+@{
+    ViewData["Title"] = "Editar tipo de propiedad";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 20px;">
+                <h3 class="mb-4 fw-bold">Editar tipo de propiedad</h3>
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                <form asp-action="Edit" method="post">
+                    <input asp-for="Id" type="hidden" />
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nombre</label>
+                        <input asp-for="Name" class="form-control" />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Descripcion</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary px-4">Guardar cambios</button>
+                    <a asp-action="Index" class="btn btn-outline-primary">Volver atrás</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+@model List<ImprovementViewModel>
+@{
+    ViewData["Title"] = "Mantenimiento de mejoras";
+}
+
+<div class="container-fluid px-4 px-xl-5 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Mejoras</h2>
+        <a asp-action="Create" class="btn btn-primary">Crear mejora</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="card p-4 text-center border-0 shadow-sm">
+            <p class="text-gray mb-0">No existen mejoras registradas.</p>
+        </div>
+    }
+    else
+    {
+        <div class="card property-card shadow-sm border-0">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Nombre</th>
+                            <th>Descripción</th>
+                            <th>Propiedades asociadas</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold">@item.Name</td>
+                                <td class="text-gray">@item.Description</td>
+                                <td>@item.PropertiesCount</td>
+                                <td class="text-end pe-4">
+                                    <div class="d-inline-flex gap-1 justify-content-end align-items-center">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">Editar</a>
+                                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline m-0">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                                    onclick="confirmAction(event, '¿Está seguro que desea eliminar esta mejora?', 'Si presiona Aceptar, el sistema eliminará la mejora seleccionada, esto debe de desvincular la mejora en todas las propiedades que la tengan asignada.');">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
